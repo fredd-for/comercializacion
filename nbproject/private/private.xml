@@ -3,15 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/var/www/html/comercializacion/app/models/usuarios.php</file>
+            <file>file:/var/www/html/comercializacion/app/controllers/ProductosController.php</file>
             <file>file:/var/www/html/comercializacion/app/controllers/ControllerBase.php</file>
-            <file>file:/var/www/html/comercializacion/app/views/index.phtml</file>
-            <file>file:/var/www/html/comercializacion/app/config/config.php</file>
-            <file>file:/var/www/html/comercializacion/app/models/menus.php</file>
-            <file>file:/var/www/html/comercializacion/app/config/services.php</file>
             <file>file:/var/www/html/comercializacion/index.php</file>
-            <file>file:/var/www/html/comercializacion/app/controllers/ControllerRrhh.php</file>
-            <file>file:/var/www/html/comercializacion/app/controllers/LoginController.php</file>
         </group>
     </open-files>
 </project-private>

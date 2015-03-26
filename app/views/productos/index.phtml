@@ -14,7 +14,15 @@
 				<div class="tab-content">
 					<div class="row">
 						<div class="col-md-12">
-							<?php echo $this->flashSession->output(); ?>
+							<?php // echo $this->flashSession->output(); ?>
+							<div id="divMsjeExito" class="msjs-alert" hidden="hidden">
+								<button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
+								<h5>
+									<i class="fa fa-check-circle"></i>
+									<a class="alert-link" href="javascript:void(0)" id="aMsjeExito"></a>	
+								</h5>
+								
+							</div>
 						</div>
 					</div>
 					<div class="row">
@@ -58,7 +66,9 @@
 				<div class="form-group">
 					<label class="col-md-3 control-label">Estación:</label>
 					<div class="col-md-9">
-						
+						<select id="estacion_id" name="estacion_id" class="form-control">
+							
+						</select>
 					</div>
 				</div>
 				<div class="form-group">
@@ -70,31 +80,37 @@
 				<div class="form-group">
 					<label class="col-md-3 control-label">Producto:</label>
 					<div class="col-md-9">
-						<input type="text" name="producto" id="producto" required>
+						<input type="text" name="producto" id="producto" class="form-control" required>
 					</div>
 				</div>
 				<div class="form-group" id="activo_id">
 					<label class="col-md-3 control-label">Codigo</label>
 					<div class="col-md-9">
-						<input type="text" name="codigo" id="codigo" >
+						<input type="text" name="codigo" id="codigo" class="form-control">
 					</div>
 				</div>
 				<div class="form-group" id="activo_id">
 					<label class="col-md-3 control-label">Descripción</label>
 					<div class="col-md-9">
-						<textarea name="descripcion" id="descripcion"></textarea>
+						<textarea name="descripcion" id="descripcion" class="form-control"></textarea>
 					</div>
 				</div>
 				<div class="form-group" id="activo_id">
 					<label class="col-md-3 control-label">Cantidad</label>
 					<div class="col-md-9">
-						<input type="number" name="cantidad" id="cantidad" value="1" >
+						<input type="number" name="cantidad" id="cantidad" value="1" class="form-control" required>
 					</div>
 				</div>
 				<div class="form-group" id="activo_id">
 					<label class="col-md-3 control-label">Tiempo</label>
 					<div class="col-md-9">
 						<?php echo $tiempo ?>
+					</div>
+				</div>
+				<div class="form-group" id="activo_id">
+					<label class="col-md-3 control-label">Precio <span id='tiempo_text'></span></label>
+					<div class="col-md-9">
+						<input type="number" name="precio_unitario" id="precio_unitario" class="form-control" required>
 					</div>
 				</div>
 			</div>
