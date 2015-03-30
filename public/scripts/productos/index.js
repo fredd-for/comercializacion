@@ -104,36 +104,38 @@ Editar
 /*
 Eliminar
  */
-// $("#delete").click(function() {
-//  	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
-//  	if (rowindex > -1)
-//  	{
-//  		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
-//  		$("#id").val(dataRecord.id);
- 		
-//  		bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de eliminar el registro.", function(result) {
-//                 if (result == true) {
-//                     var v = $.ajax({
-//                         url: '/producto/delete/',
-//                         type: 'POST',
-//                         datatype: 'json',
-//                         data: {id: dataRecord.id},
-//                         success: function(data) {
-//                             cargar(); //alert('Guardado Correctamente'); 
-//                         }, //mostramos el error
-//                         error: function() {
-//                             alert('Se ha producido un error Inesperado');
-//                         }
-//                     });
-//                 }
-//             });
-//  	}
-//  	else
-//  	{
-//  		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para eliminar.");
-//  	}
+$("#delete").click(function() {
+ 	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+ 	if (rowindex > -1)
+ 	{
+ 		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
+ 		//$("#id").val(dataRecord.id);
+ 		bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de eliminar el registro.", function(result) {
+                if (result == true) {
+                    var v = $.ajax({
+                        url: '/productos/delete/',
+                        type: 'POST',
+                        datatype: 'json',
+                        data: {id: dataRecord.id},
+                        success: function(data) {
+                            cargar(); //alert('Guardado Correctamente'); 
+                            $("#divMsjeExito").show();
+                    		$("#divMsjeExito").addClass('alert alert-warning alert-dismissable');
+                    		$("#aMsjeExito").html(data); 
+                        }, //mostramos el error
+                        error: function() {
+                            alert('Se ha producido un error Inesperado');
+                        }
+                    });
+                }
+            });
+ 	}
+ 	else
+ 	{
+ 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para eliminar.");
+ 	}
 
-//  });
+ });
 
 /*
 Select dependiente
@@ -163,7 +165,7 @@ $("#testForm").submit(function() {
             	data:{id:$("#id").val(),grupo_id:$("#grupo_id").val(),estacion_id:$("#estacion_id").val(),producto:$("#producto").val(),codigo:$("#codigo").val(),descripcion:$("#descripcion").val(),precio_unitario:$("#precio_unitario").val(),cantidad:$("#cantidad").val(),tiempo:$("#tiempo").val(),estacion_id:$("#estacion_id").val()},
 				success: function(data) { cargar(); 
 					$("#divMsjeExito").show();
-                    $("#divMsjeExito").addClass('alert alert-success alert-dismissable');
+                    $("#divMsjeExito").addClass('alert alert-info alert-dismissable');
                     $("#aMsjeExito").html(data); 
 				}, //mostramos el error
 			error: function() { alert('Se ha producido un error Inesperado'); }

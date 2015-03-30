@@ -74,9 +74,9 @@ class ProductosController extends ControllerBase
             array(
                 "Hora" => "Hora",
                 "Dia"   => "Dia",
-                "Semana" => "Semana",
-                "Mes" => "Mes",
-                "Año" => "Año",
+                "Semanal" => "Semanal",
+                "Mensual" => "Mensual",
+                "Anual" => "Anual",
                 ),
             'useEmpty' => true,
             'emptyText' => '(Selecionar)',
@@ -161,8 +161,10 @@ class ProductosController extends ControllerBase
             }   
         }
     $this->view->disable();
-    echo json_encode($msm);
+    echo $msm;
     }
+
+
 
     public function select_estacionesAction()
     {
@@ -173,6 +175,18 @@ class ProductosController extends ControllerBase
             $options.='<option value="'.$v->id.'" >'.$v->estacion.'</option>';
         }
         echo $options; 
+    }
+
+    public function deleteAction(){
+        $resul = Productos::findFirstById($this->request->getPost('id'));
+        $resul->baja_logica = 0;
+        if ($resul->save()) {
+                    $msm ='Exito: Se elimino correctamente';
+                }else{
+                    $msm = 'Error: No se guardo el registro';
+                }
+        $this->view->disable();
+        echo $msm;
     }
 
 }
