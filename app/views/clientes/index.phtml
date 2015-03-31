@@ -1,3 +1,4 @@
+<script>$(function() { FormsValidation.init(); });</script>
 <div class="row">
 	<div class="col-sm-12">
 		<div class="panel">
@@ -14,7 +15,7 @@
 				<div class="tab-content">
 					<div class="row">
 						<div class="col-md-12">
-							<?php // echo $this->flashSession->output(); ?>
+							<?php echo $this->flashSession->output(); ?>
 							<div id="divMsjeExito" class="msjs-alert" hidden="hidden">
 								<button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
 								<h5>
@@ -182,28 +183,66 @@
 <div class="modal fade" id="myModal_contrato" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form class="form-horizontal" id="testForm" data-toggle="validator" action="contratos/crear" method="post" />
+			<form class="form-horizontal" id="testForm_contrato" data-toggle="validator" action="contratos/crear" method="post" />
+			<input type="hidden" name="cliente_id" id="cliente_id">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				<h4 class="modal-title" id="titulo">Editar</h4>
+				<h4 class="modal-title" id="titulo_contrato">Editar</h4>
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
+					<div class="col-md-12">
+						<h5 align="center"><?php echo $empresa->empresa ?></h5>
+						<input type="hidden" name="arrendador" id="arrendador" value="<?php echo $empresa->empresa ?>" >
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label">Representante Legal</label>
+					<div class="col-md-9">
+						<input type="text" name="arrendador_rep_legal" id="arrendador_rep_legal" value="<?php echo $empresa->representante_legal ?>" class="form-control" placeholder="" required readonly>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label">Cargo</label>
+					<div class="col-md-9">
+						<input type="text" name="arrendador_cargo" id="arrendador_cargo" value="<?php echo $empresa->cargo ?>" class="form-control" placeholder="" required readonly>
+					</div>
+				</div>
+				<hr>
+				<div class="form-group">
+					<div class="col-md-12">
+						<h5 align="center">CLIENTE / EMPRESA</h5>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label">Razón Social</label>
+					<div class="col-md-9">
+						<input type="text" name="rs" id="rs" class="form-control" placeholder="" readonly>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label">Representante Legal</label>
+					<div class="col-md-9">
+						<input type="text" name="rl" id="rl" class="form-control" placeholder="" readonly>
+					</div>
+				</div>
+				<hr>
+				<div class="form-group">
 					<label class="col-md-3 control-label">Nro Contrato</label>
 					<div class="col-md-9">
-						<input type="text" name="contrato" id="contrato" class="form-control" required>
+						<input type="text" name="contrato" id="contrato" class="form-control" placeholder="000/2015" required>
 					</div>
 				</div>
 				<div class="form-group" >
 					<label class="col-md-3 control-label">Descripción</label>
 					<div class="col-md-9">
-						<input type="text" name="" id="descripcion" class="form-control">
+						<textarea name="descripcion" id="descripcion" class="form-control"></textarea>
 					</div>
 				</div>
 				<div class="form-group" >
 					<label class="col-md-3 control-label">Fecha Contrato</label>
 					<div class="col-md-9">
-						<input type="text" name="" id="descripcion" class="form-control">
+						<input type="text" name="fecha_contrato" id="fecha_contrato" class="form-control" placeholder="dd-mm-yyyy" required>
 					</div>
 				</div>
 			</div>
@@ -216,3 +255,6 @@
 </div>
 </div>
 <!-- end  modal -->
+
+<script>!window.jQuery && document.write(unescape('%3Cscript src="/assets/js/vendor/jquery-1.11.0.min.js"%3E%3C/script%3E'));</script>
+<script>$(function() { FormsValidation.init(); });</script>

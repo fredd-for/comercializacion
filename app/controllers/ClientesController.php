@@ -40,7 +40,12 @@ class ClientesController extends ControllerBase
                 ->addJs('/media/plugins/form-stepy/jquery.stepy.js')
         		->addJs('/media/demo/demo-formwizard.js')
                 ->addJs('/scripts/clientes/index.js')
+                ->addJs('/assets/js/plugins.js')
+                ->addJs('/assets/js/pages/formsValidation.js')
         ;
+
+        $empresa= Empresas::findFirst(array('baja_logica=1'));
+        $this->view->setVar('empresa',$empresa);
 
 	}
 
@@ -146,14 +151,9 @@ class ClientesController extends ControllerBase
 
     public function addAction()
     {
-    	$this->assets
-    				->addCss('/media/plugins/form-stepy/jquery.stepy.css')
-                    ;
-
         $this->assets
-        ->addJs('/media/plugins/form-validation/jquery.validate.min.js')
-        ->addJs('/media/plugins/form-stepy/jquery.stepy.js')
-        ->addJs('/media/demo/demo-formwizard.js')       
+        ->addJs('/assets/js/plugins.js')
+        ->addJs('/assets/js/pages/formsValidation.js')
         ;
     }
 }

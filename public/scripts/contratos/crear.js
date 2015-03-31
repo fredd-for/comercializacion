@@ -98,78 +98,6 @@ $("#add").click(function(){
 });
 
 /*
-Editar
- */
-
- $("#edit").click(function() {
- 	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
- 	if (rowindex > -1)
- 	{
- 		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
- 		$("#id").val(dataRecord.id);
- 		$("#titulo").text("Editar Cliente");
-
- 		$("#razon_social").val(dataRecord.razon_social);
- 		$("#nit").val(dataRecord.nit);
- 		$("#telefono").val(dataRecord.telefono);
- 		$("#celular").val(dataRecord.celular);
- 		$("#correo").val(dataRecord.correo);
- 		$("#direccion").val(dataRecord.direccion);
- 		$("#representante_legal").val(dataRecord.representante_legal);
- 		$("#ci_representante_legal").val(dataRecord.ci_representante_legal);
- 		$("#celular_representante_legal").val(dataRecord.celular_representante_legal);
- 		$("#correo_representante_legal").val(dataRecord.correo_representante_legal);
- 		$("#nombre_ref").val(dataRecord.nombre_ref);
- 		$("#ci_ref").val(dataRecord.ci_ref);
- 		$("#celular_ref").val(dataRecord.celular_ref);
- 		$("#correo_ref").val(dataRecord.correo_ref);
-
- 		$('#myModal').modal('show');
- 	}
- 	else
- 	{
- 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para editar.");
- 	}
-
- });
-
-/*
-Eliminar
- */
-$("#delete").click(function() {
- 	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
- 	if (rowindex > -1)
- 	{
- 		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
- 		//$("#id").val(dataRecord.id);
- 		bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de eliminar el registro.", function(result) {
-                if (result == true) {
-                    var v = $.ajax({
-                        url: '/clientes/delete/',
-                        type: 'POST',
-                        datatype: 'json',
-                        data: {id: dataRecord.id},
-                        success: function(data) {
-                            cargar(); //alert('Guardado Correctamente'); 
-                            $("#divMsjeExito").show();
-                    		$("#divMsjeExito").addClass('alert alert-warning alert-dismissable');
-                    		$("#aMsjeExito").html(data); 
-                        }, //mostramos el error
-                        error: function() {
-                            alert('Se ha producido un error Inesperado');
-                        }
-                    });
-                }
-            });
- 	}
- 	else
- 	{
- 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para eliminar.");
- 	}
-
- });
-
-/*
 guardar 
  */
 $("#wizard").submit(function() {
@@ -189,28 +117,6 @@ $("#wizard").submit(function() {
             return false; // ajax used, block the normal submit
 });
 
-
-/*
-Crear nuevo contrato
- */
-	$("#crear_contrato").click(function(){
-		var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
- 	if (rowindex > -1)
- 	{
- 		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
- 		$("#id").val(dataRecord.id);
- 		$("#titulo_contrato").text("Crear Nuevo Contrato");
- 		$("#rs").val(dataRecord.razon_social);
- 		$("#rl").val(dataRecord.representante_legal);
- 		$("#cliente_id").val(dataRecord.id);
-
- 		$('#myModal_contrato').modal('show');
- 	}
- 	else
- 	{
- 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para crear un contrato.");
- 	}
-	});
 
 
 })

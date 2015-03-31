@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50541
 File Encoding         : 65001
 
-Date: 2015-03-26 19:42:10
+Date: 2015-03-31 18:45:04
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -40,32 +40,51 @@ CREATE TABLE `clientes` (
   `fecha_reg` datetime NOT NULL,
   `baja_logica` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of clientes
 -- ----------------------------
+INSERT INTO `clientes` VALUES ('1', 'BANCO MERCANTIL SANTA CRUZ', '72544888', '2846365', '706696877', 'bancomercantil@bc.bo', 'Banco mercantil', null, 'Juan Marcelo', '49864966', '71066965', 'juan@bancomercantil.bo', 'Arsenio Castellon', '49861445', '70669877', 'arsenio@bancomercantil.bo', '2', '2015-03-27 00:00:00', '1');
+INSERT INTO `clientes` VALUES ('2', 'BANCO FIE LA PAZ', '24444487', '248596', '70306627', 'bancofie@bancofie.co', 'Zona villa dolores F, calle C, nro 75', null, 'Juan Mamani', '4875744', '70669687', 'juanmamani@gmail.com', 'Pedro Mamani', '4875487', '0', '', '635', '2015-03-27 12:48:18', '1');
+INSERT INTO `clientes` VALUES ('3', 'MDPyEP', '2485548', '123123', '0', 'mdpyep@mdpyep.com', 'calle c', null, '', '', '0', '', '', '0', '0', '', '635', '2015-03-30 12:00:07', '0');
+INSERT INTO `clientes` VALUES ('4', 'BANCO FIE EL ALTO', '7844844', '248445', '0', 'bancofie@bancofie.co', 'Zona Ceja de El Alto', null, '', '', '0', '', '', '0', '0', '', '635', '2015-03-30 12:03:26', '1');
+INSERT INTO `clientes` VALUES ('5', 'BANCO UNION', '4774578', '248445', '0', 'bancounion@bancounio', 'calle c zona villa dolores f', null, '', '', '0', '', '', '0', '0', '', '635', '2015-03-30 12:04:19', '1');
+INSERT INTO `clientes` VALUES ('6', 'BANCO MERCANTIL', '4774578', '248445', '706666', 'bancomercantil@bc.bo', 'Zona villa dolores F, calle C, nro 75', null, 'juan Mamaniq', '457457', '70966554', 'juan@bc.bo', 'Pepito Peres', '7894465', '7005555', 'pepito@bc.bo', '635', '2015-03-30 12:06:52', '1');
 
 -- ----------------------------
 -- Table structure for `contratos`
 -- ----------------------------
 DROP TABLE IF EXISTS `contratos`;
 CREATE TABLE `contratos` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `contrato` varchar(150) NOT NULL,
   `cliente_id` int(11) NOT NULL,
   `fecha_contrato` date NOT NULL,
   `usuario_reg` int(11) NOT NULL,
   `fecha_reg` datetime NOT NULL,
   `baja_logica` int(11) NOT NULL DEFAULT '1',
+  `arrendador` varchar(100) DEFAULT NULL,
+  `arrendador_rep_legal` varchar(150) DEFAULT NULL,
+  `arrendador_cargo` varchar(150) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `clientes_contratos_fk` (`cliente_id`),
   CONSTRAINT `clientes_contratos_fk` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of contratos
 -- ----------------------------
+INSERT INTO `contratos` VALUES ('1', '007', '1', '2015-03-27', '2', '2015-03-30 00:00:00', '1', null, null, null);
+INSERT INTO `contratos` VALUES ('2', '008', '1', '2015-03-01', '2', '0000-00-00 00:00:00', '1', null, null, null);
+INSERT INTO `contratos` VALUES ('3', '200/2015', '1', '2015-03-07', '635', '2015-03-31 16:57:13', '1', 'EMPRESA ESTATAL DE TRASPORTE POR CABLE ', 'juan mamani', 'GERENTE EJECUTIVO');
+INSERT INTO `contratos` VALUES ('4', '010/2015', '1', '1969-12-31', '635', '2015-03-31 16:59:23', '1', 'EMPRESA ESTATAL DE TRASPORTE POR CABLE ', null, 'GERENTE EJECUTIVO');
+INSERT INTO `contratos` VALUES ('5', '010/2015', '1', '1969-12-31', '635', '2015-03-31 17:01:06', '1', 'EMPRESA ESTATAL DE TRASPORTE POR CABLE ', null, 'GERENTE EJECUTIVO');
+INSERT INTO `contratos` VALUES ('6', '011/2015', '1', '2015-03-27', '635', '2015-03-31 17:01:41', '1', 'EMPRESA ESTATAL DE TRASPORTE POR CABLE ', null, 'GERENTE EJECUTIVO');
+INSERT INTO `contratos` VALUES ('7', '012/2015', '2', '1969-12-31', '635', '2015-03-31 17:03:34', '1', 'EMPRESA ESTATAL DE TRASPORTE POR CABLE ', 'LIC. CESAR LUIS DOCKWEILER SUAREA', 'GERENTE EJECUTIVO');
+INSERT INTO `contratos` VALUES ('8', '013/2015', '1', '1969-12-31', '635', '2015-03-31 17:04:36', '1', 'EMPRESA ESTATAL DE TRASPORTE POR CABLE ', 'LIC. CESAR LUIS DOCKWEILER SUAREA', 'GERENTE EJECUTIVO');
+INSERT INTO `contratos` VALUES ('9', '015/2015', '2', '2015-03-31', '635', '2015-03-31 17:08:02', '1', 'EMPRESA ESTATAL DE TRASPORTE POR CABLE ', 'LIC. CESAR LUIS DOCKWEILER SUAREA', 'GERENTE EJECUTIVO');
+INSERT INTO `contratos` VALUES ('10', '016/2015', '2', '2015-03-31', '635', '2015-03-31 17:25:43', '1', 'EMPRESA ESTATAL DE TRASPORTE POR CABLE ', 'LIC. CESAR LUIS DOCKWEILER SUAREA', 'GERENTE EJECUTIVO');
 
 -- ----------------------------
 -- Table structure for `contratosproductos`
@@ -92,6 +111,29 @@ CREATE TABLE `contratosproductos` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `empresas`
+-- ----------------------------
+DROP TABLE IF EXISTS `empresas`;
+CREATE TABLE `empresas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `empresa` varchar(100) NOT NULL,
+  `sigla` varchar(15) NOT NULL,
+  `logo` varchar(50) DEFAULT NULL,
+  `direccion` varchar(250) DEFAULT NULL,
+  `representante_legal` varchar(150) DEFAULT NULL,
+  `cargo` varchar(150) DEFAULT NULL,
+  `ci` varchar(150) DEFAULT NULL,
+  `nit` varchar(15) DEFAULT NULL,
+  `baja_logica` int(11) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of empresas
+-- ----------------------------
+INSERT INTO `empresas` VALUES ('1', 'EMPRESA ESTATAL DE TRASPORTE POR CABLE \"MITELEFERICO\"', 'MI TELEFERICO', null, 'AV. ESTACION CENTRAL TELEFERICO LINEA ROJA NRO. S/N ZONA PURA PURA', 'LIC. CESAR LUIS DOCKWEILER SUAREA', 'GERENTE EJECUTIVO', null, '280048029', '1');
+
+-- ----------------------------
 -- Table structure for `estaciones`
 -- ----------------------------
 DROP TABLE IF EXISTS `estaciones`;
@@ -108,17 +150,17 @@ CREATE TABLE `estaciones` (
 -- ----------------------------
 -- Records of estaciones
 -- ----------------------------
-INSERT INTO `estaciones` VALUES ('1', '1', 'ESTACION CENTRAL/TAYPI UTA', '1');
-INSERT INTO `estaciones` VALUES ('3', '1', 'CEMENTERIO/AJAYUNI', '1');
+INSERT INTO `estaciones` VALUES ('1', '1', 'ESTACION CENTRAL / TAYPI UTA', '1');
+INSERT INTO `estaciones` VALUES ('3', '1', 'CEMENTERIO / AJAYUNI', '1');
 INSERT INTO `estaciones` VALUES ('4', '1', '16 DE JULIO / JACHA QHATHU', '1');
-INSERT INTO `estaciones` VALUES ('5', '2', 'Libertador/Chuqui Apu', '1');
-INSERT INTO `estaciones` VALUES ('6', '2', 'Sopocachi/Suphu Kachi', '1');
-INSERT INTO `estaciones` VALUES ('7', '2', 'Buenos Aires/Quta Uma', '1');
-INSERT INTO `estaciones` VALUES ('8', '2', 'Ciudad Satélite/Qhana Pata', '1');
-INSERT INTO `estaciones` VALUES ('9', '3', 'Irpavi/Irpawi', '1');
-INSERT INTO `estaciones` VALUES ('10', '3', 'Obrajes/Aynacha Obrajes', '1');
-INSERT INTO `estaciones` VALUES ('11', '3', 'Alto Obrajes/Quta Uma', '1');
-INSERT INTO `estaciones` VALUES ('12', '3', 'Libertador/Chuqui Apu', '1');
+INSERT INTO `estaciones` VALUES ('5', '2', 'LIBERTADOR / CHUQUI APU', '1');
+INSERT INTO `estaciones` VALUES ('6', '2', 'SOPOCACHI / SUPHU KACHI', '1');
+INSERT INTO `estaciones` VALUES ('7', '2', 'BUENOS AIRES / QUTA UMA', '1');
+INSERT INTO `estaciones` VALUES ('8', '2', 'CIUDAD SATELITE / QHANA PATA', '1');
+INSERT INTO `estaciones` VALUES ('9', '3', 'IRPAVI / IRPAWI', '1');
+INSERT INTO `estaciones` VALUES ('10', '3', 'OBRAJES / AYNACHA OBRAJES', '1');
+INSERT INTO `estaciones` VALUES ('11', '3', 'ALTO OBRAJES / QUTA UMA', '1');
+INSERT INTO `estaciones` VALUES ('12', '3', 'LIBERTADOR / CHUQUI APU', '1');
 
 -- ----------------------------
 -- Table structure for `grupos`
@@ -132,7 +174,7 @@ CREATE TABLE `grupos` (
   `imagen` varchar(200) DEFAULT NULL,
   `baja_logica` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of grupos
@@ -140,6 +182,8 @@ CREATE TABLE `grupos` (
 INSERT INTO `grupos` VALUES ('1', 'CAJEROS', 'CAJ', 'CAJEROS', null, '1');
 INSERT INTO `grupos` VALUES ('2', 'PUBLICIDAD', 'PUB', 'PUBLICIDADES', null, '1');
 INSERT INTO `grupos` VALUES ('3', 'LOCALES', 'LOC', 'LOCALES', null, '1');
+INSERT INTO `grupos` VALUES ('4', 'ISLAS COMERCIALES', 'IC', 'ISLAS COMERCIALES', null, '1');
+INSERT INTO `grupos` VALUES ('5', 'LOCALES COMERCIALES', 'LC', 'LOCALES COMERCIALES', null, '1');
 
 -- ----------------------------
 -- Table structure for `lineas`
@@ -312,11 +356,11 @@ CREATE TABLE `productos` (
 -- ----------------------------
 -- Records of productos
 -- ----------------------------
-INSERT INTO `productos` VALUES ('1', '1', '1', 'cajeros', 'ca', null, '10.00', '80', 'dia', '1', '1', '2', '2015-03-26 00:00:00', '1');
-INSERT INTO `productos` VALUES ('2', '2', '6', 'cajeros', 'caxx', 'alskfdj', '12.00', '1', 'Dia', '1', '1', '629', '2015-03-26 18:57:29', '1');
-INSERT INTO `productos` VALUES ('3', '2', '1', 'publicidad', 'pu-01', 'publicidad de colinos', '100.00', '1', 'Dia', '1', '1', '629', '2015-03-26 18:59:03', '1');
-INSERT INTO `productos` VALUES ('4', '2', '1', 'asf', 'asdf', 'asdf', '123.00', '1', 'Dia', '1', '1', '629', '2015-03-26 18:59:07', '1');
-INSERT INTO `productos` VALUES ('5', '2', '1', 'asf', 'asdf', 'asdf', '123.00', '1', 'Dia', '1', '1', '629', '2015-03-26 18:59:09', '1');
+INSERT INTO `productos` VALUES ('1', '1', '1', 'cajeros', 'ca', null, '10.00', '80', 'dia', '1', '1', '2', '2015-03-26 00:00:00', '0');
+INSERT INTO `productos` VALUES ('2', '2', '6', 'cajeros', 'caxx', 'plan de accion', '12.00', '1', 'Dia', '1', '1', '629', '2015-03-26 18:57:29', '0');
+INSERT INTO `productos` VALUES ('3', '2', '1', 'publicidad', 'pu-01', 'publicidad de colinos', '100.00', '1', 'Dia', '1', '1', '629', '2015-03-26 18:59:03', '0');
+INSERT INTO `productos` VALUES ('4', '1', '1', 'CAJERO AUTOMATICO', 'CA', 'Cajeros automaticos', '2400.00', '5', 'Mensual', '1', '1', '629', '2015-03-26 18:59:07', '1');
+INSERT INTO `productos` VALUES ('5', '1', '3', 'CAJEROS AUTOMATICOS', 'CA', 'Cajeros Automaticos', '2500.00', '5', 'Mensual', '1', '1', '629', '2015-03-26 18:59:09', '1');
 INSERT INTO `productos` VALUES ('6', '2', '1', 'asf', 'asdf', 'asdf', '123.00', '1', 'Dia', '1', '1', '629', '2015-03-26 18:59:11', '1');
 INSERT INTO `productos` VALUES ('7', '1', '1', 'CABINAS', 'prueba', 'adf', '34.00', '1', 'Dia', '1', '1', '629', '2015-03-26 19:03:10', '1');
 INSERT INTO `productos` VALUES ('8', '1', '1', 'CABINAS', 'prueba', 'adf', '34.00', '1', 'Dia', '1', '1', '629', '2015-03-26 19:03:13', '1');
@@ -1132,8 +1176,8 @@ CREATE TABLE `usuarios` (
 -- ----------------------------
 -- Records of usuarios
 -- ----------------------------
-INSERT INTO `usuarios` VALUES ('629', 'ichacolla', '0', '1', '1', 'b374537609b09ea5376e4b8baad6b2809f495b72e9a615531ee33e980ff094c0', 'Ivan Marcelo', 'IMCM', 'Profesional Desarrollo', 'ichacolla@gmail.com', '927', null, '1', '2', '1', null, '1', '1', '4021525', 'OR', null, '1', 'Chacolla', 'Morochi', null);
-INSERT INTO `usuarios` VALUES ('635', 'fvelasco', '0', '1', '1', 'b6c56905f53fbea5b1acb6f28d4e8d61940b7c99c80b5e765e9762fc069f13f9', 'Luis Freddy', 'FV', 'Profesioanl en desarrollo de sistemas', 'fvelasco@miteleferico.bo', '4', null, '1', '3', '1', null, '1', '1', '4986493', 'LP', null, '1', 'Velasco', 'Poma', null);
+INSERT INTO `usuarios` VALUES ('629', 'ichacolla', '0', '1', '1', 'b374537609b09ea5376e4b8baad6b2809f495b72e9a615531ee33e980ff094c0', 'Ivan Marcelo', 'IMCM', 'Profesional Desarrollo', 'ichacolla@gmail.com', '930', null, '1', '2', '1', null, '1', '1', '4021525', 'OR', null, '1', 'Chacolla', 'Morochi', null);
+INSERT INTO `usuarios` VALUES ('635', 'fvelasco', '0', '1', '1', 'b6c56905f53fbea5b1acb6f28d4e8d61940b7c99c80b5e765e9762fc069f13f9', 'Luis Freddy', 'FV', 'Profesioanl en desarrollo de sistemas', 'fvelasco@miteleferico.bo', '28', null, '1', '2', '1', null, '1', '1', '4986493', 'LP', null, '1', 'Velasco', 'Poma', null);
 INSERT INTO `usuarios` VALUES ('637', 'rrhh', '0', '1', '1', '9ad76a04f82f5ff52256787255c21e50f55ca4be011e146763a1335490ac60f1', 'Usuario Recursos Humanos', 'URRHH', 'Profesional Recursos Humanos', 'rrhh@miteleferico.bo', '35', null, '1', '2', '1', null, '1', '1', '4098897', 'LP', null, '1', 'Recursos', null, null);
 INSERT INTO `usuarios` VALUES ('640', 'pdaza', '0', '1', '1', 'e6a95cbd012ece36648687f8a16c7471cd8aedd3000ea332c347926c984d8b78', 'Sharon Priscila', 'PD', 'Profesional Recursos Humanos', 'pdaza@miteleferico.bo', '24', null, '1', '2', '1', null, '1', '1', '4096997', 'LP', null, '1', 'Daza', 'Carreon', null);
 INSERT INTO `usuarios` VALUES ('641', 'fbutron321', '0', '1', '1', '5a61b5f86af462f23670da2fb54fca12f1c8a775d4aa51968c082e8ee17e937c', 'Fernando', 'FBS', 'Profesional Recurso Humanos', 'fbutron@miteleferico', '3', null, '1', '2', '1', null, '1', '1', '4567788', 'LP', null, '1', 'Butron', 'Sandoval', null);
