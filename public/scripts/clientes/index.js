@@ -41,6 +41,7 @@ $(document).ready(function (){
 			showfilterrow: true,
 			filterable: true,
 			autorowheight: true,
+			keyboardnavigation: false,
 			columns: [
 			{
 				text: '#', sortable: false, filterable: false, editable: false,
@@ -64,11 +65,81 @@ $(document).ready(function (){
 			{ text: 'Correo', columngroup: 'contacto',datafield: 'correo_ref',filtertype: 'input', width: '10%' },
 			],
 			columngroups: [
-                    { text: 'CLIENTE / EMPRESA', align: 'center', name: 'cliente' },
-                    { text: 'REPRESENTANTE LEGAL', align: 'center', name: 'representante' },
-                    { text: 'PERSONA DE CONTACTO', align: 'center', name: 'contacto' }
-            ]
+			{ text: 'CLIENTE / EMPRESA', align: 'center', name: 'cliente' },
+			{ text: 'REPRESENTANTE LEGAL', align: 'center', name: 'representante' },
+			{ text: 'PERSONA DE CONTACTO', align: 'center', name: 'contacto' }
+			]
 		});
+
+/*	Segunda Grilla*/
+var dataFields = [
+{ name: 'id', type: 'number' },
+{ name: 'contrato', type: 'string' },
+{ name: 'cliente_id', type: 'number' },
+{ name: 'fecha_contrato', type: 'date' },
+{ name: 'descripcion', type: 'string' },
+];
+
+var sourceSeg =
+{
+	datafields: dataFields,
+	datatype: "json",
+	url: '/clientes/listcontratos',
+	async: false
+};
+
+var dataAdapter = new $.jqx.dataAdapter(sourceSeg);
+dataAdapter.dataBind();
+
+$("#jqxgrid").on('rowselect', function (event) {
+	var id = event.args.row.id;
+	var records = new Array();
+	var length = dataAdapter.records.length;
+	for (var i = 0; i < length; i++) {
+		var record = dataAdapter.records[i];
+		if (record.cliente_id == id) {
+			records[records.length] = record;
+		}
+	}
+
+	var dataSource = {
+		datafields: dataFields,
+		localdata: records
+	}
+	var adapter = new $.jqx.dataAdapter(dataSource);
+    $("#jqxgrid_contratos").jqxGrid({ source: adapter });
+});
+
+$("#jqxgrid_contratos").jqxGrid(
+{
+	width: '100%',
+	source: dataAdapter,
+	sortable: true,
+	altRows: true,
+	columnsresize: true,
+	pageable: true,
+	pagerMode: 'advanced',
+	theme: 'custom',
+	showfilterrow: true,
+	showstatusbar: true,
+	showfilterrow: true,
+	filterable: true,
+	autorowheight: true,
+	columns: [
+	{
+		text: '#', sortable: false, filterable: false, editable: false,
+		groupable: false, draggable: false, resizable: false,
+		datafield: '', columntype: 'number', width: '3%',
+		cellsrenderer: function (row, column, value) {
+			return "<div style='margin:4px;'>" + (value + 1) + "</div>";
+		}
+	},
+	{ text: 'Nro Contrato', datafield: 'contrato', filtertype: 'input',width: '17%' },
+	{ text: 'Descripción', datafield: 'descripcion',filtertype: 'input', width: '60%' },
+	{ text: 'Fecha Contrato', datafield: 'fecha_contrato', filtertype: 'range', width: '20%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'}
+	]
+});
+
 
 }
 

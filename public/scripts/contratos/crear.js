@@ -6,27 +6,25 @@ $(document).ready(function (){
 			datatype: "json",
 			datafields: [
 			{ name: 'id',type: 'number'},
-			{ name: 'razon_social',type: 'string'},
-			{ name: 'nit',type: 'string'},
-			{ name: 'telefono',type: 'number'},
-			{ name: 'celular',type: 'number'},
-			{ name: 'correo',type: 'string'},
-			{ name: 'direccion',type: 'string'},
-			{ name: 'representante_legal',type:'string'},
-			{ name: 'ci_representante_legal',type:'string'},
-			{ name: 'celular_representante_legal',type:'number'},
-			{ name: 'correo_representante_legal',type:'string'},
-			{ name: 'nombre_ref',type:'string'},
-			{ name: 'ci_ref',type:'string'},
-			{ name: 'celular_ref',type:'celular'},
-			{ name: 'correo_ref',type:'string'},
+			{ name: 'grupo_id',type: 'number'},
+			{ name: 'grupo',type: 'string'},
+			{ name: 'estacion_id',type: 'number'},
+			{ name: 'estacion',type: 'string'},
+			{ name: 'linea_id',type: 'number'},
+			{ name: 'linea',type: 'string'},
+			{ name: 'producto',type:'string'},
+			{ name: 'codigo',type:'string'},
+			{ name: 'descripcion',type:'string'},
+			{ name: 'precio_unitario',type:'number'},
+			{ name: 'cantidad',type:'number'},
+			{ name: 'tiempo',type:'string'},
 			],
-			url: '/clientes/list',
+			url: '/productos/list',
 			cache: false
 		};
 		var dataAdapter = new $.jqx.dataAdapter(source);
 
-		$("#jqxgrid").jqxGrid({
+		$("#jqxgrid_p").jqxGrid({
 
 			width: '100%',
 			source: dataAdapter,
@@ -50,24 +48,16 @@ $(document).ready(function (){
 					return "<div style='margin:4px;'>" + (value + 1) + "</div>";
 				}
 			},
-			{ text: 'Razón Social', columngroup: 'cliente',datafield: 'razon_social', filtertype: 'input',width: '15%' },
-			{ text: 'NIT', columngroup: 'cliente',datafield: 'nit', filtertype: 'input',width: '8%' },
-			{ text: 'Telefono', columngroup: 'cliente',datafield: 'telefono', filtertype: 'input',width: '8%' },
-			{ text: 'Celular', columngroup: 'cliente',datafield: 'celular', filtertype: 'input',width: '8%' },
-			{ text: 'Correo', columngroup: 'cliente',datafield: 'correo', filtertype: 'input',width: '8%' },
-			{ text: 'Dirección', columngroup: 'cliente',datafield: 'direccion', filtertype: 'input',width: '20%' },
-			{ text: 'Representante Legal', columngroup: 'representante',datafield: 'representante_legal', filtertype: 'input',width: '10%' },
-			{ text: 'Celular', columngroup: 'representante',datafield: 'celular_representante_legal',filtertype: 'input', width: '10%' },
-			{ text: 'Correo', columngroup: 'representante',datafield: 'correo_representante_legal',filtertype: 'input', width: '10%' },
-			{ text: 'Persona Contacto', columngroup: 'contacto',datafield: 'nombre_ref', filtertype: 'input',width: '10%' },
-			{ text: 'Celular', columngroup: 'contacto',datafield: 'celular_ref',filtertype: 'input', width: '10%' },
-			{ text: 'Correo', columngroup: 'contacto',datafield: 'correo_ref',filtertype: 'input', width: '10%' },
-			],
-			columngroups: [
-                    { text: 'CLIENTE / EMPRESA', align: 'center', name: 'cliente' },
-                    { text: 'REPRESENTANTE LEGAL', align: 'center', name: 'representante' },
-                    { text: 'PERSONA DE CONTACTO', align: 'center', name: 'contacto' }
-            ]
+			{ text: 'linea', datafield: 'linea', filtertype: 'checkedlist',width: '10%' },
+			{ text: 'Estación', datafield: 'estacion', filtertype: 'checkedlist',width: '10%' },
+			{ text: 'Grupo', datafield: 'grupo', filtertype: 'checkedlist',width: '10%' },
+			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '20%' },
+			{ text: 'Codigo', datafield: 'codigo', filtertype: 'input',width: '5%' },
+			{ text: 'Descripción', datafield: 'descripcion', filtertype: 'input',width: '25%' },
+			{ text: 'Precio Unitario', datafield: 'precio_unitario', filtertype: 'input',width: '7%' },
+			{ text: 'Cantidad', datafield: 'uso_string',filtertype: 'input', width: '5%' },
+			{ text: 'Tiempo', datafield: 'tiempo',filtertype: 'input', width: '5%' },
+			]
 		});
 
 }
@@ -75,48 +65,114 @@ $(document).ready(function (){
 /*
 adicionar 
 */
-$("#add").click(function(){
-	$("#titulo").text("Adicionar Cliente");
-	$("#id").val("");
+// $("#add").click(function(){
+// 	$("#titulo").text("Adicionar Producto");
+// 	$("#id").val("");
+// 	$('#myModal').modal('show');
+// });
 
-	$("#razon_social").val("");
-	$("#nit").val("");
-	$("#telefono").val("");
-	$("#celular").val("");
-	$("#correo").val("");
-	$("#direccion").val("");
-	$("#representante_legal").val("");
-	$("#ci_representante_legal").val();
-	$("#celular_representante_legal").val("");
-	$("#correo_representante_legal").val("");
-	$("#nombre_ref").val("");
-	$("#ci_ref").val("");
-	$("#celular_ref").val("");
-	$("#correo_ref").val("");
+// /*
+// Editar
+//  */
 
-	$('#myModal').modal('show');
-});
+//  $("#edit").click(function() {
+//  	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+//  	if (rowindex > -1)
+//  	{
+//  		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
+//  		$("#id").val(dataRecord.id);
+//  		$("#titulo").text("Editar Producto");
+
+//  		$("#grupo_id").val(dataRecord.grupo_id);
+//  		$("#linea_id").val(dataRecord.linea_id);
+//  		$("#producto").val(dataRecord.producto);
+//  		$("#codigo").val(dataRecord.codigo);
+//  		$("#descripcion").val(dataRecord.descripcion);
+//  		$("#precio_unitario").val(dataRecord.precio_unitario);
+//  		$("#cantidad").val(dataRecord.cantidad);
+//  		$("#tiempo").val(dataRecord.tiempo);
+//  		select_estacion(dataRecord.linea_id,dataRecord.estacion_id);
+//  		$('#myModal').modal('show');
+//  	}
+//  	else
+//  	{
+//  		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para editar.");
+//  	}
+
+//  });
 
 /*
-guardar 
+Eliminar
  */
-$("#wizard").submit(function() {
-	var v=$.ajax({
-            	url:'/clientes/save/',
-            	type:'POST',
-            	datatype: 'json',
-            	data:{id:$("#id").val(),razon_social:$("#razon_social").val(),nit:$("#nit").val(),telefono:$("#telefono").val(),celular:$("#celular").val(),correo:$("#correo").val(),direccion:$("#direccion").val(),representante_legal:$("#representante_legal").val(),ci_representante_legal:$("#ci_representante_legal").val(),celular_representante_legal:$("#celular_representante_legal").val(),correo_representante_legal:$("#correo_representante_legal").val(),nombre_ref:$("#nombre_ref").val(),ci_ref:$("#ci_ref").val(),celular_ref:$("#celular_ref").val(),correo_ref:$("#correo_ref").val()},
-				success: function(data) { cargar(); 
-					$("#divMsjeExito").show();
-                    $("#divMsjeExito").addClass('alert alert-info alert-dismissable');
-                    $("#aMsjeExito").html(data); 
-				}, //mostramos el error
-			error: function() { alert('Se ha producido un error Inesperado'); }
-			});
-            $('#myModal').modal('hide');
-            return false; // ajax used, block the normal submit
-});
+// $("#delete").click(function() {
+//  	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+//  	if (rowindex > -1)
+//  	{
+//  		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
+//  		//$("#id").val(dataRecord.id);
+//  		bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de eliminar el registro.", function(result) {
+//                 if (result == true) {
+//                     var v = $.ajax({
+//                         url: '/productos/delete/',
+//                         type: 'POST',
+//                         datatype: 'json',
+//                         data: {id: dataRecord.id},
+//                         success: function(data) {
+//                             cargar(); //alert('Guardado Correctamente'); 
+//                             $("#divMsjeExito").show();
+//                     		$("#divMsjeExito").addClass('alert alert-warning alert-dismissable');
+//                     		$("#aMsjeExito").html(data); 
+//                         }, //mostramos el error
+//                         error: function() {
+//                             alert('Se ha producido un error Inesperado');
+//                         }
+//                     });
+//                 }
+//             });
+//  	}
+//  	else
+//  	{
+//  		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para eliminar.");
+//  	}
 
+//  });
+
+// /*
+// Select dependiente
+// */
+
+// $("#linea_id").change(function(){
+// 	select_estacion($(this).val());
+// });
+
+// $("#tiempo").change(function(){
+// 	$("#tiempo_text").text('('+$(this).val()+')');
+// });
+
+// function select_estacion(linea_id,estacion_id){
+// 	$.post("/productos/select_estaciones/", { linea_id: linea_id }, function(data){
+// 		$("#estacion_id").html(data);
+// 		$("#estacion_id").val(estacion_id);
+// 		}); 
+// }
+
+
+// $("#testForm").submit(function() {
+// 	var v=$.ajax({
+//             	url:'/productos/save/',
+//             	type:'POST',
+//             	datatype: 'json',
+//             	data:{id:$("#id").val(),grupo_id:$("#grupo_id").val(),estacion_id:$("#estacion_id").val(),producto:$("#producto").val(),codigo:$("#codigo").val(),descripcion:$("#descripcion").val(),precio_unitario:$("#precio_unitario").val(),cantidad:$("#cantidad").val(),tiempo:$("#tiempo").val(),estacion_id:$("#estacion_id").val()},
+// 				success: function(data) { cargar(); 
+// 					$("#divMsjeExito").show();
+//                     $("#divMsjeExito").addClass('alert alert-info alert-dismissable');
+//                     $("#aMsjeExito").html(data); 
+// 				}, //mostramos el error
+// 			error: function() { alert('Se ha producido un error Inesperado'); }
+// 			});
+//             $('#myModal').modal('hide');
+//             return false; // ajax used, block the normal submit
+// });
 
 
 })

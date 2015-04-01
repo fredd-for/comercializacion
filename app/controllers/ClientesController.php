@@ -76,6 +76,23 @@ class ClientesController extends ControllerBase
         echo json_encode($customers);
 	}
 
+    public function listcontratosAction()
+    {
+        $resul = Contratos::find(array('baja_logica=1', 'order'=>'fecha_contrato desc'));
+        $this->view->disable();
+        foreach ($resul as $v) {
+            $customers[] = array(
+                'id' => $v->id,
+                'contrato' => $v->contrato,
+                'cliente_id' => $v->cliente_id,
+                'fecha_contrato' => $v->fecha_contrato,
+                'descripcion' => $v->descripcion,
+            );
+        }
+        echo json_encode($customers);
+    }
+
+
     public function saveAction()
     {
         if (isset($_POST['id'])) {
