@@ -110,11 +110,21 @@ class ProductosController extends ControllerBase
                 'descripcion' => $v->descripcion,
                 'precio_unitario' => $v->precio_unitario,
                 'cantidad' => $v->cantidad,
-                'tiempo' => $v->tiempo
+                'tiempo' => $v->tiempo,
+                'foto' => $this->foto($v->carpeta,$v->nombre_archivo)
             );
         }
         echo json_encode($customers);
 	}
+
+    public function foto($carpeta, $archivo) {
+        $file = "/file/productos/images.png";
+        if (file_exists($carpeta . $archivo)) {
+            $file = "/".$carpeta . $archivo;
+        } 
+        return $file;
+    }
+
 
     public function saveAction()
     {
@@ -187,6 +197,49 @@ class ProductosController extends ControllerBase
                 }
         $this->view->disable();
         echo $msm;
+    }
+
+    public function galeriaAction($producto_id)
+    {
+        if ($this->request->hasFiles() == true) {
+                foreach ($this->request->getUploadedFiles() as $file) {
+                //Move the file into the application
+                $carpeta = "file/productos/";
+                    $path = $carpeta.date("Ymd_his").$file->getName();
+                    if($file->moveTo($path)) {
+                        $resul3 = new Archivos();
+                        $resul3->producto_id = $producto_id;
+                        $resul3->tipo_archivo = $file->getType();
+                        $resul3->nombre_archivo = date("Ymd_his").$file->getName();
+                        $resul3->carpeta = $carpeta;
+                        $resul3->tamanio = $file->getSize();
+                        $resul3->usuario_reg = $this->_user->id;
+                        $resul3->fecha_reg = date("Y-m-d h:i:s");
+                        $resul3->estado = 1;
+                        $resul3->baja_logica = 1;
+                        
+                        if ($resul3->save()) {
+                            $this->flashSession->success("Exito: Registro guardado correctamente...");    
+                        }else{
+                            $this->flashSession->error("Error: no se a guardado el registro...");    
+                        }
+                    } else {
+                        die("Acurrio algun error.");    
+                    } 
+                }
+            }
+
+            
+
+        // $model = new Productos();
+        // $resul = $model->getProducto($producto_id);
+        // $producto_id = 0;
+        // foreach ($resul as $v) {
+        //     $producto_id = $v->id;
+        // }
+        $this->view->setVar('producto_id', $producto_id);
+
+
     }
 
 }

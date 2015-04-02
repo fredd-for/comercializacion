@@ -2,7 +2,7 @@
 	<div class="col-sm-12">
 		<div class="panel">
 			<div class="panel-heading">
-				<h4>Contrato Nro</h4>
+				<h4>Contrato Nro <strong><?php echo $contrato->contrato ?></strong></h4>
 				<div class="options">
 					<ul class="nav nav-tabs">
 						<li class="active"><a data-toggle="tab" href="#domshortcuttiles"><i class="fa fa-users"></i></a></li>
@@ -12,7 +12,40 @@
 			</div>
 			<div class="panel-body">
 				<div class="tab-content">
-					<!-- <div class="row">
+					<div class="row">
+						<div class="col-md-12">
+							<table class="table table-borderless table-striped">
+								<tr>
+									<td width="15%"><strong>Cliente Razón Social</strong></td>
+									<td><?php echo $contrato->razon_social ?></td>
+									<td><strong>Contrato Nro</strong></td>
+									<td><?php echo $contrato->contrato ?></td>
+									<td><strong>Fecha Contrato</strong></td>
+									<td><?php echo date("d-m-Y",strtotime($contrato->fecha_contrato)) ?></td>
+
+								</tr>
+								<tr>
+									<td><strong>Descripción</strong></td>
+									<td colspan="5"><?php echo $contrato->descripcion ?></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-12">
+							<div id="jqxgrid_cp" style="height: 200px; width: 100%;" ></div>
+						</div>
+					</div>
+				</div>
+				<br>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- <div class="row">
 						<div class="col-md-12">
 							<?php //echo $this->flashSession->output(); ?>
 							<div id="divMsjeExito" class="msjs-alert" hidden="hidden">
@@ -25,25 +58,108 @@
 							</div>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="pull-right">
-								<button class="btn btn-sm btn-primary" type="button" id="add"><i class="fa fa-plus fa-fw"></i>Adicionar</button>
-								<button class="btn btn-sm btn-warning" type="button" id="edit"><i class="fa fa-pencil fa-fw"></i> Editar</button>
-								<button class="btn btn-sm btn-danger" type="button" id="delete"><i class="fa fa-trash-o fa-fw"></i> Eliminar</button>
+				-->
+				<div class="row">
+					<div class="col-md-12">
+						<div class="pull-right">
+							<button class="btn btn-sm btn-primary" type="button" id="add_contrato"><i class="fa fa-plus fa-fw"></i>Añadir a Contrato</button>
+								<!-- <button class="btn btn-sm btn-warning" type="button" id="edit"><i class="fa fa-pencil fa-fw"></i> Editar</button>
+								<button class="btn btn-sm btn-danger" type="button" id="delete"><i class="fa fa-trash-o fa-fw"></i> Eliminar</button> -->
 							</div>
 						</div>
-					</div> -->
+					</div> 
 					<div class="row">
 						<div class="col-md-12">
 							<div id="jqxgrid_p" style="height: 550px; width: 100%;" ></div>
 						</div>
 					</div>
-				</div>
-				<br>
-			
-			</div>
-		</div>
-	</div>
-</div>
 
+
+					<!-- Modal añadir a contrato -->
+					<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<form class="form-horizontal" id="testForm" data-toggle="validator" action="" method="post" />
+								<input type="hidden" name="cliente_id" id="cliente_id">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+									<h4 class="modal-title" id="titulo">Editar</h4>
+								</div>
+								<div class="modal-body">
+									<div class="form-group">
+										<label class="col-md-3 control-label">Estación</label>
+										<div class="col-md-9">
+											<input type="text" name="estacion" id="estacion" class="form-control" placeholder="" readonly>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-3 control-label">Grupo</label>
+										<div class="col-md-9">
+											<input type="text" name="grupo" id="grupo" class="form-control" placeholder="" readonly="">
+										</div>
+									</div>
+									<div class="form-group" >
+										<label class="col-md-3 control-label">Producto</label>
+										<div class="col-md-9">
+											<input type="text" name="producto" id="producto" class="form-control" placeholder="" readonly="">
+										</div>
+									</div>
+									<div class="form-group" >
+										<label class="col-md-3 control-label">Cantidad</label>
+										<div class="col-md-9">
+											<input type="number" name="cantidad" id="cantidad" class="form-control" placeholder="">
+										</div>
+									</div>
+									<div class="form-group" >
+										<label class="col-md-3 control-label">Fecha Inicio</label>
+										<div class="col-md-9">
+											<input type="text" id="fecha_inicio" name="fecha_inicio" class="form-control" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" required/>
+										</div>
+									</div>
+									<div class="form-group" >
+										<label class="col-md-3 control-label">Fecha Finalización</label>
+										<div class="col-md-9">
+											<input type="text" id="fecha_fin" name="fecha_fin" class="form-control" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" required/>
+										</div>
+									</div>
+
+									<div class="form-group" >
+										<label class="col-md-3 control-label">Tiempo</label>
+										<div class="col-md-9">
+											<?php echo $tiempo ?>
+										</div>
+									</div>
+									<div class="form-group" >
+										<label class="col-md-3 control-label">Precio Bs. <span id='tiempo_text'></span></label>
+										<div class="col-md-9">
+											<input type="number" name="precio_unitario" id="precio_unitario" class="form-control" required title="campo obligatorio">
+										</div>
+									</div>
+									<div class="form-group" >
+										<label class="col-md-3 control-label">Total</label>
+										<div class="col-md-9">
+
+										</div>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+									<button type="submit" class="btn btn-primary" id="Save">Guardar</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<!-- end  modal -->
+		
+				<style type="text/css">
+					.datepicker{
+						z-index:1151 !important;
+					}
+				</style>
+				<script>$(function() { 
+					$("#fecha_inicio, #fecha_fin").datepicker({
+						autoclose:true
+					});
+
+				});</script>

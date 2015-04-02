@@ -5,6 +5,7 @@
         <group>
             <file>file:/var/www/html/comercializacion/app/controllers/ProductosController.php</file>
             <file>file:/var/www/html/comercializacion/app/controllers/ControllerBase.php</file>
+            <file>file:/var/www/html/comercializacion/app/config/services.php</file>
             <file>file:/var/www/html/comercializacion/index.php</file>
         </group>
     </open-files>

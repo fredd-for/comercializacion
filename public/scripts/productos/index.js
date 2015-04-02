@@ -18,11 +18,44 @@ $(document).ready(function (){
 			{ name: 'precio_unitario',type:'number'},
 			{ name: 'cantidad',type:'number'},
 			{ name: 'tiempo',type:'string'},
+			{ name: 'foto'},
 			],
 			url: '/productos/list',
-			cache: false
+			cache: true
 		};
 		var dataAdapter = new $.jqx.dataAdapter(source);
+
+		var toThemeProperty = function(className) {
+			return className + " " + className + "-" + theme;
+		}
+		var groupsrenderer = function(text, group, expanded, data) {
+			if (data.subItems.length > 0) {
+				var aggregate = this.getcolumnaggregateddata('id', ['sum'], true, data.subItems);
+				var total = this.getcolumnaggregateddata('suma', ['sum'], true, data.subItems);
+			}
+			else {
+				var rows = new Array();
+				var getRows = function(group, rows) {
+					if (group.subGroups.length > 0) {
+						for (var i = 0; i < group.subGroups.length; i++) {
+							getRows(group.subGroups[i], rows);
+						}
+					}
+					else {
+						for (var i = 0; i < group.subItems.length; i++) {
+							rows.push(group.subItems[i]);
+						}
+					}
+				}
+				getRows(data, rows);
+				var aggregate = this.getcolumnaggregateddata('id', ['sum'], true, rows);
+				var total = this.getcolumnaggregateddata('suma', ['sum'], true, rows);
+			}
+			return '<div class="' + toThemeProperty('jqx-grid-groups-row') + '" style="position: absolute "><span style="margin: 5px 0 0 0;">' + text + ' (' + total.sum + ') , </span>' + '<span class="' + toThemeProperty('jqx-grid-groups-row-details') + '">' + "Cantidad Valores:<b>" + 1 + "</b>, Monto Bs: " + '<b>' + 1 + '</b>' + '</span></div>';
+		}
+		var barra = function(statusbar) {
+		};
+
 
 		$("#jqxgrid").jqxGrid({
 
@@ -30,24 +63,24 @@ $(document).ready(function (){
 			source: dataAdapter,
 			sortable: true,
 			altRows: true,
-			columnsresize: true,
-			pageable: true,
+			showstatusbar: true,
+			statusbarheight: 25,
 			pagerMode: 'advanced',
 			theme: 'custom',
-			//scrollmode: 'deferred',
-			showstatusbar: true,
 			showfilterrow: true,
 			filterable: true,
-			autorowheight: true,
-			columns: [
+			scrollmode: 'deferred',
+			renderstatusbar: barra,
+			scrollfeedback: function (row)
 			{
-				text: '#', sortable: false, filterable: false, editable: false,
-				groupable: false, draggable: false, resizable: false,
-				datafield: '', columntype: 'number', width: '3%',
-				cellsrenderer: function (row, column, value) {
-					return "<div style='margin:4px;'>" + (value + 1) + "</div>";
-				}
+				return '<table style="height: 150px;"><tr><td><img src="' + row.foto + '"  height="90"/></td></tr><tr><td>' + row.producto + '</td></tr></table>';
 			},
+			rowsheight: 90,
+			columns: [
+			{text: 'Image', datafield: 'foto', width: 100, cellsrenderer: function (row, column, value) {
+                            return '<img src="' + value + '" height="90"/>';
+                        }
+            },
 			{ text: 'linea', datafield: 'linea', filtertype: 'input',width: '10%' },
 			{ text: 'Estación', datafield: 'estacion', filtertype: 'input',width: '10%' },
 			{ text: 'Grupo', datafield: 'grupo', filtertype: 'input',width: '10%' },
@@ -59,6 +92,25 @@ $(document).ready(function (){
 			{ text: 'Tiempo', datafield: 'tiempo',filtertype: 'input', width: '5%' },
 			]
 		});
+
+		$("#jqxgrid").bind("filter", function(event) {
+        var visibleRows = $('#jqxgrid').jqxGrid('getrows');
+        var count = visibleRows.length;        
+        $('#statusbarjqxgrid').html('Total: <b>' + count + '</b>');
+    });
+    $("#jqxgrid").bind("bindingcomplete", function(event) {
+        var visibleRows = $('#jqxgrid').jqxGrid('getrows');
+        var count = visibleRows.length;
+        var total_venta = 0;
+        var total = 0;
+        $.each(visibleRows, function(i, e) {
+            total += e.suma;
+            
+        });
+        $('#statusbarjqxgrid').html('Total: <b>' + count + '</b>');
+        $('#fecha').addClass('animated');
+        $('#fecha').addClass('fadeIn');
+    });
 
 }
 
@@ -72,63 +124,81 @@ $("#add").click(function(){
 });
 
 /*
+Galeria de Imagenes
+*/
+$("#galeria").click(function() {
+	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+	if (rowindex > -1)
+	{
+		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
+		$("#id").val(dataRecord.id);
+		$(location).attr('href','/productos/galeria/'+dataRecord.id);
+	}
+	else
+	{
+		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para editar.");
+	}
+
+});
+
+/*
 Editar
- */
+*/
 
- $("#edit").click(function() {
- 	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
- 	if (rowindex > -1)
- 	{
- 		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
- 		$("#id").val(dataRecord.id);
- 		$("#titulo").text("Editar Producto");
+$("#edit").click(function() {
+	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+	if (rowindex > -1)
+	{
+		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
+		$("#id").val(dataRecord.id);
+		$("#titulo").text("Editar Producto");
 
- 		$("#grupo_id").val(dataRecord.grupo_id);
- 		$("#linea_id").val(dataRecord.linea_id);
- 		$("#producto").val(dataRecord.producto);
- 		$("#codigo").val(dataRecord.codigo);
- 		$("#descripcion").val(dataRecord.descripcion);
- 		$("#precio_unitario").val(dataRecord.precio_unitario);
- 		$("#cantidad").val(dataRecord.cantidad);
- 		$("#tiempo").val(dataRecord.tiempo);
- 		select_estacion(dataRecord.linea_id,dataRecord.estacion_id);
- 		$('#myModal').modal('show');
- 	}
- 	else
- 	{
- 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para editar.");
- 	}
+		$("#grupo_id").val(dataRecord.grupo_id);
+		$("#linea_id").val(dataRecord.linea_id);
+		$("#producto").val(dataRecord.producto);
+		$("#codigo").val(dataRecord.codigo);
+		$("#descripcion").val(dataRecord.descripcion);
+		$("#precio_unitario").val(dataRecord.precio_unitario);
+		$("#cantidad").val(dataRecord.cantidad);
+		$("#tiempo").val(dataRecord.tiempo);
+		select_estacion(dataRecord.linea_id,dataRecord.estacion_id);
+		$('#myModal').modal('show');
+	}
+	else
+	{
+		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para editar.");
+	}
 
- });
+});
 
 /*
 Eliminar
- */
+*/
 $("#delete").click(function() {
- 	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
- 	if (rowindex > -1)
- 	{
- 		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
+	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+	if (rowindex > -1)
+	{
+		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
  		//$("#id").val(dataRecord.id);
  		bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de eliminar el registro.", function(result) {
-                if (result == true) {
-                    var v = $.ajax({
-                        url: '/productos/delete/',
-                        type: 'POST',
-                        datatype: 'json',
-                        data: {id: dataRecord.id},
-                        success: function(data) {
+ 			if (result == true) {
+ 				var v = $.ajax({
+ 					url: '/productos/delete/',
+ 					type: 'POST',
+ 					datatype: 'json',
+ 					data: {id: dataRecord.id},
+ 					success: function(data) {
                             cargar(); //alert('Guardado Correctamente'); 
                             $("#divMsjeExito").show();
-                    		$("#divMsjeExito").addClass('alert alert-warning alert-dismissable');
-                    		$("#aMsjeExito").html(data); 
+                            $("#divMsjeExito").addClass('alert alert-warning alert-dismissable');
+                            $("#aMsjeExito").html(data); 
                         }, //mostramos el error
                         error: function() {
-                            alert('Se ha producido un error Inesperado');
+                        	alert('Se ha producido un error Inesperado');
                         }
                     });
-                }
-            });
+ 			}
+ 		});
  	}
  	else
  	{
@@ -153,26 +223,26 @@ function select_estacion(linea_id,estacion_id){
 	$.post("/productos/select_estaciones/", { linea_id: linea_id }, function(data){
 		$("#estacion_id").html(data);
 		$("#estacion_id").val(estacion_id);
-		}); 
+	}); 
 }
 
 
 $("#testForm").submit(function() {
 	var v=$.ajax({
-            	url:'/productos/save/',
-            	type:'POST',
-            	datatype: 'json',
-            	data:{id:$("#id").val(),grupo_id:$("#grupo_id").val(),estacion_id:$("#estacion_id").val(),producto:$("#producto").val(),codigo:$("#codigo").val(),descripcion:$("#descripcion").val(),precio_unitario:$("#precio_unitario").val(),cantidad:$("#cantidad").val(),tiempo:$("#tiempo").val(),estacion_id:$("#estacion_id").val()},
-				success: function(data) { cargar(); 
-					$("#divMsjeExito").show();
-                    $("#divMsjeExito").addClass('alert alert-info alert-dismissable');
-                    $("#aMsjeExito").html(data); 
+		url:'/productos/save/',
+		type:'POST',
+		datatype: 'json',
+		data:{id:$("#id").val(),grupo_id:$("#grupo_id").val(),estacion_id:$("#estacion_id").val(),producto:$("#producto").val(),codigo:$("#codigo").val(),descripcion:$("#descripcion").val(),precio_unitario:$("#precio_unitario").val(),cantidad:$("#cantidad").val(),tiempo:$("#tiempo").val(),estacion_id:$("#estacion_id").val()},
+		success: function(data) { cargar(); 
+			$("#divMsjeExito").show();
+			$("#divMsjeExito").addClass('alert alert-info alert-dismissable');
+			$("#aMsjeExito").html(data); 
 				}, //mostramos el error
-			error: function() { alert('Se ha producido un error Inesperado'); }
+				error: function() { alert('Se ha producido un error Inesperado'); }
 			});
-            $('#myModal').modal('hide');
+	$('#myModal').modal('hide');
             return false; // ajax used, block the normal submit
-});
+        });
 
 
 })

@@ -13,36 +13,42 @@ class ContratosController extends ControllerBase
 	public function crearAction($contrato_id='')
 	{
 		
-		if ($this->request->isPost()) {
-			$resul = new Contratos();
-			$resul->contrato = $this->request->getPost('contrato');
-			$resul->cliente_id = $this->request->getPost('cliente_id');
-			$resul->fecha_contrato = date("Y-m-d",strtotime($this->request->getPost('fecha_contrato')));
-			$resul->usuario_reg = $this->_user->id;
-			$resul->fecha_reg = date("Y-m-d H:i:s");
-			$resul->baja_logica = 1;
-			$resul->arrendador = $this->request->getPost('arrendador');
-			$resul->arrendador_rep_legal = $this->request->getPost('arrendador_rep_legal');
-			$resul->arrendador_cargo = $this->request->getPost('arrendador_cargo');
-			$resul->descripcion = $this->request->getPost('descripcion');
-			if ($resul->save()) {
-                $this->flashSession->success("Exito: Registro guardado correctamente...");
-                
-            }else{
-                $this->flashSession->error("Error: no se guardo el registro...");
-                $this->response->redirect('/clientes');
-            }
-		}
-			//$this->flashSession->error("Error: no se guardo el registro...");
+		$tiempo = $this->tag->selectStatic(
+        array(
+            "tiempo",
+            array(
+                "Hora" => "Hora",
+                "Dia"   => "Dia",
+                "Semanal" => "Semanal",
+                "Mensual" => "Mensual",
+                "Anual" => "Anual",
+                ),
+            'useEmpty' => true,
+            'emptyText' => '(Selecionar)',
+            'emptyValue' => '',
+            'class' => 'form-control',
+            'required' => 'required',
+            'title' => 'Campo requerido'
+            )
+        );
+        $this->view->setVar('tiempo', $tiempo);
+		
 		$model = new Contratos();
-		$contratos = $model->listContrato(10);
-
+		$resul = $model->listContrato($contrato_id);
+        $contrato=array();
+        foreach ($resul as $v) {
+            $contrato = $v;  
+        }
+        $this->view->setVar('contrato',$contrato);
+        
 		$this->assets
                 ->addCss('/jqwidgets/styles/jqx.base.css')
                 ->addCss('/jqwidgets/styles/jqx.custom.css')
+                // ->addCss('/js/datepicker/datepicker.css')
                 //->addCss('/media/plugins/form-stepy/jquery.stepy.css')
                 ;
         $this->assets
+                
                 ->addJs('/jqwidgets/jqxcore.js')
                 ->addJs('/jqwidgets/jqxmenu.js')
                 ->addJs('/jqwidgets/jqxdropdownlist.js')
@@ -66,14 +72,39 @@ class ContratosController extends ControllerBase
                 ->addJs('/jqwidgets/globalization/globalize.js')
                 ->addJs('/jqwidgets/jqxgrid.aggregates.js')
                 ->addJs('/media/plugins/bootbox/bootbox.min.js')
-          //       ->addJs('/media/plugins/form-validation/jquery.validate.min.js')
-          //       ->addJs('/media/plugins/form-stepy/jquery.stepy.js')
-        		// ->addJs('/media/demo/demo-formwizard.js')
-                 ->addJs('/scripts/contratos/crear.js')
-                // ->addJs('/assets/js/plugins.js')
-                // ->addJs('/assets/js/pages/formsValidation.js')
+                // ->addJs('/js/datepicker/bootstrap-datepicker.js')
+                
+                ->addJs('/scripts/contratos/crear.js')
         ;
 
 
 	}
+
+    public function listcpAction($contrato_id)
+    {
+        $model = new Contratos();
+        $resul = $model->listcp($contrato_id);
+        $this->view->disable();
+        foreach ($resul as $v) {
+            $customers[] = array(
+                'id' => $v->id,
+                'razon_social' => $v->razon_social,
+                'nit' => $v->nit,
+                'telefono' => $v->telefono,
+                'celular' => $v->celular,
+                'correo' => $v->correo,
+                'direccion' => $v->direccion,
+                // 'imagen' => $v->imagen,
+                'representante_legal' => $v->representante_legal,
+                'ci_representante_legal' => $v->ci_representante_legal,
+                'celular_representante_legal' => $v->celular_representante_legal,
+                'correo_representante_legal' => $v->correo_representante_legal,
+                'nombre_ref' => $v->nombre_ref,
+                'ci_ref' => $v->ci_ref,
+                'celular_ref' => $v->celular_ref,
+                'correo_ref' => $v->correo_ref
+            );
+        }
+        echo json_encode($customers);
+    }
 }
