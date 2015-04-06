@@ -130,11 +130,11 @@ cargar2();
 			{ name: 'grupo',type: 'number'},
 			{ name: 'producto',type: 'number'},
 			{ name: 'precio_tiempo',type: 'string'},
-			{ name: 'fecha_inicio'},
-			{ name: 'fecha_fin'},
+			{ name: 'fecha_inicio',type:'date'},
+			{ name: 'fecha_fin',type:'date'},
 			{ name: 'total',type:'number'},
 			],
-			url: '/contratos/listcp',
+			url: '/contratos/listcp/'+$("#contrato_id").val(),
 			cache: false
 		};
 		var dataAdapter = new $.jqx.dataAdapter(source);
@@ -166,8 +166,8 @@ cargar2();
 				}
 			},
 			{ text: 'Linea', datafield: 'linea', filtertype: 'filter',width: '13%' },
-			{ text: 'Estación', datafield: 'Estacion', filtertype: 'input',width: '14%' },
-			{ text: 'Producto', datafield: 'Producto', filtertype: 'input',width: '25%' },
+			{ text: 'Estación', datafield: 'estacion', filtertype: 'input',width: '14%' },
+			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '25%' },
 			{ text: 'Precio / Tiempo', datafield: 'precio_tiempo', filtertype: 'input',width: '15%' },
 			{ text: 'Fecha Inicio', datafield: 'fecha_inicio', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
 	        { text: 'Fecha Finalización', datafield: 'fecha_fin', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
@@ -194,7 +194,7 @@ $("#add_contrato").click(function() {
  	if (rowindex > -1)
  	{
  		var dataRecord = $("#jqxgrid_p").jqxGrid('getrowdata', rowindex);
- 		$("#id").val(dataRecord.id);
+ 		$("#producto_id").val(dataRecord.id);
  		$("#titulo").text("Añadir a Contrato");
 
  		$("#estacion").val(dataRecord.estacion);
@@ -268,22 +268,27 @@ Eliminar
 // }
 
 
-// $("#testForm").submit(function() {
-// 	var v=$.ajax({
-//             	url:'/productos/save/',
-//             	type:'POST',
-//             	datatype: 'json',
-//             	data:{id:$("#id").val(),grupo_id:$("#grupo_id").val(),estacion_id:$("#estacion_id").val(),producto:$("#producto").val(),codigo:$("#codigo").val(),descripcion:$("#descripcion").val(),precio_unitario:$("#precio_unitario").val(),cantidad:$("#cantidad").val(),tiempo:$("#tiempo").val(),estacion_id:$("#estacion_id").val()},
-// 				success: function(data) { cargar(); 
-// 					$("#divMsjeExito").show();
-//                     $("#divMsjeExito").addClass('alert alert-info alert-dismissable');
-//                     $("#aMsjeExito").html(data); 
-// 				}, //mostramos el error
-// 			error: function() { alert('Se ha producido un error Inesperado'); }
-// 			});
-//             $('#myModal').modal('hide');
-//             return false; // ajax used, block the normal submit
-// });
+$("#testForm").submit(function() {
+	var v=$.ajax({
+		url:'/contratos/savecontratosproductos/',
+		type:'POST',
+		datatype: 'json',
+		data:{id:$("#id").val(),contrato_id:$("#contrato_id").val(),producto_id:$("#producto_id").val(),precio_unitario:$("#precio_unitario").val(),tiempo:$("#tiempo").val(),fecha_inicio:$("#fecha_inicio").val(),fecha_fin:$("#fecha_fin").val(),cantidad:$("#cantidad").val()},
+		success: function(data) { 
+			//cargar(); 
+			cargar2(); 
+			
+			$("#divMsjeExito").show();
+			$("#divMsjeExito").addClass('alert alert-info alert-dismissable');
+			$("#aMsjeExito").html(data); 
+				}, //mostramos el error
+				error: function() { alert('Se ha producido un error Inesperado'); }
+			});
+	$('#myModal').modal('hide');
+            return false; // ajax used, block the normal submit
+        });
 
-
+$("#fecha_inicio, #fecha_fin").datepicker({
+						autoclose:true
+					});
 })

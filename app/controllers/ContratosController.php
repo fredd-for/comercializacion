@@ -88,23 +88,129 @@ class ContratosController extends ControllerBase
         foreach ($resul as $v) {
             $customers[] = array(
                 'id' => $v->id,
-                'razon_social' => $v->razon_social,
-                'nit' => $v->nit,
-                'telefono' => $v->telefono,
-                'celular' => $v->celular,
-                'correo' => $v->correo,
-                'direccion' => $v->direccion,
-                // 'imagen' => $v->imagen,
-                'representante_legal' => $v->representante_legal,
-                'ci_representante_legal' => $v->ci_representante_legal,
-                'celular_representante_legal' => $v->celular_representante_legal,
-                'correo_representante_legal' => $v->correo_representante_legal,
-                'nombre_ref' => $v->nombre_ref,
-                'ci_ref' => $v->ci_ref,
-                'celular_ref' => $v->celular_ref,
-                'correo_ref' => $v->correo_ref
+                'linea' => $v->linea,
+                'estacion' => $v->estacion,
+                'grupo' => $v->grupo,
+                'producto' => $v->producto,
+                'precio_tiempo' => $v->precio_tiempo,
+                'fecha_inicio' => $v->fecha_inicio,
+                'fecha_fin' => $v->fecha_fin,
+                'total' => '10'
             );
         }
         echo json_encode($customers);
     }
+
+    public function savecontratosproductosAction()
+    {
+        
+        if (isset($_POST['id'])) {
+            if ($_POST['id']>0) {
+                // $resul = Clientes::findFirstById($this->request->getPost('id'));
+                // $resul->razon_social= $this->request->getPost('razon_social');
+                // $resul->nit = $this->request->getPost('nit');
+                // $resul->telefono = $this->request->getPost('telefono');
+                // $resul->celular = $this->request->getPost('celular');
+                // $resul->correo = $this->request->getPost('correo');
+                // $resul->direccion = $this->request->getPost('direccion');
+                // // $resul->imagen = $this->request->getPost('imagen');
+                // $resul->representante_legal = $this->request->getPost('representante_legal');
+                // $resul->ci_representante_legal = $this->request->getPost('ci_representante_legal');
+                // $resul->celular_representante_legal = $this->request->getPost('celular_representante_legal');
+                // $resul->correo_representante_legal = $this->request->getPost('correo_representante_legal');
+                // $resul->nombre_ref = $this->request->getPost('nombre_ref');
+                // $resul->ci_ref = $this->request->getPost('ci_ref');
+                // $resul->celular_ref = $this->request->getPost('celular_ref');
+                // $resul->correo_ref = $this->request->getPost('correo_ref');
+                // // $resul->usuario_reg = $this->_user->id;
+                // // $resul->fecha_reg = date("Y-m-d H:i:s");
+                // // $resul->baja_logica = 1;
+                // if ($resul->save()) {
+                //     $msm ='Exito: Se guardo correctamente';
+                // }else{
+                //     $msm = 'Error: No se guardo el registro';
+                // }
+            }
+            else{
+                $resul = new Contratosproductos();
+                $resul->contrato_id= $this->request->getPost('contrato_id');
+                $resul->producto_id = $this->request->getPost('producto_id');
+                $resul->precio_unitario = $this->request->getPost('precio_unitario');
+                $resul->tiempo = $this->request->getPost('tiempo');
+                $resul->fecha_inicio = date("Y-m-d",strtotime($this->request->getPost('fecha_inicio')));
+                $resul->fecha_fin = date("Y-m-d",strtotime($this->request->getPost('fecha_fin')));
+                $resul->cantidad = $this->request->getPost('cantidad');
+                $resul->baja_logica = 1;
+                if ($resul->save()) {
+                    $msm ='Exito: Se guardo correctamente';
+                }else{
+                    $msm = 'Error: No se guardo el registro';
+                }
+            }   
+        }
+    $this->view->disable();
+    echo $msm;
+    }
+
+    public function mensualAction($fecha_inicio='2014-12-14',$fecha_fin='2015-02-15',$costo_mes='2000')
+    {
+        $dia_i = date('j',strtotime($fecha_inicio)); //dia inicial de la fecha de inicio
+        $dia_f = date('j',strtotime($fecha_fin)); //dia final de la fecha final
+        $costo_total = 0;
+        $mes = date('n',strtotime($fecha_inicio));
+        $anio = date('Y',strtotime($fecha_inicio));
+        if( is_callable("cal_days_in_month")){
+            $nro_dias= cal_days_in_month(CAL_GREGORIAN, $mes, $anio);
+        }
+        else{
+            $nro_dias = date("t",mktime(0,0,0,$mes,1,$anio));
+            //$dias = date("d",mktime(0,0,0,$Month+1,0,$Year));
+        }
+        $mes_anio_i = date("Y-m", strtotime($fecha_inicio));
+        $mes_anio_f = date("Y-m", strtotime($fecha_fin));
+        if ($mes_anio_i<$mes_anio_f) {
+            $costo_total +=($nro_dias-$dia_i+1)*($costo_mes/$nro_dias);
+            $dia_i = 1;
+        }
+        
+        //incrementar un mes a un fecha
+        $mes_anio_i = date("Y-m",strtotime('+1 month',strtotime($mes_anio_i))); //incrementamos 1 mes
+        while ( $mes_anio_i<$mes_anio_f ) {
+            $costo_total=$costo_total+$costo_mes;
+            //echo $mes_anio_i.'<br>';
+            $mes_anio_i = date("Y-m",strtotime('+1 month',strtotime($mes_anio_i)));
+        }
+        // Calculamos mes final
+        $mes = date('n',strtotime($fecha_fin));
+        $anio = date('Y',strtotime($fecha_fin));
+        if( is_callable("cal_days_in_month")){
+            $nro_dias= cal_days_in_month(CAL_GREGORIAN, $mes, $anio);
+        }
+        else{
+            $nro_dias = date("t",mktime(0,0,0,$mes,1,$anio));
+            //$dias = date("d",mktime(0,0,0,$Month+1,0,$Year));
+        }
+        $costo_total+=($dia_f-$dia_i+1)*($costo_mes/$nro_dias);
+        echo 'Fecha Inicio: '.$fecha_inicio.' Fecha Final: '.$fecha_fin.' Costo total: '.$costo_total;
+        
+    }
+
+    public function diasAction($fecha_inicio='2014-12-14',$fecha_fin='2015-02-14',$costo_dia='20')
+    {
+        $datetime1 = new DateTime($fecha_inicio);
+        $datetime2 = new DateTime($fecha_fin);
+        $interval = $datetime1->diff($datetime2);
+        $nro_dias = $interval->format('%a')+1;
+        echo $costo_total = $nro_dias*$costo_dia;
+    }
+
+    public function horaAction($fecha_inicio='2014-12-14 10:55:00',$fecha_fin='2014-12-15 11:55:00',$costo_hora='20')
+    {
+        $minutos = (strtotime($fecha_inicio)-strtotime($fecha_fin))/60;
+        $minutos = abs($minutos); 
+        $minutos = floor($minutos);
+        $horas = ceil($minutos/60);
+        echo $costo_total = $horas*$costo_hora;
+    }
+
 }

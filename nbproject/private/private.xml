@@ -5,8 +5,10 @@
         <group>
             <file>file:/var/www/html/comercializacion/app/controllers/ProductosController.php</file>
             <file>file:/var/www/html/comercializacion/app/controllers/ControllerBase.php</file>
+            <file>file:/var/www/html/comercializacion/app/config/loader.php</file>
             <file>file:/var/www/html/comercializacion/app/config/services.php</file>
             <file>file:/var/www/html/comercializacion/index.php</file>
+            <file>file:/var/www/html/comercializacion/app/controllers/ContratosController.php</file>
         </group>
     </open-files>
 </project-private>

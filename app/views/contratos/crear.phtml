@@ -80,7 +80,9 @@
 						<div class="modal-dialog">
 							<div class="modal-content">
 								<form class="form-horizontal" id="testForm" data-toggle="validator" action="" method="post" />
-								<input type="hidden" name="cliente_id" id="cliente_id">
+								<input type="hidden" name="id" id="id">
+								<input type="hidden" name="contrato_id" id="contrato_id" value="<?php echo $contrato->id ?>">
+								<input type="hidden" name="producto_id" id="producto_id" value="">
 								<div class="modal-header">
 									<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 									<h4 class="modal-title" id="titulo">Editar</h4>
@@ -157,9 +159,4 @@
 						z-index:1151 !important;
 					}
 				</style>
-				<script>$(function() { 
-					$("#fecha_inicio, #fecha_fin").datepicker({
-						autoclose:true
-					});
-
-				});</script>
+				
