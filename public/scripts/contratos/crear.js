@@ -21,7 +21,7 @@ $(document).ready(function (){
 			{ name: 'foto'},
 			],
 			url: '/productos/list',
-			cache: true
+			cache: false
 		};
 		var dataAdapter = new $.jqx.dataAdapter(source);
 
@@ -57,7 +57,7 @@ $(document).ready(function (){
 		};
 
 
-		$("#jqxgrid_p").jqxGrid({
+		$("#jqxgrid").jqxGrid({
 
 			width: '100%',
 			source: dataAdapter,
@@ -93,12 +93,12 @@ $(document).ready(function (){
 			]
 		});
 
-		$("#jqxgrid_p").bind("filter", function(event) {
+		$("#jqxgrid").bind("filter", function(event) {
         var visibleRows = $('#jqxgrid').jqxGrid('getrows');
         var count = visibleRows.length;        
         $('#statusbarjqxgrid').html('Total: <b>' + count + '</b>');
     });
-    $("#jqxgrid_p").bind("bindingcomplete", function(event) {
+    $("#jqxgrid").bind("bindingcomplete", function(event) {
         var visibleRows = $('#jqxgrid').jqxGrid('getrows');
         var count = visibleRows.length;
         var total_venta = 0;
@@ -142,20 +142,22 @@ cargar2();
 		$("#jqxgrid_cp").jqxGrid({
 
 			width: '100%',
-			height:'250px',			
-			source: dataAdapter,
-			sortable: true,
-			altRows: true,
-			columnsresize: true,
-			pageable: true,
-			pagerMode: 'advanced',
-			theme: 'custom',
-			//scrollmode: 'deferred',
-			showstatusbar: true,
-			showfilterrow: true,
-			filterable: true,
-			autorowheight: true,
-			keyboardnavigation: false,
+			height:'200px',
+            source: dataAdapter,                
+            sortable: true,
+            altrows: true,
+            columnsresize: true,
+            theme: 'custom',
+            showstatusbar: true,
+            showfilterrow: true,
+            filterable: true,
+            // autorowheight: true,
+            // pageable: true,
+            pagerMode: 'advanced',
+            
+            statusbarheight: 25,
+            showaggregates: true,
+
 			columns: [
 			{
 				text: '#', sortable: false, filterable: false, editable: false,
@@ -165,45 +167,43 @@ cargar2();
 					return "<div style='margin:4px;'>" + (value + 1) + "</div>";
 				}
 			},
-			{ text: 'Linea', datafield: 'linea', filtertype: 'filter',width: '13%' },
-			{ text: 'Estación', datafield: 'estacion', filtertype: 'input',width: '14%' },
+			{ text: 'Linea', datafield: 'linea', filtertype: 'filter',width: '10%' },
+			{ text: 'Estación', datafield: 'estacion', filtertype: 'input',width: '17%' },
 			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '25%' },
-			{ text: 'Precio / Tiempo', datafield: 'precio_tiempo', filtertype: 'input',width: '15%' },
+			{ text: 'Precio Bs. / Tiempo', datafield: 'precio_tiempo', filtertype: 'input',width: '15%' },
 			{ text: 'Fecha Inicio', datafield: 'fecha_inicio', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
 	        { text: 'Fecha Finalización', datafield: 'fecha_fin', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
-			{ text: 'Sub Total', datafield: 'total', filtertype: 'number',width: '10%' },
+			//{ text: 'Sub Total', datafield: 'total', filtertype: 'number',width: '10%' },
+			{ text: 'Sub Total', datafield: 'total', cellsalign: 'right', cellsformat: 'c2', aggregates: ['sum', 'avg'] },
 			]
 		});
 }
-
-/*
-adicionar 
-*/
-// $("#add").click(function(){
-// 	$("#titulo").text("Adicionar Producto");
-// 	$("#id").val("");
-// 	$('#myModal').modal('show');
-// });
 
 /*
 Añadir a Contrato
  */
 
 $("#add_contrato").click(function() {
- 	var rowindex = $('#jqxgrid_p').jqxGrid('getselectedrowindex');
+ 	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
  	if (rowindex > -1)
  	{
- 		var dataRecord = $("#jqxgrid_p").jqxGrid('getrowdata', rowindex);
- 		$("#producto_id").val(dataRecord.id);
- 		$("#titulo").text("Añadir a Contrato");
+ 		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
+ 		if (dataRecord.cantidad>0) {
+ 			$("#producto_id").val(dataRecord.id);
+ 			$("#titulo").text("Añadir a Contrato");
 
- 		$("#estacion").val(dataRecord.estacion);
- 		$("#grupo").val(dataRecord.grupo);
- 		$("#producto").val(dataRecord.producto);
- 		$("#cantidad").val(1);
- 		$("#tiempo").val(dataRecord.tiempo);
- 		$("#precio_unitario").val(dataRecord.precio_unitario);
- 		$('#myModal').modal('show');
+ 			$("#estacion").val(dataRecord.estacion);
+ 			$("#grupo").val(dataRecord.grupo);
+ 			$("#producto").val(dataRecord.producto);
+ 			$("#cantidad").val(1);
+ 			$("#tiempo").val(dataRecord.tiempo);
+ 			$("#precio_unitario").val(dataRecord.precio_unitario);
+ 			$("#tiempo_text").text('('+dataRecord.tiempo+')');
+ 			$('#myModal').modal('show');
+ 		}else{
+ 			bootbox.alert("<strong>¡Mensaje!</strong> El producto ya fue alquilado.");		
+ 		}
+ 		
  	}
  	else
  	{
@@ -212,72 +212,95 @@ $("#add_contrato").click(function() {
 
  });
 
+$("#cantidad").blur(function(){
+	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+	var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
+	if ($(this).val()>dataRecord.cantidad){
+		bootbox.alert("<strong>¡Mensaje!</strong> "+dataRecord.producto+ " disponibles solo "+dataRecord.cantidad);
+		$("#cantidad").val('').focus();
+	}
+	calculoCosto();
+});
+
+$("#hora_inicio, #hora_fin,#hora_inicio, #hora_fin,#precio_unitario").blur(function(){
+	calculoCosto();
+});
+
+$("#tiempo").change(function(){
+	$("#tiempo_text").text('('+$(this).val()+')');
+	calculoCosto();
+});
+
+function calculoCosto(){
+	var fecha_inicio = $("#fecha_inicio").val();
+	var fecha_fin = $("#fecha_fin").val();
+	var hora_inicio = $("#hora_inicio").val();
+	var hora_fin = $("#hora_fin").val();
+	var cantidad = $("#cantidad").val();
+	var tiempo = $("#tiempo").val();
+	var precio_unitario = $("#precio_unitario").val();
+
+	if (fecha_inicio!='' && fecha_fin!='' && hora_inicio!='' && hora_fin!='' && cantidad>0 && tiempo!='' && precio_unitario!='') {
+		var v=$.ajax({
+		url:'/contratos/calculocosto/',
+		type:'POST',
+		datatype: 'json',
+		data:{fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,hora_inicio:hora_inicio,hora_fin:hora_fin,cantidad:cantidad,tiempo:tiempo,precio_unitario:precio_unitario},
+		success: function(data) { 
+			//alert(data);
+			$("#total").val(data);	
+		}, //mostramos el error
+		error: function() { alert('Se ha producido un error Inesperado'); }
+		});	
+	};
+	
+}
+
 /*
-Eliminar
+Eliminar Contratos productos
  */
-// $("#delete").click(function() {
-//  	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
-//  	if (rowindex > -1)
-//  	{
-//  		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
-//  		//$("#id").val(dataRecord.id);
-//  		bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de eliminar el registro.", function(result) {
-//                 if (result == true) {
-//                     var v = $.ajax({
-//                         url: '/productos/delete/',
-//                         type: 'POST',
-//                         datatype: 'json',
-//                         data: {id: dataRecord.id},
-//                         success: function(data) {
-//                             cargar(); //alert('Guardado Correctamente'); 
-//                             $("#divMsjeExito").show();
-//                     		$("#divMsjeExito").addClass('alert alert-warning alert-dismissable');
-//                     		$("#aMsjeExito").html(data); 
-//                         }, //mostramos el error
-//                         error: function() {
-//                             alert('Se ha producido un error Inesperado');
-//                         }
-//                     });
-//                 }
-//             });
-//  	}
-//  	else
-//  	{
-//  		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para eliminar.");
-//  	}
+$("#delete").click(function() {
+ 	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+ 	if (rowindex > -1)
+ 	{
+ 		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
+ 		//$("#id").val(dataRecord.id);
+ 		bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de eliminar el registro.", function(result) {
+                if (result == true) {
+                    var v = $.ajax({
+                        url: '/productos/delete/',
+                        type: 'POST',
+                        datatype: 'json',
+                        data: {id: dataRecord.id},
+                        success: function(data) {
+                            cargar(); //alert('Guardado Correctamente'); 
+                            $("#divMsjeExito").show();
+                    		$("#divMsjeExito").addClass('alert alert-warning alert-dismissable');
+                    		$("#aMsjeExito").html(data); 
+                        }, //mostramos el error
+                        error: function() {
+                            alert('Se ha producido un error Inesperado');
+                        }
+                    });
+                }
+            });
+ 	}
+ 	else
+ 	{
+ 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para eliminar.");
+ 	}
 
-//  });
-
-// /*
-// Select dependiente
-// */
-
-// $("#linea_id").change(function(){
-// 	select_estacion($(this).val());
-// });
-
-// $("#tiempo").change(function(){
-// 	$("#tiempo_text").text('('+$(this).val()+')');
-// });
-
-// function select_estacion(linea_id,estacion_id){
-// 	$.post("/productos/select_estaciones/", { linea_id: linea_id }, function(data){
-// 		$("#estacion_id").html(data);
-// 		$("#estacion_id").val(estacion_id);
-// 		}); 
-// }
-
+ });
 
 $("#testForm").submit(function() {
 	var v=$.ajax({
 		url:'/contratos/savecontratosproductos/',
 		type:'POST',
 		datatype: 'json',
-		data:{id:$("#id").val(),contrato_id:$("#contrato_id").val(),producto_id:$("#producto_id").val(),precio_unitario:$("#precio_unitario").val(),tiempo:$("#tiempo").val(),fecha_inicio:$("#fecha_inicio").val(),fecha_fin:$("#fecha_fin").val(),cantidad:$("#cantidad").val()},
+		data:{id:$("#id").val(),contrato_id:$("#contrato_id").val(),producto_id:$("#producto_id").val(),precio_unitario:$("#precio_unitario").val(),tiempo:$("#tiempo").val(),fecha_inicio:$("#fecha_inicio").val(),fecha_fin:$("#fecha_fin").val(),cantidad:$("#cantidad").val(),total:$("#total").val()},
 		success: function(data) { 
-			//cargar(); 
+			cargar(); 
 			cargar2(); 
-			
 			$("#divMsjeExito").show();
 			$("#divMsjeExito").addClass('alert alert-info alert-dismissable');
 			$("#aMsjeExito").html(data); 
@@ -288,7 +311,9 @@ $("#testForm").submit(function() {
             return false; // ajax used, block the normal submit
         });
 
-$("#fecha_inicio, #fecha_fin").datepicker({
-						autoclose:true
-					});
+	$("#fecha_inicio, #fecha_fin").datepicker({
+						autoclose:true,
+	});
+	 
+
 })

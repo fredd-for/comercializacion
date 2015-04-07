@@ -7,44 +7,10 @@ class ContratosController extends ControllerBase
 	
 	public function indexAction()
 	{
-		# code...
-	}
-
-	public function crearAction($contrato_id='')
-	{
-		
-		$tiempo = $this->tag->selectStatic(
-        array(
-            "tiempo",
-            array(
-                "Hora" => "Hora",
-                "Dia"   => "Dia",
-                "Semanal" => "Semanal",
-                "Mensual" => "Mensual",
-                "Anual" => "Anual",
-                ),
-            'useEmpty' => true,
-            'emptyText' => '(Selecionar)',
-            'emptyValue' => '',
-            'class' => 'form-control',
-            'required' => 'required',
-            'title' => 'Campo requerido'
-            )
-        );
-        $this->view->setVar('tiempo', $tiempo);
-		
-		$model = new Contratos();
-		$resul = $model->listContrato($contrato_id);
-        $contrato=array();
-        foreach ($resul as $v) {
-            $contrato = $v;  
-        }
-        $this->view->setVar('contrato',$contrato);
-        
 		$this->assets
                 ->addCss('/jqwidgets/styles/jqx.base.css')
                 ->addCss('/jqwidgets/styles/jqx.custom.css')
-                // ->addCss('/js/datepicker/datepicker.css')
+                //->addCss('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css')
                 //->addCss('/media/plugins/form-stepy/jquery.stepy.css')
                 ;
         $this->assets
@@ -72,7 +38,81 @@ class ContratosController extends ControllerBase
                 ->addJs('/jqwidgets/globalization/globalize.js')
                 ->addJs('/jqwidgets/jqxgrid.aggregates.js')
                 ->addJs('/media/plugins/bootbox/bootbox.min.js')
-                // ->addJs('/js/datepicker/bootstrap-datepicker.js')
+                // ->addJs('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js')
+                ->addJs('/media/plugins/form-validation/jquery.validate.min.js')
+                ->addJs('/assets/js/plugins.js')
+                ->addJs('/assets/js/pages/formsValidation.js')
+                
+                ->addJs('/scripts/contratos/index.js')
+        ;
+	}
+
+	public function crearAction($contrato_id='')
+	{
+		
+		$tiempo = $this->tag->selectStatic(
+        array(
+            "tiempo",
+            array(
+                "Hora" => "Hora",
+                "Dia"   => "Dia",
+                //"Semanal" => "Semanal",
+                "Mensual" => "Mensual",
+                //"Anual" => "Anual",
+                ),
+            'useEmpty' => true,
+            'emptyText' => '(Selecionar)',
+            'emptyValue' => '',
+            'class' => 'form-control',
+            'required' => 'required',
+            'title' => 'Campo requerido'
+            )
+        );
+        $this->view->setVar('tiempo', $tiempo);
+		
+		$model = new Contratos();
+		$resul = $model->listContrato($contrato_id);
+        $contrato=array();
+        foreach ($resul as $v) {
+            $contrato = $v;  
+        }
+        $this->view->setVar('contrato',$contrato);
+        
+		$this->assets
+                ->addCss('/jqwidgets/styles/jqx.base.css')
+                ->addCss('/jqwidgets/styles/jqx.custom.css')
+                //->addCss('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css')
+                //->addCss('/media/plugins/form-stepy/jquery.stepy.css')
+                ;
+        $this->assets
+                
+                ->addJs('/jqwidgets/jqxcore.js')
+                ->addJs('/jqwidgets/jqxmenu.js')
+                ->addJs('/jqwidgets/jqxdropdownlist.js')
+                ->addJs('/jqwidgets/jqxlistbox.js')
+                ->addJs('/jqwidgets/jqxcheckbox.js')
+                ->addJs('/jqwidgets/jqxscrollbar.js')
+                ->addJs('/jqwidgets/jqxgrid.js')
+                ->addJs('/jqwidgets/jqxdata.js')
+                ->addJs('/jqwidgets/jqxgrid.sort.js')
+                ->addJs('/jqwidgets/jqxgrid.pager.js')
+                ->addJs('/jqwidgets/jqxgrid.filter.js')
+                ->addJs('/jqwidgets/jqxgrid.selection.js')
+                ->addJs('/jqwidgets/jqxgrid.grouping.js')
+                ->addJs('/jqwidgets/jqxgrid.columnsreorder.js')
+                ->addJs('/jqwidgets/jqxgrid.columnsresize.js')
+                ->addJs('/jqwidgets/jqxdatetimeinput.js')
+                ->addJs('/jqwidgets/jqxcalendar.js')
+                ->addJs('/jqwidgets/jqxbuttons.js')
+                ->addJs('/jqwidgets/jqxdata.export.js')
+                ->addJs('/jqwidgets/jqxgrid.export.js')
+                ->addJs('/jqwidgets/globalization/globalize.js')
+                ->addJs('/jqwidgets/jqxgrid.aggregates.js')
+                ->addJs('/media/plugins/bootbox/bootbox.min.js')
+                // ->addJs('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js')
+                ->addJs('/media/plugins/form-validation/jquery.validate.min.js')
+                ->addJs('/assets/js/plugins.js')
+                ->addJs('/assets/js/pages/formsValidation.js')
                 
                 ->addJs('/scripts/contratos/crear.js')
         ;
@@ -92,10 +132,10 @@ class ContratosController extends ControllerBase
                 'estacion' => $v->estacion,
                 'grupo' => $v->grupo,
                 'producto' => $v->producto,
-                'precio_tiempo' => $v->precio_tiempo,
+                'precio_tiempo' => $v->precio_unitario.' Bs. x '.$v->tiempo,
                 'fecha_inicio' => $v->fecha_inicio,
                 'fecha_fin' => $v->fecha_fin,
-                'total' => '10'
+                'total' => $v->total,
             );
         }
         echo json_encode($customers);
@@ -140,8 +180,12 @@ class ContratosController extends ControllerBase
                 $resul->fecha_inicio = date("Y-m-d",strtotime($this->request->getPost('fecha_inicio')));
                 $resul->fecha_fin = date("Y-m-d",strtotime($this->request->getPost('fecha_fin')));
                 $resul->cantidad = $this->request->getPost('cantidad');
+                $resul->total = $this->request->getPost('total');
                 $resul->baja_logica = 1;
                 if ($resul->save()) {
+                    $resul2 = Productos::findFirstById($this->request->getPost('producto_id'));
+                    $resul2->cantidad = $resul2->cantidad-$this->request->getPost('cantidad');
+                    $resul2->save();
                     $msm ='Exito: Se guardo correctamente';
                 }else{
                     $msm = 'Error: No se guardo el registro';
@@ -152,7 +196,22 @@ class ContratosController extends ControllerBase
     echo $msm;
     }
 
-    public function mensualAction($fecha_inicio='2014-12-14',$fecha_fin='2015-02-15',$costo_mes='2000')
+    public function calculocostoAction()
+    {
+        $fecha_inicio = date("Y-m-d",strtotime($_POST['fecha_inicio']));
+        $fecha_fin = date("Y-m-d",strtotime($_POST['fecha_fin']));
+        $precio_unitario = $_POST['precio_unitario'];
+        if ($_POST['tiempo'] = 'Mensual') {
+            $costo = $this->mensual($fecha_inicio,$fecha_fin,$precio_unitario);
+            $costo = $costo * $_POST['cantidad'];
+        }else{
+            $costo = 0;
+        }
+        $this->view->disable();
+        echo $costo;
+    }
+
+    public function mensual($fecha_inicio='2014-12-14',$fecha_fin='2015-02-15',$costo_mes='2000')
     {
         $dia_i = date('j',strtotime($fecha_inicio)); //dia inicial de la fecha de inicio
         $dia_f = date('j',strtotime($fecha_fin)); //dia final de la fecha final
@@ -191,7 +250,8 @@ class ContratosController extends ControllerBase
             //$dias = date("d",mktime(0,0,0,$Month+1,0,$Year));
         }
         $costo_total+=($dia_f-$dia_i+1)*($costo_mes/$nro_dias);
-        echo 'Fecha Inicio: '.$fecha_inicio.' Fecha Final: '.$fecha_fin.' Costo total: '.$costo_total;
+        return $costo_total;
+        //echo 'Fecha Inicio: '.$fecha_inicio.' Fecha Final: '.$fecha_fin.' Costo total: '.$costo_total;
         
     }
 
