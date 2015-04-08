@@ -17,12 +17,13 @@ class Contratos extends \Phalcon\Mvc\Model
 
 	public function listcp($contrato_id)
 	{
-		$sql = "SELECT l.linea, e.estacion,p.producto,c.contrato,cp.*
+		$sql = "SELECT g.grupo,l.linea, e.estacion,p.producto,c.contrato,cp.*
 		FROM contratosproductos cp 
 		INNER JOIN contratos c ON cp.contrato_id=c.id
 		INNER JOIN productos p	ON cp.producto_id = p.id
 		INNER JOIN estaciones e ON p.estacion_id = e.id
 		INNER JOIN lineas l ON e.linea_id = l.id
+		INNER JOIN grupos g ON p.grupo_id = g.id
 		WHERE cp.baja_logica=1 AND cp.contrato_id='$contrato_id' 
 		ORDER BY fecha_fin ASC";
 		$this->_db = new Contratos();

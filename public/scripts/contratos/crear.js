@@ -127,11 +127,14 @@ cargar2();
 			{ name: 'id',type: 'number'},
 			{ name: 'linea',type: 'string'},
 			{ name: 'estacion',type: 'string'},
-			{ name: 'grupo',type: 'number'},
-			{ name: 'producto',type: 'number'},
+			{ name: 'grupo',type: 'string'},
+			{ name: 'producto',type: 'string'},
 			{ name: 'precio_tiempo',type: 'string'},
 			{ name: 'fecha_inicio',type:'date'},
 			{ name: 'fecha_fin',type:'date'},
+			{ name: 'precio_unitario',type:'number'},
+			{ name: 'tiempo',type:'string'},
+			{ name: 'cantidad',type:'number'},
 			{ name: 'total',type:'number'},
 			],
 			url: '/contratos/listcp/'+$("#contrato_id").val(),
@@ -171,8 +174,8 @@ cargar2();
 			{ text: 'Estación', datafield: 'estacion', filtertype: 'input',width: '17%' },
 			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '25%' },
 			{ text: 'Precio Bs. / Tiempo', datafield: 'precio_tiempo', filtertype: 'input',width: '15%' },
-			{ text: 'Fecha Inicio', datafield: 'fecha_inicio', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
-	        { text: 'Fecha Finalización', datafield: 'fecha_fin', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
+			{ text: 'Fecha Inicio', datafield: 'fecha_inicio', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy HH:mm', align:'center'},
+	        { text: 'Fecha Finalización', datafield: 'fecha_fin', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy HH:mm', align:'center'},
 			//{ text: 'Sub Total', datafield: 'total', filtertype: 'number',width: '10%' },
 			{ text: 'Sub Total', datafield: 'total', cellsalign: 'right', cellsformat: 'c2', aggregates: ['sum', 'avg'] },
 			]
@@ -190,7 +193,7 @@ $("#add_contrato").click(function() {
  		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
  		if (dataRecord.cantidad>0) {
  			$("#producto_id").val(dataRecord.id);
- 			$("#titulo").text("Añadir a Contrato");
+ 			$("#titulo").text("Añadir Producto al Contrato");
 
  			$("#estacion").val(dataRecord.estacion);
  			$("#grupo").val(dataRecord.grupo);
@@ -211,6 +214,41 @@ $("#add_contrato").click(function() {
  	}
 
  });
+
+$("#edit_cp").click(function(){
+	var rowindex = $('#jqxgrid_cp').jqxGrid('getselectedrowindex');
+ 	if (rowindex > -1)
+ 	{
+ 		var dataRecord = $("#jqxgrid_cp").jqxGrid('getrowdata', rowindex);
+ 			$("#cp_id").val(dataRecord.id);
+ 			$("#titulo").text("Editar Producto del Contrato");
+ 			// alert(dataRecord.tiempo);
+ 			$("#estacion").val(dataRecord.estacion);
+ 			$("#grupo").val(dataRecord.grupo);
+ 			$("#producto").val(dataRecord.producto);
+ 			$("#cantidad").val(dataRecord.cantidad);
+ 			$("#tiempo").val(dataRecord.tiempo);
+ 			$("#precio_unitario").val(dataRecord.precio_unitario);
+ 			$("#tiempo_text").text('('+dataRecord.tiempo+')');
+ 			$("#total").val(dataRecord.total);
+ 			var fe = $.jqx.dataFormat.formatdate(dataRecord.fecha_inicio, 'dd-MM-yyyy');
+            var fa = $.jqx.dataFormat.formatdate(dataRecord.fecha_fin, 'dd-MM-yyyy');
+            $("#fecha_inicio").val(fe);
+            $("#fecha_fin").val(fa);
+
+            var fe = $.jqx.dataFormat.formatdate(dataRecord.fecha_inicio, 'HH:mm');
+            var fa = $.jqx.dataFormat.formatdate(dataRecord.fecha_fin, 'HH:mm');
+            $("#hora_inicio").val(fe);
+            $("#hora_fin").val(fa);
+
+ 			$('#myModal').modal('show');
+ 		
+ 	}
+ 	else
+ 	{
+ 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un producto para agregar.");
+ 	}
+});
 
 $("#cantidad").blur(function(){
 	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
@@ -238,6 +276,7 @@ function calculoCosto(){
 	var hora_fin = $("#hora_fin").val();
 	var cantidad = $("#cantidad").val();
 	var tiempo = $("#tiempo").val();
+	//alert (tiempo);
 	var precio_unitario = $("#precio_unitario").val();
 
 	if (fecha_inicio!='' && fecha_fin!='' && hora_inicio!='' && hora_fin!='' && cantidad>0 && tiempo!='' && precio_unitario!='') {

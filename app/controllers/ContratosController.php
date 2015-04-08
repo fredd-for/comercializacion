@@ -133,6 +133,9 @@ class ContratosController extends ControllerBase
                 'grupo' => $v->grupo,
                 'producto' => $v->producto,
                 'precio_tiempo' => $v->precio_unitario.' Bs. x '.$v->tiempo,
+                'precio_unitario' => $v->precio_unitario,
+                'tiempo' => $v->tiempo,
+                'cantidad' => $v->cantidad,
                 'fecha_inicio' => $v->fecha_inicio,
                 'fecha_fin' => $v->fecha_fin,
                 'total' => $v->total,
@@ -200,13 +203,22 @@ class ContratosController extends ControllerBase
     {
         $fecha_inicio = date("Y-m-d",strtotime($_POST['fecha_inicio']));
         $fecha_fin = date("Y-m-d",strtotime($_POST['fecha_fin']));
+
+        $hora_inicio = $_POST['hora_inicio'];
+        $hora_fin = $_POST['hora_fin'];
+
         $precio_unitario = $_POST['precio_unitario'];
-        if ($_POST['tiempo'] = 'Mensual') {
+        if ($_POST['tiempo'] == 'Mensual') {
             $costo = $this->mensual($fecha_inicio,$fecha_fin,$precio_unitario);
-            $costo = $costo * $_POST['cantidad'];
-        }else{
+        }elseif ($_POST['tiempo'] == 'Dia') {
+            $costo = $this->dias($fecha_inicio,$fecha_fin,$precio_unitario);
+        }elseif ($_POST['tiempo']=='Hora') {
+            $costo = $this->horas($fecha_inicio.' '.$hora_inicio,$fecha_fin.' '.$hora_fin,$precio_unitario);
+        }
+        else{
             $costo = 0;
         }
+        $costo = $costo * $_POST['cantidad'];
         $this->view->disable();
         echo $costo;
     }
@@ -255,22 +267,24 @@ class ContratosController extends ControllerBase
         
     }
 
-    public function diasAction($fecha_inicio='2014-12-14',$fecha_fin='2015-02-14',$costo_dia='20')
+    public function dias($fecha_inicio='2015-02-14',$fecha_fin='2015-02-14',$costo_dia='20')
     {
         $datetime1 = new DateTime($fecha_inicio);
         $datetime2 = new DateTime($fecha_fin);
         $interval = $datetime1->diff($datetime2);
         $nro_dias = $interval->format('%a')+1;
-        echo $costo_total = $nro_dias*$costo_dia;
+        $costo_total = $nro_dias*$costo_dia;
+        return $costo_total;
     }
 
-    public function horaAction($fecha_inicio='2014-12-14 10:55:00',$fecha_fin='2014-12-15 11:55:00',$costo_hora='20')
+    public function horas($fecha_inicio='2014-12-14 10:55',$fecha_fin='2014-12-15 11:55',$costo_hora='20')
     {
         $minutos = (strtotime($fecha_inicio)-strtotime($fecha_fin))/60;
         $minutos = abs($minutos); 
         $minutos = floor($minutos);
         $horas = ceil($minutos/60);
-        echo $costo_total = $horas*$costo_hora;
+        $costo_total = $horas*$costo_hora;
+        return $costo_total;
     }
 
 }
