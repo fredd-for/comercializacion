@@ -1,23 +1,26 @@
 
 $(document).ready(function (){
 
-cargar2();	
-	function cargar2(){	
+cargar();	
+	function cargar(){	
 		var source =
 		{
 			datatype: "json",
 			datafields: [
 			{ name: 'id',type: 'number'},
-			{ name: 'linea',type: 'string'},
-			{ name: 'estacion',type: 'string'},
-			{ name: 'grupo',type: 'number'},
-			{ name: 'producto',type: 'number'},
-			{ name: 'precio_tiempo',type: 'string'},
-			{ name: 'fecha_inicio',type:'date'},
-			{ name: 'fecha_fin',type:'date'},
-			{ name: 'total',type:'number'},
+			{ name: 'razon_social',type: 'string'},
+			{ name: 'cliente_id',type: 'number'},
+			{ name: 'contrato',type: 'string'},
+			{ name: 'fecha_contrato',type: 'date'},
+			{ name: 'descripcion',type: 'string'},
+			{ name: 'monto_total',type: 'number'},
+			{ name: 'monto_cancelado',type: 'number'},
+			{ name: 'monto_cobrar',type:'number'},
+			{ name: 'fecha_pago',type:'date'},
+			{ name: 'dias_atraso',type:'number'},
+			{ name: 'mora',type:'number'},
 			],
-			url: '/contratos/listcp/15',
+			url: '/contratos/list/',
 			cache: false
 		};
 		var dataAdapter = new $.jqx.dataAdapter(source);
@@ -36,7 +39,7 @@ cargar2();
             autorowheight: true,
             pageable: true,
             pagerMode: 'advanced',
-            
+            groupable: true,
 			columns: [
 			{
 				text: '#', sortable: false, filterable: false, editable: false,
@@ -46,16 +49,20 @@ cargar2();
 					return "<div style='margin:4px;'>" + (value + 1) + "</div>";
 				}
 			},
-			{ text: 'Linea', datafield: 'linea', filtertype: 'filter',width: '10%' },
-			{ text: 'Estación', datafield: 'estacion', filtertype: 'input',width: '17%' },
-			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '25%' },
-			{ text: 'Precio Bs', datafield: 'precio_tiempo', filtertype: 'input',width: '15%' },
-			{ text: 'Fecha Inicio', datafield: 'fecha_inicio', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
-	        { text: 'Fecha Finalización', datafield: 'fecha_fin', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
-			{ text: 'Sub Total', datafield: 'total', filtertype: 'number',width: '10%' },
-			//{ text: 'Sub Total', datafield: 'total', cellsalign: 'right', cellsformat: 'c2', aggregates: ['sum', 'avg'] },
-			]
+			{ text: 'Cliente / Razon Social', datafield: 'razon_social', filtertype: 'filter',width: '10%' },
+			{ text: 'Nro Contrato', datafield: 'contrato', filtertype: 'input',width: '8%' },
+			{ text: 'Fecha Contrato', datafield: 'fecha_contrato', filtertype: 'range', width: '8%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
+			{ text: 'Descripción', datafield: 'descripcion', filtertype: 'input',width: '19%' },
+			{ text: 'Monto Total Bs.', datafield: 'monto_total', filtertype: 'number', width: '10%',cellsformat: "c2", cellsalign: 'right'},
+	        { text: 'Monto Cancelado Bs.', datafield: 'monto_cancelado', filtertype: 'number', width: '10%', cellsformat: "c2", cellsalign: 'right'},
+			{ text: 'Monto Cobrar', datafield: 'monto_cobrar', filtertype: 'number',width: '10%',cellsformat: "c2", cellsalign: 'right' },
+			{ text: 'Ultima Fecha Pago', datafield: 'fecha_pago', filtertype: 'range', width: '8%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
+			{ text: 'Mora', datafield: 'mora', filtertype: 'number',width: '10%' },
+			],
+			groups: ['razon_social']
 		});
+
+ 		//$("#jqxgrid").jqxGrid('expandgroup',4);
 }
 
 

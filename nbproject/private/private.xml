@@ -5,6 +5,8 @@
         <group>
             <file>file:/var/www/html/comercializacion/app/controllers/ProductosController.php</file>
             <file>file:/var/www/html/comercializacion/app/controllers/ControllerBase.php</file>
+            <file>file:/var/www/html/comercializacion/app/config/config.php</file>
+            <file>file:/var/www/html/comercializacion/app/controllers/ErrorController.php</file>
             <file>file:/var/www/html/comercializacion/app/config/loader.php</file>
             <file>file:/var/www/html/comercializacion/app/config/services.php</file>
             <file>file:/var/www/html/comercializacion/index.php</file>

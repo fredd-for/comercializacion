@@ -81,7 +81,7 @@ $(document).ready(function (){
                             return '<img src="' + value + '" height="90"/>';
                         }
             },
-			{ text: 'linea', datafield: 'linea', filtertype: 'input',width: '10%' },
+			{ text: 'linea', datafield: 'linea', filtertype: 'input',width: '9%' },
 			{ text: 'Estación', datafield: 'estacion', filtertype: 'input',width: '10%' },
 			{ text: 'Grupo', datafield: 'grupo', filtertype: 'input',width: '10%' },
 			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '20%' },
@@ -221,7 +221,7 @@ $("#edit_cp").click(function(){
  	{
  		var dataRecord = $("#jqxgrid_cp").jqxGrid('getrowdata', rowindex);
  			$("#cp_id").val(dataRecord.id);
- 			$("#titulo").text("Editar Producto del Contrato");
+ 			$("#titulo_pp").text("Editar Producto del Contrato");
  			// alert(dataRecord.tiempo);
  			$("#estacion").val(dataRecord.estacion);
  			$("#grupo").val(dataRecord.grupo);
@@ -248,6 +248,33 @@ $("#edit_cp").click(function(){
  	{
  		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un producto para agregar.");
  	}
+});
+
+$("#ver_planpagos").click(function(){
+	var rowindex = $('#jqxgrid_cp').jqxGrid('getselectedrowindex');
+	if (rowindex > -1)
+	{
+		var dataRecord = $("#jqxgrid_cp").jqxGrid('getrowdata', rowindex);
+		//alert(dataRecord.id);
+		$("#titulo_pp").text("Ver Plan de Pagos");
+		var v=$.ajax({
+			url:'/contratos/listplanpagos/',
+			type:'POST',
+			datatype: 'json',
+			data:{id:dataRecord.id},
+			success: function(data) { 
+			$("#contenido_pp").html(data);	
+		}, 
+		error: function() { alert('Se ha producido un error Inesperado'); }
+	});	
+
+		$('#myModal_verpp').modal('show');
+
+	}
+	else
+	{
+		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un producto para agregar.");
+	}
 });
 
 $("#cantidad").blur(function(){
@@ -298,21 +325,21 @@ function calculoCosto(){
 /*
 Eliminar Contratos productos
  */
-$("#delete").click(function() {
- 	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+$("#quitar").click(function() {
+ 	var rowindex = $('#jqxgrid_cp').jqxGrid('getselectedrowindex');
  	if (rowindex > -1)
  	{
- 		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
- 		//$("#id").val(dataRecord.id);
- 		bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de eliminar el registro.", function(result) {
+ 		var dataRecord = $("#jqxgrid_cp").jqxGrid('getrowdata', rowindex);
+ 		bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de quitar el producto.", function(result) {
                 if (result == true) {
                     var v = $.ajax({
-                        url: '/productos/delete/',
+                        url: '/contratos/quitar/',
                         type: 'POST',
                         datatype: 'json',
                         data: {id: dataRecord.id},
                         success: function(data) {
                             cargar(); //alert('Guardado Correctamente'); 
+                            cargar2();
                             $("#divMsjeExito").show();
                     		$("#divMsjeExito").addClass('alert alert-warning alert-dismissable');
                     		$("#aMsjeExito").html(data); 
@@ -326,7 +353,7 @@ $("#delete").click(function() {
  	}
  	else
  	{
- 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para eliminar.");
+ 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un producto para quitar.");
  	}
 
  });

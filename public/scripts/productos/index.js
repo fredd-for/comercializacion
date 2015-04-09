@@ -81,6 +81,7 @@ $(document).ready(function (){
                             return '<img src="' + value + '" height="90"/>';
                         }
             },
+			{ text: 'ID', datafield: 'id', filtertype: 'input',width: '5%' },
 			{ text: 'linea', datafield: 'linea', filtertype: 'input',width: '10%' },
 			{ text: 'Estación', datafield: 'estacion', filtertype: 'input',width: '10%' },
 			{ text: 'Grupo', datafield: 'grupo', filtertype: 'input',width: '10%' },

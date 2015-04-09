@@ -47,26 +47,27 @@ class ClientesController extends ControllerBase
         $empresa= Empresas::findFirst(array('baja_logica=1'));
         $this->view->setVar('empresa',$empresa);
 
-        if ($this->request->isPost()) {
-            $resul = new Contratos();
-            $resul->contrato = $this->request->getPost('contrato');
-            $resul->cliente_id = $this->request->getPost('cliente_id');
-            $resul->fecha_contrato = date("Y-m-d",strtotime($this->request->getPost('fecha_contrato')));
-            $resul->usuario_reg = $this->_user->id;
-            $resul->fecha_reg = date("Y-m-d H:i:s");
-            $resul->baja_logica = 1;
-            $resul->arrendador = $this->request->getPost('arrendador');
-            $resul->arrendador_rep_legal = $this->request->getPost('arrendador_rep_legal');
-            $resul->arrendador_cargo = $this->request->getPost('arrendador_cargo');
-            $resul->descripcion = $this->request->getPost('descripcion');
-            if ($resul->save()) {
-                $this->flashSession->success("Exito: Registro guardado correctamente...");
-                $this->response->redirect('/contratos/crear/'.$resul->id);
-            }else{
-                $this->flashSession->error("Error: no se guardo el registro...");
-                $this->response->redirect('/clientes');
-            }
-        }
+        // if ($this->request->isPost()) {
+            
+        //         $resul = new Contratos();
+        //         $resul->contrato = $this->request->getPost('contrato');
+        //         $resul->cliente_id = $this->request->getPost('cliente_id');
+        //         $resul->fecha_contrato = date("Y-m-d",strtotime($this->request->getPost('fecha_contrato')));
+        //         $resul->usuario_reg = $this->_user->id;
+        //         $resul->fecha_reg = date("Y-m-d H:i:s");
+        //         $resul->baja_logica = 1;
+        //         $resul->arrendador = $this->request->getPost('arrendador');
+        //         $resul->arrendador_rep_legal = $this->request->getPost('arrendador_rep_legal');
+        //         $resul->arrendador_cargo = $this->request->getPost('arrendador_cargo');
+        //         $resul->descripcion = $this->request->getPost('descripcion');
+        //         if ($resul->save()) {
+        //             $this->flashSession->success("Exito: Registro guardado correctamente...");
+        //             $this->response->redirect('/contratos/crear/'.$resul->id);
+        //         }else{
+        //             $this->flashSession->error("Error: no se guardo el registro...");
+        //             $this->response->redirect('/clientes');
+        //         }    
+        // }
 	}
 
 	public function listAction()
@@ -98,7 +99,10 @@ class ClientesController extends ControllerBase
 
     public function listcontratosAction()
     {
-        $resul = Contratos::find(array('baja_logica=1', 'order'=>'fecha_contrato desc'));
+        //$resul = Contratos::find(array('baja_logica=1', 'order'=>'fecha_contrato desc'));
+        $model = new Contratos();
+        $resul = $model->listadocontratos();
+
         $this->view->disable();
         foreach ($resul as $v) {
             $customers[] = array(
@@ -107,6 +111,7 @@ class ClientesController extends ControllerBase
                 'cliente_id' => $v->cliente_id,
                 'fecha_contrato' => $v->fecha_contrato,
                 'descripcion' => $v->descripcion,
+                'num_productos' => $v->num_productos,
             );
         }
         echo json_encode($customers);
@@ -198,4 +203,55 @@ class ClientesController extends ControllerBase
         // ->addJs('/js/datepicker/bootstrap-datepicker.js')
         ;
     }
+
+     public function savecontratoAction()
+    {
+        if (isset($_POST['contrato_id'])) {
+            $contrato_id = 0;
+            if ($_POST['contrato_id']>0) {
+                $resul = Contratos::findFirstById($this->request->getPost('contrato_id'));
+                $resul->contrato = $this->request->getPost('contrato');
+                $resul->fecha_contrato = date("Y-m-d",strtotime($this->request->getPost('fecha_contrato')));
+                $resul->descripcion = $this->request->getPost('descripcion');
+                if ($resul->save()) {
+                    $contrato_id = $resul->id;
+                }
+            }
+            else{
+                $resul = new Contratos();
+                $resul->contrato = $this->request->getPost('contrato');
+                $resul->cliente_id = $this->request->getPost('cliente_id');
+                $resul->fecha_contrato = date("Y-m-d",strtotime($this->request->getPost('fecha_contrato')));
+                $resul->usuario_reg = $this->_user->id;
+                $resul->fecha_reg = date("Y-m-d H:i:s");
+                $resul->baja_logica = 1;
+                $resul->arrendador = $this->request->getPost('arrendador');
+                $resul->arrendador_rep_legal = $this->request->getPost('arrendador_rep_legal');
+                $resul->arrendador_cargo = $this->request->getPost('arrendador_cargo');
+                $resul->descripcion = $this->request->getPost('descripcion');
+                if ($resul->save()) {
+                    $this->flashSession->success("Exito: Registro guardado correctamente...");
+                    $contrato_id =$resul->id; 
+                }else{
+                    $this->flashSession->error("Error: no se guardo el registro...");
+                }    
+                
+            }   
+        }
+    $this->view->disable();
+    echo $contrato_id;
+    }
+
+    public function deletecontratoAction(){
+        $resul = Contratos::findFirstById($this->request->getPost('id'));
+        $resul->baja_logica = 0;
+        if ($resul->save()) {
+                    $msm ='Exito: Se elimino correctamente';
+                }else{
+                    $msm = 'Error: No se guardo el registro';
+                }
+        $this->view->disable();
+        echo $msm;
+    }
+
 }
