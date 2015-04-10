@@ -303,6 +303,21 @@ class ContratosController extends ControllerBase
         echo $chtml;
     }
 
+    public function listadoplanpagosAction($contrato_id)
+    {
+        $model = new Contratos();
+        $resul = $model->listContrato($contrato_id);
+        $contrato=array();
+        foreach ($resul as $v) {
+            $contrato = $v;  
+        }
+        $this->view->setVar('contrato',$contrato);
+
+        $model = new Contratos();
+        $contratoproducto = $model->listcp($contrato_id);
+        $this->view->setVar('contratoproducto',$contratoproducto);
+    }
+
 /*
 Funcionesa para plan de pagos
  */

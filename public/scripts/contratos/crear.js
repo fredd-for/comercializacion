@@ -250,6 +250,21 @@ $("#edit_cp").click(function(){
  	}
 });
 
+$("#definir_pp").click(function(){
+	var rowindex = $('#jqxgrid_cp').jqxGrid('getselectedrowindex');
+ 	if (rowindex > -1)
+ 	{
+ 		
+
+ 		$('#myModal_definir_pp').modal('show');
+ 		
+ 	}
+ 	else
+ 	{
+ 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un producto para definir plan de pagos.");
+ 	}
+});
+
 $("#ver_planpagos").click(function(){
 	var rowindex = $('#jqxgrid_cp').jqxGrid('getselectedrowindex');
 	if (rowindex > -1)
@@ -275,6 +290,11 @@ $("#ver_planpagos").click(function(){
 	{
 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un producto para agregar.");
 	}
+});
+
+$("#ver_pp_todo").click(function(){
+	var contrato_id = $("#contrato_id").val();
+	$(location).attr('href','/contratos/listadoplanpagos/'+contrato_id);
 });
 
 $("#cantidad").blur(function(){
