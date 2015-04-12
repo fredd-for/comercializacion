@@ -129,6 +129,7 @@ cargar2();
 			{ name: 'estacion',type: 'string'},
 			{ name: 'grupo',type: 'string'},
 			{ name: 'producto',type: 'string'},
+			{ name: 'producto_id',type: 'number'},
 			{ name: 'precio_tiempo',type: 'string'},
 			{ name: 'fecha_inicio',type:'date'},
 			{ name: 'fecha_fin',type:'date'},
@@ -204,7 +205,7 @@ $("#add_contrato").click(function() {
  			$("#tiempo_text").text('('+dataRecord.tiempo+')');
  			$('#myModal').modal('show');
  		}else{
- 			bootbox.alert("<strong>¡Mensaje!</strong> El producto ya fue alquilado.");		
+ 			bootbox.alert("<strong>¡Mensaje!</strong> El producto ya fue alqado.");		
  		}
  		
  	}
@@ -254,8 +255,10 @@ $("#definir_pp").click(function(){
 	var rowindex = $('#jqxgrid_cp').jqxGrid('getselectedrowindex');
  	if (rowindex > -1)
  	{
- 		
-
+ 		var dataRecord = $("#jqxgrid_cp").jqxGrid('getrowdata', rowindex);	
+ 		$("#producto_id").val(dataRecord.producto_id);
+ 		$("#contratoproducto_id").val(dataRecord.id);
+ 		lista_pp(dataRecord.id);
  		$('#myModal_definir_pp').modal('show');
  		
  	}
@@ -378,7 +381,7 @@ $("#quitar").click(function() {
 
  });
 
-$("#testForm").submit(function() {
+$("#testForm").submit(function(){
 	var v=$.ajax({
 		url:'/contratos/savecontratosproductos/',
 		type:'POST',
@@ -397,7 +400,81 @@ $("#testForm").submit(function() {
             return false; // ajax used, block the normal submit
         });
 
-	$("#fecha_inicio, #fecha_fin").datepicker({
+
+// Adicionar plan de pagos
+$("#add_pp").click(function(){
+  	$("#fecha_programado").val('');
+  	$("#monto_programado").val('');
+    $('#myModal_pp').modal('show');
+  
+});
+
+
+
+
+$("#testForm_pp").submit(function(){
+var planplago_id = $("#planpago_id").val();	
+var v=$.ajax({
+   url:'/contratos/savepp/',
+   type:'POST',
+   datatype: 'json',
+   data:{id:planplago_id,contratoproducto_id:$("#contratoproducto_id").val(),contrato_id:$("#contrato_id").val(),producto_id:$("#producto_id").val(),fecha_programado:$("#fecha_programado").val(),monto_programado:$("#monto_programado").val()},
+   success: function(data) { alert(data); 
+                        }, //mostramos el error
+                        error: function() { alert('Se ha producido un error Inesperado'); }
+                      });
+
+  lista_pp($("#contratoproducto_id").val());
+   $('#myModal_pp').modal('hide');
+   return false; // ajax used, block the normal submit
+  
+});
+
+
+// Listado de plan pagos
+function lista_pp(contratoproducto_id){
+  //alert(contratoproducto_id);
+  var v=$.ajax({
+  	url:'/contratos/listapp/',
+  	type:'POST',
+  	datatype: 'json',
+  	complete:function(){
+  		$(".delete_pp").click(function(){
+  			var nombre = $(this).attr("nombre");
+  			var planpagos_id = $(this).attr("planpagos_id");
+  			bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de eliminar el registro. "+nombre, function(result) {
+  				if (result==true) {
+  					var v=$.ajax({
+  						url:'/contratos/deletepp/',
+  						type:'POST',
+  						datatype: 'json',
+  						data:{id:planpagos_id},
+  						success: function(data) { alert(data);
+  							lista_pp(contratoproducto_id);
+                        }, //mostramos el error
+                        error: function() { alert('Se ha producido un error Inesperado'); }
+                    });
+  				}
+  			});
+  		});
+
+  		$(".edit_pp").click(function(){
+  			$("#fecha_programado").val($(this).attr("fecha_programado"));
+  			$("#monto_programado").val($(this).attr("monto_programado"));
+  			$("#planpago_id").val($(this).attr("planpago_id"))
+    		$('#myModal_pp').modal('show');
+  		});
+  	},
+  	data:{contratoproducto_id:contratoproducto_id},
+  	success: function(data) { $("#li_pp").html(data);
+                      }, //mostramos el error
+                      error: function() { alert('Se ha producido un error Inesperado'); 
+                  }
+
+              });
+}
+
+	$("#fecha_inicio, #fecha_fin, #fecha_programado").datepicker({
 						autoclose:true,
 	});
 	 

@@ -157,6 +157,7 @@ class ContratosController extends ControllerBase
                 'estacion' => $v->estacion,
                 'grupo' => $v->grupo,
                 'producto' => $v->producto,
+                'producto_id' => $v->producto_id,
                 'precio_tiempo' => $v->precio_unitario.' Bs. x '.$v->tiempo,
                 'precio_unitario' => $v->precio_unitario,
                 'tiempo' => $v->tiempo,
@@ -284,18 +285,117 @@ class ContratosController extends ControllerBase
         echo $costo;
     }
 
+// Listado de plan de pagos
+    public function listappAction()
+    {
+        $html='<div class="table-responsive">';
+        $suma = 0;
+        if ($_POST['contratoproducto_id']>0) {
+            $resul=Planpagos::find(array('baja_logica=1 and contratoproducto_id='.$_POST['contratoproducto_id'],'order'=>'fecha_programado ASC'));
+            if (count($resul)>0) {
+                $html.='<table class="table table-vcenter table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha Programado</th>
+                                        <th>Monto Programado</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>';
+                foreach ($resul as $v) {
+                    $nombre = 'Fecha Programado: '.date("d-m-Y",strtotime($v->fecha_programado)).' Monto Programado: '.$v->monto_programado.' Bs.';
+                    $fecha_programado = date("d-m-Y",strtotime($v->fecha_programado));
+                    $monto_programado = $v->monto_programado;
+                    $suma+=$v->monto_programado;
+                    $html.='<tr>
+                                <td>'.date("d-m-Y",strtotime($v->fecha_programado)).'</td>
+                                <td class="text-right">'.$v->monto_programado.' Bs.</td>
+                                <td class="text-center">
+                            <div class="btn-group">
+                                <a href="javascript:void(0)" data-toggle="tooltip" title="Editar" class="btn btn-xs btn-warning edit_pp" planpago_id="'.$v->id.'" fecha_programado="'.$fecha_programado.'" monto_programado="'.$monto_programado.'"><i class="fa fa-pencil"></i></a>
+                                <a href="javascript:void(0)" data-toggle="tooltip" title="Eliminar" class="btn btn-xs btn-danger delete_pp" planpagos_id="'.$v->id.'" nombre="'.$nombre.'"><i class="fa fa-times"></i></a>
+                            </div>
+                        </td>
+                            </tr>';
+                
+                // $html.= '<li class="list-group-item "><button class="btn btn-warning btn-circle badge delete_pp" type="button" planpagos_id="'.$v->id.'" nombre="'.$nombre.'" ><i class="fa fa-times"></i></button>'.$nombre.'</li>';     
+                }   
+                $html.='<tr>
+                                <td><strong>TOTAL</strong></td>
+                                <td class="text-right">'.$suma.' Bs.</td>
+                                <td class="text-right"></td>
+                            </tr></tbody></table>'; 
+            }else{
+                $html.='<p>No se tiene plan de pagos</p>';
+            }
+               
+        }
+        $html.='</div>';
+        $this->view->disable();
+        echo $html;
+    }
+
+//Guardar plan de pagos
+public function saveppAction()
+    {
+        if (isset($_POST['id'])) {
+            if ($_POST['id']>0) {
+                $resul = Planpagos::findFirstById($_POST['id']);
+                $resul->fecha_programado = date("Y-m-d",strtotime($_POST['fecha_programado']));
+                $resul->monto_programado = $_POST['monto_programado'];
+                if ($resul->save()) {
+                    $msm = 'Exito: Se guardo correctamente';
+                }else{
+                    $msm = 'Error: No se guardo el registro';
+                }
+            }
+            else{
+                $resul = new Planpagos();
+                $resul->contratoproducto_id = $_POST['contratoproducto_id'];
+                $resul->contrato_id = $_POST['contrato_id'];
+                $resul->producto_id = $_POST['producto_id'];
+                $resul->fecha_programado = date("Y-m-d",strtotime($_POST['fecha_programado']));
+                $resul->monto_programado = $_POST['monto_programado'];
+                $resul->baja_logica = 1;
+                if ($resul->save()) {
+                    $msm = 'Exito: Se guardo correctamente';
+                }else{
+                    $msm = 'Error: No se guardo el registro';
+                }
+            }
+        }
+        $this->view->disable();
+        echo json_encode($msm);
+    }
+
+// Eliminar plan de pagos
+    public function deleteppAction()
+    {
+        $resul = Planpagos::findFirstById($_POST['id']);
+        $resul->baja_logica = 0;
+        if ($resul->save()) {
+            $msm = 'Exito: Se elimino correctamente';
+        }else{
+            $msm = 'Error: No se elimino el registro';
+        }
+        $this->view->disable();
+        echo json_encode($msm);
+    }
+
+
+
     public function listplanpagosAction()
     {
         $chtml = '<table border="1">
     <tr>
         <td>Fecha Programado</td>
-        <td>Monto Programado</td>
+        <td>Monto Programado Bs.</td>
     </tr>';
         $resul = Planpagos::find(array('baja_logica=1 and contratoproducto_id='.$_POST['id'],'order' => 'fecha_programado ASC'));
         foreach ($resul as $v) {
          $chtml .='<tr>
-                <td>'.$v->fecha_programado.'</td>
-                <td>'.$v->monto_programado.'</td>
+                <td>'.date("d-m-Y",strtotime($v->fecha_programado)).'</td>
+                <td>'.$v->monto_programado.' Bs.</td>
                 </tr>';
         }
         $chtml.= '</table>';
