@@ -33,7 +33,7 @@ class PlanpagosController extends ControllerBase
                 ->addJs('/jqwidgets/jqxgrid.export.js')
                 ->addJs('/jqwidgets/globalization/globalize.js')
                 ->addJs('/jqwidgets/jqxgrid.aggregates.js')
-                ->addJs('/scripts/productos/index.js')
+                ->addJs('/scripts/planpagos/index.js')
                 ->addJs('/media/plugins/bootbox/bootbox.min.js')
         ;
 
@@ -41,26 +41,25 @@ class PlanpagosController extends ControllerBase
 
 	public function listAction()
 	{
-		$model = new Productos();
+		$model = new Planpagos();
         $resul = $model->lista();
         $this->view->disable();
         foreach ($resul as $v) {
             $customers[] = array(
                 'id' => $v->id,
-                'linea_id' => $v->linea_id,
+                'grupo' => $v->grupo,
+                'razon_social' => $v->razon_social,
                 'linea' => $v->linea,
                 'estacion' => $v->estacion,
-                'grupo' => $v->grupo,
-                'grupo_id' => $v->grupo_id,
-                'linea_id' => $v->linea_id,
-                'estacion_id' => $v->estacion_id,
                 'producto' => $v->producto,
-                'codigo' => $v->codigo,
-                'descripcion' => $v->descripcion,
+                'contrato' => $v->contrato,
+                'fecha_contrato' => $v->fecha_contrato,
                 'precio_unitario' => $v->precio_unitario,
-                'cantidad' => $v->cantidad,
-                'tiempo' => $v->tiempo,
-                'foto' => $this->foto($v->carpeta,$v->nombre_archivo)
+                'fecha_inicio' => $v->fecha_inicio,
+                'fecha_fin' => $v->fecha_fin,
+                'monto_mora' => 250,
+                'monto_mes' => 1500,
+                'monto_cobrar' => 2530
             );
         }
         echo json_encode($customers);
