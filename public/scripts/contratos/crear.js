@@ -81,9 +81,9 @@ $(document).ready(function (){
                             return '<img src="' + value + '" height="90"/>';
                         }
             },
-			{ text: 'linea', datafield: 'linea', filtertype: 'input',width: '9%' },
-			{ text: 'Estación', datafield: 'estacion', filtertype: 'input',width: '10%' },
-			{ text: 'Grupo', datafield: 'grupo', filtertype: 'input',width: '10%' },
+			{ text: 'linea', datafield: 'linea', filtertype: 'checkedlist',width: '9%' },
+			{ text: 'Estación', datafield: 'estacion', filtertype: 'checkedlist',width: '10%' },
+			{ text: 'Grupo', datafield: 'grupo', filtertype: 'checkedlist',width: '10%' },
 			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '20%' },
 			{ text: 'Codigo', datafield: 'codigo', filtertype: 'input',width: '5%' },
 			{ text: 'Descripción', datafield: 'descripcion', filtertype: 'input',width: '25%' },
@@ -171,8 +171,8 @@ cargar2();
 					return "<div style='margin:4px;'>" + (value + 1) + "</div>";
 				}
 			},
-			{ text: 'Linea', datafield: 'linea', filtertype: 'filter',width: '10%' },
-			{ text: 'Estación', datafield: 'estacion', filtertype: 'input',width: '17%' },
+			{ text: 'Linea', datafield: 'linea', filtertype: 'checkedlist',width: '10%' },
+			{ text: 'Estación', datafield: 'estacion', filtertype: 'checkedlist',width: '17%' },
 			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '25%' },
 			{ text: 'Precio Bs. / Tiempo', datafield: 'precio_tiempo', filtertype: 'input',width: '15%' },
 			{ text: 'Fecha Inicio', datafield: 'fecha_inicio', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy HH:mm', align:'center'},
@@ -361,8 +361,8 @@ $("#quitar").click(function() {
                         datatype: 'json',
                         data: {id: dataRecord.id},
                         success: function(data) {
-                            cargar(); //alert('Guardado Correctamente'); 
                             cargar2();
+                            cargar(); //alert('Guardado Correctamente'); 
                             $("#divMsjeExito").show();
                     		$("#divMsjeExito").addClass('alert alert-warning alert-dismissable');
                     		$("#aMsjeExito").html(data); 
@@ -388,8 +388,8 @@ $("#testForm").submit(function(){
 		datatype: 'json',
 		data:{id:$("#id").val(),contrato_id:$("#contrato_id").val(),producto_id:$("#producto_id").val(),precio_unitario:$("#precio_unitario").val(),tiempo:$("#tiempo").val(),fecha_inicio:$("#fecha_inicio").val(),fecha_fin:$("#fecha_fin").val(),cantidad:$("#cantidad").val(),total:$("#total").val()},
 		success: function(data) { 
-			cargar(); 
 			cargar2(); 
+			cargar();
 			$("#divMsjeExito").show();
 			$("#divMsjeExito").addClass('alert alert-info alert-dismissable');
 			$("#aMsjeExito").html(data); 

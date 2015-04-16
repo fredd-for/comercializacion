@@ -213,6 +213,8 @@ class ClientesController extends ControllerBase
                 $resul->contrato = $this->request->getPost('contrato');
                 $resul->fecha_contrato = date("Y-m-d",strtotime($this->request->getPost('fecha_contrato')));
                 $resul->descripcion = $this->request->getPost('descripcion');
+                $resul->dias_tolerancia = $this->request->getPost('dias_tolerancia');
+                $resul->porcentaje_mora = $this->request->getPost('porcentaje_mora');
                 if ($resul->save()) {
                     $contrato_id = $resul->id;
                 }
@@ -229,6 +231,8 @@ class ClientesController extends ControllerBase
                 $resul->arrendador_rep_legal = $this->request->getPost('arrendador_rep_legal');
                 $resul->arrendador_cargo = $this->request->getPost('arrendador_cargo');
                 $resul->descripcion = $this->request->getPost('descripcion');
+                $resul->dias_tolerancia = $this->request->getPost('dias_tolerancia');
+                $resul->porcentaje_mora = $this->request->getPost('porcentaje_mora');
                 if ($resul->save()) {
                     $this->flashSession->success("Exito: Registro guardado correctamente...");
                     $contrato_id =$resul->id; 
