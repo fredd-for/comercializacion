@@ -89,6 +89,69 @@ public function controlAction($contratoproducto_id)
 
 }
 
+public function savedepositoAction()
+{
+    $html = '
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+';
+    //$AddEdit_derechollave = 'add_derechollave';
+    if (isset($_POST['planpago_id'])) {
+        if ($_POST['planpago_id']>0) {
+         $fecha_deposito = date("Y-m-d",strtotime($this->request->getPost('fecha_deposito')));
+         $resul = Planpagos::findFirstById($_POST['planpago_id']);
+         $resul->fecha_deposito = $fecha_deposito;
+         $resul->nro_deposito = $this->request->getPost('nro_deposito');
+         $resul->monto_deposito = $this->request->getPost('monto_deposito');
+             if ($resul->save()) {
+                $msm = 'Exito: Se guardo correctamente';
+                $fecha_deposito_mora = '';
+                $fecha_deposito =date("d-m-Y",strtotime($resul->fecha_deposito));
+                if ($resul->fecha_deposito_mora != null) {
+                    $fecha_deposito_mora = date("d-m-Y",strtotime($resul->fecha_deposito_mora));
+                }
+
+                $html = '
+                <td>'.$resul->id.'</td>
+                <td>'.date("d-m-Y",strtotime($resul->fecha_programado)).'</td>
+                <td>'.$resul->monto_programado.'</td>
+                <td>'.$resul->nro_deposito.'</td>
+                <td>'.$fecha_deposito.'</td>
+                <td>'.$resul->monto_deposito.'</td>
+                <td>'.$resul->dias_atraso.'</td>
+                <td>'.$resul->mora.'</td>
+                <td>'.$resul->nro_deposito_mora.'</td>
+                <td>'.$resul->fecha_deposito_mora.'</td>
+                <td>'.$resul->monto_deposito_mora.'</td>
+                <td class="text-center">
+                    <div class="btn-group btn-group-xs">
+                        <a href="javascript:void(0)" data-toggle="tooltip" title="Realizar deposito" class="btn btn-default reg_deposito" planpago_id ="'.$resul->id.'" fecha_programado ="'.date("Y-m-d",strtotime($resul->fecha_programado)).'" monto_programado ="'.$resul->monto_programado.'" nro_deposito ="'.$resul->nro_deposito.'" fecha_deposito ="'.$fecha_deposito.'" monto_deposito ="'.$resul->monto_deposito.'"><i class="fa fa-pencil"></i></a>
+
+                        <a href="javascript:void(0)" data-toggle="tooltip" title="Delete" class="btn btn-danger"><i class="fa fa-times"></i></a>
+                    </div>
+                </td>
+                ';
+
+            }else{
+                $msm = 'Error: No se guardo el registro';
+            }
+        }
+    }
+
+$this->view->disable();
+echo $html;
+}
+
 public function savederechollaveAction()
 {
     $garantia_id = '';

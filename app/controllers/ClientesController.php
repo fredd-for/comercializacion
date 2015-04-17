@@ -168,6 +168,7 @@ class ClientesController extends ControllerBase
                 $resul->fecha_reg = date("Y-m-d H:i:s");
                 $resul->baja_logica = 1;
                 if ($resul->save()) {
+                   
                     $msm ='Exito: Se guardo correctamente';
                 }else{
                     $msm = 'Error: No se guardo el registro';

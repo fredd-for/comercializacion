@@ -111,23 +111,33 @@
 							<?php 
 							$c = 1;
 							foreach ($planpago as $v) {
-								$arr = array('fecha_programado' => 1, 'monto_programado' => 2);
+								$fecha_deposito = '';
+								if ($v->fecha_deposito!=null) {
+									$fecha_deposito = date("d-m-Y",strtotime($v->fecha_deposito));
+								}
+
+								$fecha_deposito_mora = '';
+								if ($v->fecha_deposito_mora!=null) {
+									$fecha_deposito_mora = date("d-m-Y",strtotime($v->fecha_deposito_mora));
+								}
+
+								$fecha_programado = date("d-m-Y",strtotime($v->fecha_programado));
 							?>
 								<tr id="html<?php echo $v->id ?>">
 									<td><?php echo $c; $c++; ?></td>
-									<td><?php echo $v->fecha_programado ?></td>
+									<td><?php echo $fecha_programado ?></td>
 									<td><?php echo $v->monto_programado ?></td>
-									<td><?php echo $v->nro_deposito ?></td>
-									<td><?php echo $v->fecha_deposito ?></td>
+									<td><?php echo $v->nro_deposito.'<br>'.$v->nro_deposito ?></td>
+									<td><?php echo $fecha_deposito.'<br>'.$fecha_deposito ?></td>
 									<td><?php echo $v->monto_deposito ?></td>
 									<td><?php echo $v->dias_atraso ?></td>
 									<td><?php echo $v->mora ?></td>
 									<td><?php echo $v->nro_deposito_mora ?></td>
-									<td><?php echo $v->fecha_deposito_mora ?></td>
+									<td><?php echo $fecha_deposito_mora ?></td>
 									<td><?php echo $v->monto_deposito_mora ?></td>
 									<td class="text-center">
 										<div class="btn-group btn-group-xs">
-											<a href="javascript:void(0)" data-toggle="tooltip" title="Realizar deposito" class="btn btn-default reg_deposito" planpago_id ="<?php echo $v->id ?>" fecha_programado ="<?php echo $v->fecha_programado ?>" monto_programado ="<?php echo $v->monto_programado ?>" nro_deposito ="<?php echo $v->nro_deposito ?>" fecha_deposito ="<?php echo $v->fecha_deposito ?>" monto_deposito ="<?php echo $v->monto_deposito ?>"><i class="fa fa-pencil"></i></a>
+											<a href="javascript:void(0)" data-toggle="tooltip" title="Realizar deposito" class="btn btn-default reg_deposito" planpago_id ="<?php echo $v->id ?>" fecha_programado ="<?php echo $fecha_programado ?>" monto_programado ="<?php echo $v->monto_programado ?>" nro_deposito ="<?php echo $v->nro_deposito ?>" fecha_deposito ="<?php echo $fecha_deposito ?>" monto_deposito ="<?php echo $v->monto_deposito ?>"><i class="fa fa-pencil"></i></a>
 
 											<a href="javascript:void(0)" data-toggle="tooltip" title="Delete" class="btn btn-danger"><i class="fa fa-times"></i></a>
 										</div>

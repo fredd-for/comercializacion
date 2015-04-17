@@ -100,12 +100,41 @@ $("#testForm_garantia").submit(function(){
 REgistro de deposito de pago
  */
 $(".reg_deposito").click(function() {
-	var x = $(this).attr('planpago_id');
+	$("#planpago_id").val($(this).attr('planpago_id'));
+	$("#fecha_deposito").val($(this).attr('fecha_deposito'));
+	$("#nro_deposito").val($(this).attr('nro_deposito'));
+	$("#monto_deposito").val($(this).attr('monto_deposito'));
 	$('#titulo_deposito').text('Registrar Deposito');
 	$('#myModal_deposito').modal('show');
 });
 
-$("#fecha_deposito_derechollave, #fecha_deposito_garantia, #fecha_devolucion_garantia").datepicker({
+$("#testForm_deposito").submit(function(){
+	var v=$.ajax({
+		url:'/planpagos/savedeposito/',
+		type:'POST',
+		datatype: 'json',
+		data:{planpago_id:$("#planpago_id").val(),nro_deposito:$("#nro_deposito").val(),fecha_deposito:$("#fecha_deposito").val(),monto_deposito:$("#monto_deposito").val()},
+		complete:function(){
+			$(".reg_deposito").click(function() {
+				$("#planpago_id").val($(this).attr('planpago_id'));
+				$("#fecha_deposito").val($(this).attr('fecha_deposito'));
+				$("#nro_deposito").val($(this).attr('nro_deposito'));
+				$("#monto_deposito").val($(this).attr('monto_deposito'));
+				$('#titulo_deposito').text('Registrar Deposito');
+				$('#myModal_deposito').modal('show');
+			});
+		},
+		success: function(data) { 
+			$("#html"+$("#planpago_id").val()).html(data); 
+				}, //mostramos el error
+				error: function() { alert('Se ha producido un error Inesperado'); }
+			});
+	$('#myModal_deposito').modal('hide');
+    return false; // ajax used, block the normal submit
+});
+
+
+$("#fecha_deposito, #fecha_deposito_derechollave, #fecha_deposito_garantia, #fecha_devolucion_garantia").datepicker({
 	autoclose:true,
 });
 
