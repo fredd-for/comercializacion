@@ -4,8 +4,11 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/var/www/html/comercializacion/app/controllers/ProductosController.php</file>
+            <file>file:/var/www/html/comercializacion/app/views/index/index.phtml</file>
             <file>file:/var/www/html/comercializacion/app/controllers/ControllerBase.php</file>
+            <file>file:/var/www/html/comercializacion/app/views/index.phtml</file>
             <file>file:/var/www/html/comercializacion/app/config/config.php</file>
+            <file>file:/var/www/html/comercializacion/app/models/Planpagodepositos.php</file>
             <file>file:/var/www/html/comercializacion/app/controllers/ErrorController.php</file>
             <file>file:/var/www/html/comercializacion/app/controllers/PlanpagosController.php</file>
             <file>file:/var/www/html/comercializacion/app/config/loader.php</file>

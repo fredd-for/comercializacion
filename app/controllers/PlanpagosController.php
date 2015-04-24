@@ -201,15 +201,20 @@ private function htmlcontrolpagos($contratoproducto_id)
                                             $dias_atraso = $v->dias_atraso;
                                             $mora=$v->mora;
                                         }else{
-                                            $nuevafecha = strtotime ( '+'.$rm->dias_tolerancia.' day' , strtotime ( $v->fecha_programado ) ) ;
-                                            $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
+                                            if ($total_deposito<$v->monto_reprogramado) {
+                                                $nuevafecha = strtotime ( '+'.$rm->dias_tolerancia.' day' , strtotime ( $v->fecha_programado ) ) ;
+                                                $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
 
-                                            $datetime1 = new DateTime($nuevafecha);
-                                            $datetime2 = new DateTime(date("Y-m-d"));
-                                            $interval = $datetime1->diff($datetime2);
-                                            $dias_atraso = $interval->format('%a');
-                                            $mora=($rm->total/$rm->nro_dias)*$dias_atraso;
-                                            $color_mora = 'danger';
+                                                $datetime1 = new DateTime($nuevafecha);
+                                                $datetime2 = new DateTime(date("Y-m-d"));
+                                                $interval = $datetime1->diff($datetime2);
+                                                $dias_atraso = $interval->format('%R%a');
+                                                $mora=($rm->total*$rm->porcentaje_mora)*$dias_atraso;
+                                                $color_mora = 'danger';    
+                                            }else{
+                                                $color_mora = 'success';   
+                                            }
+                                            
                                         }
                                     }
                                 }
@@ -245,17 +250,20 @@ private function htmlcontrolpagos($contratoproducto_id)
 
 public function pruebaAction()
 {
-    $datetime1 = new DateTime('2015-02-28');
-    $datetime2 = new DateTime('2015-04-02');
-    $interval = $datetime1->diff($datetime2);
-    $nro_dias = $interval->format('%a');
-    echo $nro_dias;
 
-    $fecha = date('Y-m-d');
-    $nuevafecha = strtotime ( '+5 day' , strtotime ( $fecha ) ) ;
+    $nuevafecha = strtotime ( '+5 day' , strtotime ('2015-03-31') ) ;
     $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
 
-    echo 'sumamos mas 5 dias '.$nuevafecha;
+    $datetime1 = new DateTime($nuevafecha);
+    $datetime2 = new DateTime('2015-04-03');
+    $interval = $datetime1->diff($datetime2);
+    $dias_atraso = $interval->format('%R%a');
+    echo $dias_atraso;
+    // $fecha = date('Y-m-d');
+    // $nuevafecha = strtotime ( '+5 day' , strtotime ( $fecha ) ) ;
+    // $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
+
+    // echo 'sumamos mas 5 dias '.$nuevafecha;
 
     // $model = new Planpagodepositos();
     //         $resulmora = $model->getfechadeposito(1);
@@ -341,12 +349,19 @@ public function savedepositoAction()
                     $datetime1 = new DateTime($nuevafecha);
                     $datetime2 = new DateTime($v->fecha);
                     $interval = $datetime1->diff($datetime2);
-                    $nro_dias = $interval->format('%a');
+                    $nro_dias = $interval->format('%R%a');
+                    if ($nro_dias>0) {
+                        $planpago = Planpagos::findFirstById($_POST['planpago_id']);
+                        $planpago->dias_atraso = $nro_dias;
+                        $planpago->mora = ($v->total*$v->porcentaje_mora)*$nro_dias;
+                        $planpago->save();    
+                    }else{
+                        $planpago = Planpagos::findFirstById($_POST['planpago_id']);
+                        $planpago->dias_atraso = 0;
+                        $planpago->mora = 0;
+                        $planpago->save();
+                    }
                     
-                    $planpago = Planpagos::findFirstById($_POST['planpago_id']);
-                    $planpago->dias_atraso = $nro_dias;
-                    $planpago->mora = ($v->total/$v->nro_dias)*$nro_dias;
-                    $planpago->save();
                 }
             }
             /*end*/
