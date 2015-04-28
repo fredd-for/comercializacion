@@ -8,28 +8,26 @@ class Planpagos extends \Phalcon\Mvc\Model
 	private $_db;
 	public function lista()
 	{
-		$sql="SELECT cl.razon_social,c.cliente_id,c.contrato,c.fecha_contrato,c.descripcion,p.producto,p.codigo,g.grupo,e.estacion,l.linea,
-		cp.*
-		FROM contratos c
-		INNER JOIN clientes cl ON c.cliente_id = cl.id
-		INNER JOIN contratosproductos cp ON c.id = cp.contrato_id
-		INNER JOIN productos p ON p.id = cp.producto_id 
-		INNER JOIN grupos g ON p.grupo_id = g.id
-		INNER JOIN estaciones e ON p.estacion_id = e.id
-		INNER JOIN lineas l ON e.linea_id = l.id
-		WHERE c.baja_logica =1 AND cp.baja_logica = 1";
-
-
+		// $sql="SELECT cl.razon_social,c.cliente_id,c.contrato,c.fecha_contrato,c.descripcion,p.producto,p.codigo,g.grupo,e.estacion,l.linea,
+		// cp.*
+		// FROM contratos c
+		// INNER JOIN clientes cl ON c.cliente_id = cl.id
+		// INNER JOIN contratosproductos cp ON c.id = cp.contrato_id
+		// INNER JOIN productos p ON p.id = cp.producto_id 
+		// INNER JOIN grupos g ON p.grupo_id = g.id
+		// INNER JOIN estaciones e ON p.estacion_id = e.id
+		// INNER JOIN lineas l ON e.linea_id = l.id
+		// WHERE c.baja_logica =1 AND cp.baja_logica = 1";
 		$sql = "SELECT cl.razon_social,c.cliente_id,c.contrato,c.fecha_contrato,c.descripcion,c.porcentaje_mora,p.producto,p.codigo,g.grupo,e.estacion,l.linea,cp.*,
 		(SELECT SUM(ppd.monto_deposito)
 			FROM planpagos pp,planpagodepositos ppd
 			WHERE pp.contratoproducto_id = cp.id AND pp.baja_logica =1 AND pp.id = ppd.planpago_id AND ppd.baja_logica=1 AND ppd.tipo_deposito =1
 			) as deposito,
 
-(SELECT SUM(IF(pp.monto_reprogramado<=(SELECT SUM(monto_deposito) FROM planpagodepositos WHERE planpago_id =pp.id AND tipo_deposito=1 AND baja_logica = 1),pp.mora,
-	(IF((DATEDIFF(CURDATE(),ADDDATE(pp.fecha_programado, INTERVAL c.dias_tolerancia DAY)))>0,cp.total*c.porcentaje_mora*(DATEDIFF(CURDATE(),ADDDATE(pp.fecha_programado, INTERVAL c.dias_tolerancia DAY))),0))
-	)
-)
+		(SELECT SUM(IF(pp.monto_reprogramado<=(SELECT SUM(monto_deposito) FROM planpagodepositos WHERE planpago_id =pp.id AND tipo_deposito=1 AND baja_logica = 1),pp.mora,
+			(IF((DATEDIFF(CURDATE(),ADDDATE(pp.fecha_programado, INTERVAL c.dias_tolerancia DAY)))>0,cp.total*c.porcentaje_mora*(DATEDIFF(CURDATE(),ADDDATE(pp.fecha_programado, INTERVAL c.dias_tolerancia DAY))),0))
+			)
+		)
 FROM planpagos pp
 WHERE pp.contratoproducto_id =cp.id AND pp.baja_logica = 1 ) as mora
 
@@ -52,6 +50,22 @@ return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($s
 		LEFT JOIN planpagodepositos d ON pp.id=d.planpago_id AND d.baja_logica = 1
 		WHERE pp.contratoproducto_id = '$contratoproducto_id'
 		ORDER BY pp.fecha_programado, d.fecha_deposito";
+		$this->_db = new Planpagos();
+		return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));	
+	}
+
+	public function getcontrato($contratoproducto_id)
+	{
+		$sql = "SELECT cl.razon_social,c.cliente_id,c.contrato,c.fecha_contrato,c.descripcion,p.producto,p.codigo,g.grupo,e.estacion,l.linea,
+		cp.*
+		FROM contratos c
+		INNER JOIN clientes cl ON c.cliente_id = cl.id
+		INNER JOIN contratosproductos cp ON c.id = cp.contrato_id
+		INNER JOIN productos p ON p.id = cp.producto_id 
+		INNER JOIN grupos g ON p.grupo_id = g.id
+		INNER JOIN estaciones e ON p.estacion_id = e.id
+		INNER JOIN lineas l ON e.linea_id = l.id
+		WHERE c.baja_logica =1 AND cp.baja_logica = 1 AND cp.id = '$contratoproducto_id'";
 		$this->_db = new Planpagos();
 		return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));	
 	}

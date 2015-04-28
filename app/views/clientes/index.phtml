@@ -232,15 +232,17 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-3 control-label">Representante Legal</label>
-					<div class="col-md-9">
-						<input type="text" name="arrendador_rep_legal" id="arrendador_rep_legal" value="<?php echo $empresa->representante_legal ?>" class="form-control" placeholder="" required readonly>
+					<label class="col-md-4 control-label">Representante Legal</label>
+					<div class="col-md-8">
+						<?php echo $empresa->representante_legal.' <br> <span>'.$empresa->cargo.'</span>';  ?>
+						<input type="hidden" name="arrendador_rep_legal" id="arrendador_rep_legal" value="<?php echo $empresa->representante_legal ?>" class="form-control" placeholder="" required readonly>
+						<input type="hidden" name="arrendador_cargo" id="arrendador_cargo" value="<?php echo $empresa->cargo ?>" class="form-control" placeholder="" required readonly>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-3 control-label">Cargo</label>
-					<div class="col-md-9">
-						<input type="text" name="arrendador_cargo" id="arrendador_cargo" value="<?php echo $empresa->cargo ?>" class="form-control" placeholder="" required readonly>
+					<label class="col-md-4 control-label">Responsable Comercial</label>
+					<div class="col-md-8">
+						<?php echo $responsable ?>
 					</div>
 				</div>
 				<hr>
@@ -250,43 +252,43 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-3 control-label">Razón Social</label>
-					<div class="col-md-9">
+					<label class="col-md-4 control-label">Razón Social</label>
+					<div class="col-md-8">
 						<input type="text" name="rs" id="rs" class="form-control" placeholder="" readonly>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-3 control-label">Representante Legal</label>
-					<div class="col-md-9">
+					<label class="col-md-4 control-label">Representante Legal</label>
+					<div class="col-md-8">
 						<input type="text" name="rl" id="rl" class="form-control" placeholder="" readonly>
 					</div>
 				</div>
 				<hr>
 				<div class="form-group">
-					<label class="col-md-3 control-label">Nro Contrato</label>
-					<div class="col-md-9">
+					<label class="col-md-4 control-label">Nro Contrato</label>
+					<div class="col-md-8">
 						<input type="text" name="contrato" id="contrato" class="form-control" placeholder="000/2015" required>
 					</div>
 				</div>
 				<div class="form-group" >
-					<label class="col-md-3 control-label">Descripción</label>
-					<div class="col-md-9">
+					<label class="col-md-4 control-label">Descripción</label>
+					<div class="col-md-8">
 						<textarea name="descripcion" id="descripcion" class="form-control"></textarea>
 					</div>
 				</div>
 				<div class="form-group" >
-					<label class="col-md-3 control-label">Fecha Contrato</label>
-					<div class="col-md-9">
+					<label class="col-md-4 control-label">Fecha Contrato</label>
+					<div class="col-md-8">
 						<input type="text" name="fecha_contrato" id="fecha_contrato" class="form-control" placeholder="dd-mm-yyyy" required>
 					</div>
 				</div>
 				<div class="form-group" >
-					<label class="col-md-3 control-label">Toleracia (dias)</label>
-					<div class="col-md-3">
+					<label class="col-md-4 control-label">Toleracia (dias)</label>
+					<div class="col-md-2">
 						<input type="text" name="dias_tolerancia" id="dias_tolerancia" class="form-control" placeholder="" required value="5">
 					</div>
-					<label class="col-md-3 control-label">Interes por Mora (%)</label>
-					<div class="col-md-3">
+					<label class="col-md-4 control-label">Interes por Mora (%)</label>
+					<div class="col-md-2">
 						<input type="text" name="porcentaje_mora" id="porcentaje_mora" class="form-control" placeholder="" required value="3">
 					</div>
 				</div>

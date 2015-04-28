@@ -47,27 +47,36 @@ class ClientesController extends ControllerBase
         $empresa= Empresas::findFirst(array('baja_logica=1'));
         $this->view->setVar('empresa',$empresa);
 
-        // if ($this->request->isPost()) {
-            
-        //         $resul = new Contratos();
-        //         $resul->contrato = $this->request->getPost('contrato');
-        //         $resul->cliente_id = $this->request->getPost('cliente_id');
-        //         $resul->fecha_contrato = date("Y-m-d",strtotime($this->request->getPost('fecha_contrato')));
-        //         $resul->usuario_reg = $this->_user->id;
-        //         $resul->fecha_reg = date("Y-m-d H:i:s");
-        //         $resul->baja_logica = 1;
-        //         $resul->arrendador = $this->request->getPost('arrendador');
-        //         $resul->arrendador_rep_legal = $this->request->getPost('arrendador_rep_legal');
-        //         $resul->arrendador_cargo = $this->request->getPost('arrendador_cargo');
-        //         $resul->descripcion = $this->request->getPost('descripcion');
-        //         if ($resul->save()) {
-        //             $this->flashSession->success("Exito: Registro guardado correctamente...");
-        //             $this->response->redirect('/contratos/crear/'.$resul->id);
-        //         }else{
-        //             $this->flashSession->error("Error: no se guardo el registro...");
-        //             $this->response->redirect('/clientes');
-        //         }    
-        // }
+        //$model = usuarios::find(array('habilitado=1 and nivel=3',"order"=>"paterno ASC"));
+        $model = new Usuarios();
+        $resul = $model->responsablecomercial();
+        $responsable = $this->tag->select(
+            array(
+                'responsable_id',
+                $resul,
+                'using' => array('id', 'nombres'),
+                'useEmpty' => true,
+                'emptyText' => '(Selecionar)',
+                'emptyValue' => '',
+                'class' => 'form-control'
+                )
+            );
+        $this->view->setVar('responsable',$responsable);
+
+        // $nivelsalarial = $this->tag->select(
+        //     array(
+        //         'codigo_nivel',
+        //         Nivelsalariales::find(array('baja_logica=1',"order"=>"id ASC","columns" => "id,CONCAT(denominacion, ' (', sueldo, ' Bs.)') as fullname")),
+        //         //Nivelsalariales::find(array('baja_logica=1','order' => 'id ASC')),
+        //         'using' => array('id', "fullname"),
+        //         'useEmpty' => true,
+        //         'emptyText' => '(Selecionar)',
+        //         'emptyValue' => '',
+        //         'class' => 'form-control'
+        //         )
+        //     );
+
+
 	}
 
 	public function listAction()
@@ -83,7 +92,6 @@ class ClientesController extends ControllerBase
                 'celular' => $v->celular,
                 'correo' => $v->correo,
                 'direccion' => $v->direccion,
-                // 'imagen' => $v->imagen,
                 'representante_legal' => $v->representante_legal,
                 'ci_representante_legal' => $v->ci_representante_legal,
                 'celular_representante_legal' => $v->celular_representante_legal,
@@ -104,7 +112,9 @@ class ClientesController extends ControllerBase
         $resul = $model->listadocontratos();
 
         $this->view->disable();
+        $customers = array();
         foreach ($resul as $v) {
+//            echo "<p>-->".$v->paterno."</p>";
             $customers[] = array(
                 'id' => $v->id,
                 'contrato' => $v->contrato,
@@ -112,6 +122,10 @@ class ClientesController extends ControllerBase
                 'fecha_contrato' => $v->fecha_contrato,
                 'descripcion' => $v->descripcion,
                 'num_productos' => $v->num_productos,
+                'dias_tolerancia' => $v->dias_tolerancia,
+                'porcentaje_mora' => $v->porcentaje_mora*100,
+                'responsable' =>utf8_encode($v->responsable),
+                'responsable_id' => $v->responsable_id,
             );
         }
         echo json_encode($customers);
@@ -215,7 +229,7 @@ class ClientesController extends ControllerBase
                 $resul->fecha_contrato = date("Y-m-d",strtotime($this->request->getPost('fecha_contrato')));
                 $resul->descripcion = $this->request->getPost('descripcion');
                 $resul->dias_tolerancia = $this->request->getPost('dias_tolerancia');
-                $resul->porcentaje_mora = $this->request->getPost('porcentaje_mora');
+                $resul->porcentaje_mora = $this->request->getPost('porcentaje_mora')/100;
                 if ($resul->save()) {
                     $contrato_id = $resul->id;
                 }
@@ -233,7 +247,7 @@ class ClientesController extends ControllerBase
                 $resul->arrendador_cargo = $this->request->getPost('arrendador_cargo');
                 $resul->descripcion = $this->request->getPost('descripcion');
                 $resul->dias_tolerancia = $this->request->getPost('dias_tolerancia');
-                $resul->porcentaje_mora = $this->request->getPost('porcentaje_mora');
+                $resul->porcentaje_mora = $this->request->getPost('porcentaje_mora')/100;
                 if ($resul->save()) {
                     $this->flashSession->success("Exito: Registro guardado correctamente...");
                     $contrato_id =$resul->id; 

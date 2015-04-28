@@ -101,8 +101,10 @@ REgistro de deposito de pago
  */
 $(".reg_deposito").click(function() {
 	$("#planpago_id").val($(this).attr('planpago_id'));
-	$("#tipo_deposito").val($(this).attr('tipo_deposito'));
-	$('#titulo_deposito').text($(this).attr('texto'));
+	$("#fecha_deposito").val($(this).attr('fecha_deposito'));
+	$("#nro_deposito").val($(this).attr('nro_deposito'));
+	$("#monto_deposito").val($(this).attr('monto_deposito'));
+	$('#titulo_deposito').text('Registrar Deposito');
 	$('#myModal_deposito').modal('show');
 });
 
@@ -111,18 +113,19 @@ $("#testForm_deposito").submit(function(){
 		url:'/planpagos/savedeposito/',
 		type:'POST',
 		datatype: 'json',
-		data:{contratoproducto_id:$("#contratoproducto_id").val(),planpago_id:$("#planpago_id").val(),nro_deposito:$("#nro_deposito").val(),fecha_deposito:$("#fecha_deposito").val(),monto_deposito:$("#monto_deposito").val(),tipo_deposito:$("#tipo_deposito").val()},
+		data:{planpago_id:$("#planpago_id").val(),nro_deposito:$("#nro_deposito").val(),fecha_deposito:$("#fecha_deposito").val(),monto_deposito:$("#monto_deposito").val()},
 		complete:function(){
 			$(".reg_deposito").click(function() {
 				$("#planpago_id").val($(this).attr('planpago_id'));
-				$("#tipo_deposito").val($(this).attr('tipo_deposito'));
-				$('#titulo_deposito').text($(this).attr('texto'));
+				$("#fecha_deposito").val($(this).attr('fecha_deposito'));
+				$("#nro_deposito").val($(this).attr('nro_deposito'));
+				$("#monto_deposito").val($(this).attr('monto_deposito'));
+				$('#titulo_deposito').text('Registrar Deposito');
 				$('#myModal_deposito').modal('show');
 			});
-
 		},
 		success: function(data) { 
-			$("#cargar_html").html(data); 
+			$("#html"+$("#planpago_id").val()).html(data); 
 				}, //mostramos el error
 				error: function() { alert('Se ha producido un error Inesperado'); }
 			});
@@ -130,88 +133,6 @@ $("#testForm_deposito").submit(function(){
     return false; // ajax used, block the normal submit
 });
 
-
-/*
-Edicion de depositos
- */
-$(".edit_deposito").click(function() {
-	$("#planpago_id").val($(this).attr('planpago_id'))
-	htmldepositos($(this).attr('planpago_id'));
-	
-});
-
-function htmldepositos(planpago_id) {
-	
-	var v=$.ajax({
-		url:'/planpagos/htmldepositos/',
-		type:'POST',
-		datatype: 'json',
-		complete:function(){
-
-			$(".eliminar_deposito").click(function(){
-				var ppd =$(this).attr('planpagodeposito_id');
-				if(ppd!=""){
-					bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de eliminar el deposito?.", function(result) {
-						if (result==true) {
-							var v=$.ajax({
-								url:'/planpagos/deletedeposito/',
-								type:'POST',
-								datatype: 'json',
-								data:{planpagodeposito_id:ppd},
-								success: function(data) { 
-									htmldepositos($("#planpago_id").val());
-
-									/*
-									
-									*/
-									var v=$.ajax({
-										url:'/planpagos/gethtmlcontrolpagos/',
-										type:'POST',
-										datatype: 'json',
-										data:{contratoproducto_id:$("#contratoproducto_id").val()},
-										complete:function(){
-											$(".reg_deposito").click(function() {
-												$("#planpago_id").val($(this).attr('planpago_id'));
-												$("#tipo_deposito").val($(this).attr('tipo_deposito'));
-												$('#titulo_deposito').text($(this).attr('texto'));
-												$('#myModal_deposito').modal('show');
-											});
-											$(".edit_deposito").click(function() {
-												$("#planpago_id").val($(this).attr('planpago_id'))
-												htmldepositos($(this).attr('planpago_id'));
-
-											});
-										},
-										success: function(data) { 
-											$("#cargar_html").html(data); 
-										},
-										error: function() { alert('Se ha producido un error Inesperado'); }
-									});
-
-
-
-								},
-								error: function() { alert('Se ha producido un error Inesperado'); }
-							});
-						}
-					});
-				
-				}else{
-					bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para eliminar.");
-				}
-
-
-
-			});
-    	},
-		data:{planpago_id:planpago_id},
-		success: function(data) { 
-			$("#html_depositos").html(data); 
-				}, //mostramos el error
-				error: function() { alert('Se ha producido un error Inesperado'); }
-		});
-	$('#myModal_editdeposito').modal('show');
-}
 
 $("#fecha_deposito, #fecha_deposito_derechollave, #fecha_deposito_garantia, #fecha_devolucion_garantia").datepicker({
 	autoclose:true,

@@ -55,20 +55,27 @@ class PlanpagosController extends ControllerBase
             'producto' => $v->producto,
             'contrato' => $v->contrato,
             'fecha_contrato' => $v->fecha_contrato,
-            'precio_unitario' => $v->precio_unitario,
             'fecha_inicio' => $v->fecha_inicio,
             'fecha_fin' => $v->fecha_fin,
-            'monto_mora' => 250,
-            'monto_mes' => 1500,
-            'monto_cobrar' => 2530
+            'total' => $v->total,
+            'deposito' => $v->deposito,
+            'cobrar' => $v->total-$v->deposito,
+            'mora' => $v->mora
             );
     }
     echo json_encode($customers);
 }
 
-public function control1Action($contratoproducto_id)
+public function controlAction($contratoproducto_id)
 {
-        
+        $model = new Planpagos();
+        $resul = $model->getcontrato($contratoproducto_id);
+        $contratoproducto = array();
+        foreach ($resul as $v) {
+            $contratoproducto = $v;
+        }
+        $this->view->setVar('contratoproducto',$contratoproducto);
+
         $html = $this->htmlcontrolpagos($contratoproducto_id);
         $this->view->setVar('htmlp',$html);
         $this->view->setVar('contratoproducto_id',$contratoproducto_id);
@@ -79,7 +86,8 @@ public function control1Action($contratoproducto_id)
         $derechollave = Garantias::findFirst(array('baja_logica=1 and tipo=2 and contratoproducto_id = '.$contratoproducto_id, 'order'=>'tipo ASC'));
         $this->view->setVar('derechollave',$derechollave);    
         $this->assets
-        ->addJs('/scripts/planpagos/control1.js');
+        ->addJs('/media/plugins/bootbox/bootbox.min.js')
+        ->addJs('/scripts/planpagos/control.js');
 
     
 }
@@ -131,12 +139,17 @@ private function htmlcontrolpagos($contratoproducto_id)
                             </thead>
                             <tbody>';
         
-        
+        $total=0;
+        $t_deposito=0;
+        $total_mora = 0;
+        $total_deposito_mora = 0;
         foreach ($resul as $v) {
             if ($id != $v->id) {
+                $total+=$v->monto_programado;
                 $div_nrodeposito = '';
                 $div_fecha_deposito = '';
                 $div_monto_deposito = '';
+
 
                 $div_nrodeposito_mora = '';
                 $div_fecha_deposito_mora = '';
@@ -149,24 +162,26 @@ private function htmlcontrolpagos($contratoproducto_id)
                 }
                 $html.='<tr id="html'.$v->id.'">
                             <td class="active">'.$v->id.'</td>
-                            <td class="active">'.$v->fecha_programado.'</td>
+                            <td class="active">'.date("d-m-Y",strtotime($v->fecha_programado)).'</td>
                             <td class="active text-right">'.$diff_text.' '.number_format($v->monto_reprogramado,2,'.',' ').'</td>';
                                 $total_deposito = 0;
-                                $total_mora = 0;
+                                
                                 $color = '';
                                 $masmenos = '';
                                 //<span class="badge">8</span>
                                 foreach ($datos[$v->id] as $k => $m) {
                                     if ($datos[$v->id][$k]['tipo_deposito']==1) {
                                         $div_nrodeposito .=$datos[$v->id][$k]['nro_deposito'].'<br>';
-                                        $div_fecha_deposito .=$datos[$v->id][$k]['fecha_deposito'].'<br>';
+                                        $div_fecha_deposito .=date("d-m-Y",strtotime($datos[$v->id][$k]['fecha_deposito'])).'<br>';
                                         $div_monto_deposito .=number_format($datos[$v->id][$k]['monto_deposito'],2,'.',' ').'<br>';    
-                                        $total_deposito+=$datos[$v->id][$k]['monto_deposito'];
+                                        $total_deposito += $datos[$v->id][$k]['monto_deposito'];
+                                        $t_deposito+=$datos[$v->id][$k]['monto_deposito'];
                                     }else{
                                         $div_nrodeposito_mora .=$datos[$v->id][$k]['nro_deposito'].'<br>';
-                                        $div_fecha_deposito_mora .=$datos[$v->id][$k]['fecha_deposito'].'<br>';
+                                        $fdm=$datos[$v->id][$k]['fecha_deposito']!='' ? date("d-m-Y",strtotime($datos[$v->id][$k]['fecha_deposito'])) : '';
+                                        $div_fecha_deposito_mora .= $fdm .'<br>';
                                         $div_monto_deposito_mora .= number_format($datos[$v->id][$k]['monto_deposito'],2,'.',' ').'<br>';    
-                                        $total_mora+=$datos[$v->id][$k]['monto_deposito'];
+                                        $total_deposito_mora+=$datos[$v->id][$k]['monto_deposito'];
                                     }
                                     
 
@@ -216,6 +231,7 @@ private function htmlcontrolpagos($contratoproducto_id)
                                             }
                                             
                                         }
+                                        $total_mora+=$mora;
                                     }
                                 }
                                 
@@ -228,18 +244,32 @@ private function htmlcontrolpagos($contratoproducto_id)
                                 <td class="'.$color_mora.'">'.$div_nrodeposito_mora.'</td>
                                 <td class="'.$color_mora.'">'.$div_fecha_deposito_mora.'</td>
                                 <td class="'.$color_mora.' text-right">'.$div_monto_deposito_mora.'</td>
-                                 <td class="text-center">
+                                <td class="text-center">
                                     <div class="btn-group btn-group-xs">
-                                        <a href="javascript:void(0)" data-toggle="tooltip" title="Realizar deposito" class="btn btn-primary reg_deposito" planpago_id ="'.$v->id.'" tipo_deposito="1" texto="Registrar Deposito"><i class="fa fa-plus"></i></a>
-                                        <a href="javascript:void(0)" data-toggle="tooltip" title="Editar Depositos" class="btn btn-warning"><i class="fa fa-pencil"></i></a>
-                                        <a href="javascript:void(0)" data-toggle="tooltip" title="Realizar deposito" class="btn btn-default reg_deposito" planpago_id ="'.$v->id.'" tipo_deposito="2" texto="Registrar Deposito Mora"><i class="fa fa-plus"></i></a>
+                                        <a href="javascript:void(0)" data-toggle="tooltip" title="Realizar deposito" class="btn btn-primary reg_deposito" planpago_id ="'.$v->id.'" tipo_deposito="1" texto="Registrar Deposito"><i class="fa fa-tag"></i></a>
+                                        <a href="javascript:void(0)" data-toggle="tooltip" title="Editar Depositos" class="btn btn-warning edit_deposito" planpago_id ="'.$v->id.'"><i class="fa fa-pencil"></i></a>
+                                        <a href="javascript:void(0)" data-toggle="tooltip" title="Realizar deposito" class="btn btn-default reg_deposito" planpago_id ="'.$v->id.'" tipo_deposito="2" texto="Registrar Deposito Mora"><i class="fa fa-tags"></i></a>
                                     </div>
                                 </td>
                         </tr>';
                 }
+                           
             $id = $v->id;
         }
-         
+         $html .='<tr class= "text-right">
+                                    <td></td>
+                                    <th>TOTAL</th>
+                                    <td>'.number_format($total,2,'.',' ').'</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>'.number_format($t_deposito,2,'.',' ').'</td>
+                                    <td></td>
+                                    <td>'.number_format($total_mora,2,'.',' ').'</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>'.number_format($total_deposito_mora,2,'.',' ').'</td>
+                                    <td></td>
+                                </tr>'; 
         $html .='</tbody>
                 </table>
                 </div>';
@@ -248,50 +278,80 @@ private function htmlcontrolpagos($contratoproducto_id)
         //$this->view->setVar('htmlp',$html);
 }
 
+public function modificacionplanpagos($contratoproducto_id)
+{
+    $model = new Planpagodepositos();
+    $resul_ppd = $model->listadepositos($contratoproducto_id);
+    $diff=0;
+    foreach ($resul_ppd as $v) {
+        if ($diff>0) {
+            $planpago=Planpagos::findFirstById($v->id);
+            $planpago->monto_reprogramado = ($v->monto_programado-$diff);    
+            $planpago->save();
+        }else{
+            $planpago=Planpagos::findFirstById($v->id);
+            $planpago->monto_reprogramado = $v->monto_programado;    
+            $planpago->save();
+        }
+        $diff = 0;
+        if ($v->deposito >0) {
+            $diff = ($v->deposito-$v->monto_reprogramado);
+            $planpago=Planpagos::findFirstById($v->id);
+            $planpago->diferencia = $diff;  
+            $planpago->save();
+        }
+    }    
+}
+function modificacionmora($planpago_id)
+{
+    $model = new Planpagodepositos();
+    $resulmora = $model->getdatosverificar($planpago_id,1);
+
+    foreach ($resulmora as $v) {
+        if ($v->deposito>=$v->monto_reprogramado) {
+            $nuevafecha = strtotime ( '+'.$v->dias_tolerancia.' day' , strtotime ( $v->fecha_programado ) ) ;
+            $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
+
+            $datetime1 = new DateTime($nuevafecha);
+            $datetime2 = new DateTime($v->fecha);
+            $interval = $datetime1->diff($datetime2);
+            $nro_dias = $interval->format('%R%a');
+            if ($nro_dias>0) {
+                $planpago = Planpagos::findFirstById($planpago_id);
+                $planpago->dias_atraso = $nro_dias;
+                $planpago->mora = ($v->total*$v->porcentaje_mora)*$nro_dias;
+                $planpago->save();    
+            }else{
+                $planpago = Planpagos::findFirstById($planpago_id);
+                $planpago->dias_atraso = 0;
+                $planpago->mora = 0;
+                $planpago->save();
+            }
+
+        }else{
+            $planpago = Planpagos::findFirstById($planpago_id);
+                $planpago->dias_atraso = 0;
+                $planpago->mora = 0;
+                $planpago->save();
+        }
+        
+    }
+}
+
 public function pruebaAction()
 {
-
-    $nuevafecha = strtotime ( '+5 day' , strtotime ('2015-03-31') ) ;
-    $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
-
-    $datetime1 = new DateTime($nuevafecha);
-    $datetime2 = new DateTime('2015-04-03');
-    $interval = $datetime1->diff($datetime2);
-    $dias_atraso = $interval->format('%R%a');
-    echo $dias_atraso;
-    // $fecha = date('Y-m-d');
-    // $nuevafecha = strtotime ( '+5 day' , strtotime ( $fecha ) ) ;
-    // $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
-
-    // echo 'sumamos mas 5 dias '.$nuevafecha;
-
-    // $model = new Planpagodepositos();
-    //         $resulmora = $model->getfechadeposito(1);
-    //         echo var_dump($resulmora);
-}
-
-public function controlAction($contratoproducto_id)
-{
-    $cp = Contratosproductos::findFirstById($contratoproducto_id);
-    if ($cp != false) {
-        $resul = Planpagos::find(array("baja_logica = 1 and contratoproducto_id = ".$contratoproducto_id, 'order'=>'fecha_programado ASC'));
-
-        $this->view->setVar('planpago',$resul);
-        $this->view->setVar('contratoproducto_id',$contratoproducto_id);        
-
-        $garantia = Garantias::findFirst(array('baja_logica=1 and tipo=1 and contratoproducto_id = '.$contratoproducto_id, 'order'=>'tipo ASC'));
-        $this->view->setVar('garantia',$garantia);
-
-        $derechollave = Garantias::findFirst(array('baja_logica=1 and tipo=2 and contratoproducto_id = '.$contratoproducto_id, 'order'=>'tipo ASC'));
-        $this->view->setVar('derechollave',$derechollave);    
-        $this->assets
-        ->addJs('/scripts/planpagos/control.js')            
-        ;
-    }else{
-        $this->response->redirect('/');
+   
+   $model = new Contratos();
+   $contratoproducto = $model->getcontrato(1);
+   $array = array();
+   foreach ($contratoproducto as $v) {
+    $array = $v;
     }
-
+    //echo var_dump($array);
+    echo $array->grupo;
 }
+
+
 
 public function savedepositoAction()
 {
@@ -311,59 +371,15 @@ public function savedepositoAction()
          $resul->baja_logica = 1;
          if ($resul->save()) {
             if ($this->request->getPost('tipo_deposito') ==1) {
-                    /*
+            /*
             Realizamos la modificacion de montos en el caso de que esta sea mas o menos
              */
-            $model = new Planpagodepositos();
-            $resul_ppd = $model->listadepositos($this->request->getPost('contratoproducto_id'));
-            $diff=0;
-            foreach ($resul_ppd as $v) {
-                if ($diff>0) {
-                    $planpago=Planpagos::findFirstById($v->id);
-                    $planpago->monto_reprogramado = ($v->monto_programado-$diff);    
-                    $planpago->save();
-                }else{
-                    $planpago=Planpagos::findFirstById($v->id);
-                    $planpago->monto_reprogramado = $v->monto_programado;    
-                    $planpago->save();
-                }
-                $diff = 0;
-                if ($v->deposito >0) {
-                    $diff = ($v->deposito-$v->monto_reprogramado);
-                    $planpago=Planpagos::findFirstById($v->id);
-                    $planpago->diferencia = $diff;  
-                    $planpago->save();
-                }
-            }
+            $this->modificacionplanpagos($this->request->getPost('contratoproducto_id'));
             // end modificacion
 
             /*Verificamos dias de mora y el monto*/
-            $model = new Planpagodepositos();
-            $resulmora = $model->getdatosverificar($_POST['planpago_id'],1);
-
-            foreach ($resulmora as $v) {
-                if ($v->deposito>=$v->monto_reprogramado) {
-                    $nuevafecha = strtotime ( '+'.$v->dias_tolerancia.' day' , strtotime ( $v->fecha_programado ) ) ;
-                    $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
-
-                    $datetime1 = new DateTime($nuevafecha);
-                    $datetime2 = new DateTime($v->fecha);
-                    $interval = $datetime1->diff($datetime2);
-                    $nro_dias = $interval->format('%R%a');
-                    if ($nro_dias>0) {
-                        $planpago = Planpagos::findFirstById($_POST['planpago_id']);
-                        $planpago->dias_atraso = $nro_dias;
-                        $planpago->mora = ($v->total*$v->porcentaje_mora)*$nro_dias;
-                        $planpago->save();    
-                    }else{
-                        $planpago = Planpagos::findFirstById($_POST['planpago_id']);
-                        $planpago->dias_atraso = 0;
-                        $planpago->mora = 0;
-                        $planpago->save();
-                    }
-                    
-                }
-            }
+            $this->modificacionmora($_POST['planpago_id']);
+            
             /*end*/
 
         }
@@ -452,6 +468,14 @@ public function savedepositoAction()
 
 $this->view->disable();
 echo $html;
+}
+
+public function gethtmlcontrolpagosAction()
+{
+    $html = $this->htmlcontrolpagos($_POST['contratoproducto_id']);
+    $msm = 'Exito: Se guardo correctamente';
+    $this->view->disable();
+    echo $html;
 }
 
 public function savederechollaveAction()
@@ -618,68 +642,80 @@ $this->view->disable();
 echo $html;
 }
 
-    // public function saveAction()
-    // {
-    //     if (isset($_POST['id'])) {
-    //         if ($_POST['id']>0) {
-    //             $resul = Productos::findFirstById($this->request->getPost('id'));
-    //             $resul->grupo_id= $this->request->getPost('grupo_id');
-    //             $resul->estacion_id = $this->request->getPost('estacion_id');
-    //             $resul->producto = $this->request->getPost('producto');
-    //             $resul->codigo = $this->request->getPost('codigo');
-    //             $resul->descripcion = $this->request->getPost('descripcion');
-    //             $resul->precio_unitario = $this->request->getPost('precio_unitario');
-    //             $resul->cantidad = $this->request->getPost('cantidad');
-    //             $resul->tiempo = $this->request->getPost('tiempo');
-    //             // $resul->usuario_reg = $this->_user->id;
-    //             // $resul->fecha_reg = date("Y-m-d");
-    //             // $resul->baja_logica = 1;
-    //             if ($resul->save()) {
-    //                 $msm ='Exito: Se guardo correctamente';
-    //             }else{
-    //                 $msm = 'Error: No se guardo el registro';
-    //             }
-    //         }
-    //         else{
-    //             $resul = new Productos();
-    //             $resul->grupo_id= $this->request->getPost('grupo_id');
-    //             $resul->estacion_id = $this->request->getPost('estacion_id');
-    //             $resul->producto = $this->request->getPost('producto');
-    //             $resul->codigo = $this->request->getPost('codigo');
-    //             $resul->descripcion = $this->request->getPost('descripcion');
-    //             $resul->precio_unitario = $this->request->getPost('precio_unitario');
-    //             $resul->cantidad = $this->request->getPost('cantidad');
-    //             $resul->tiempo = $this->request->getPost('tiempo');
-    //             $resul->usuario_reg = $this->_user->id;
-    //             $resul->fecha_reg = date("Y-m-d H:i:s");
-    //             $resul->dimension_x = 1;
-    //             $resul->dimension_y = 1;
-    //             $resul->baja_logica = 1;
-    //             if ($resul->save()) {
-    //                 $msm ='Exito: Se guardo correctamente';
-    //             }else{
-    //                 $msm = 'Error: No se guardo el registro';
-    //             }
-    //         }   
-    //     }
-    // $this->view->disable();
-    // echo $msm;
-    // }
 
+public function htmldepositosAction()
+{
+    $resul = Planpagos::findFirstById($_POST['planpago_id']);
+    $pp_deposito = Planpagodepositos::find(array("planpago_id=".$_POST['planpago_id']." and baja_logica = 1 and tipo_deposito =1","order"=>"fecha_deposito ASC"));
+    $pp_deposito_mora = Planpagodepositos::find(array("planpago_id=".$_POST['planpago_id']." and baja_logica = 1 and tipo_deposito =2","order"=>"fecha_deposito ASC"));
 
+    $html='<div class="table-responsive">
+    <table class="table table-vcenter table-striped">
+        <thead>
+            <tr>
+                <td colspan="2"><strong>Fecha Programada: </strong>'.$resul->fecha_programado.' </td>
+                <td colspan="2"><strong>Monto Programada Bs.: </strong> '.$resul->monto_reprogramado.'</td>
+            </tr>
+            <tr>
+                <th>Nro Deposito</th>
+                <th>Fecha Deposito</th>
+                <th>Monto Deposito</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>';
+        foreach ($pp_deposito as $v) {
+            $html.='<tr>
+                <td>'.$v->nro_deposito.'</td>
+                <td>'.$v->fecha_deposito.'</td>
+                <td>'.$v->monto_deposito.'</td>
+                <td class="text-center">
+                     <div class="btn-group btn-group-xs">
+                         <a href="javascript:void(0)" data-toggle="tooltip" title="Eliminar Deposito" class="btn btn-danger eliminar_deposito" planpagodeposito_id ="'.$v->id.'"><i class="fa fa-trash-o"></i></a>
+                     </div>
+                </td>
+            </tr>';    
+        }
+        
+            $html.='<tr>
+                <td colspan="2"><strong>Dias Atraso: </strong> '.$resul->dias_atraso.'</td>
+                <td colspan="2"><strong>Mora: </strong> '.$resul->mora.'</td>
+            </tr>';
+        foreach ($pp_deposito_mora as $v) {
+            $html.='<tr>
+                <td>'.$v->nro_deposito.'</td>
+                <td>'.$v->fecha_deposito.'</td>
+                <td>'.$v->monto_deposito.'</td>
+                <td class="text-center">
+                     <div class="btn-group btn-group-xs">
+                         <a href="javascript:void(0)" data-toggle="tooltip" title="Eliminar Deposito" class="btn btn-danger eliminar_deposito" planpagodeposito_id ="'.$v->id.'"><i class="fa fa-trash-o"></i></a>
+                     </div>
+                </td>
+            </tr>';    
+        }
+        $html.='</tbody>
+    </table>
+</div>';
 
-    // public function deleteAction(){
-    //     $resul = Productos::findFirstById($this->request->getPost('id'));
-    //     $resul->baja_logica = 0;
-    //     if ($resul->save()) {
-    //                 $msm ='Exito: Se elimino correctamente';
-    //             }else{
-    //                 $msm = 'Error: No se guardo el registro';
-    //             }
-    //     $this->view->disable();
-    //     echo $msm;
-    // }
+    $this->view->disable();
+    echo $html;
+}
+    
+    public function deletedepositoAction()
+    {
+        $resul = Planpagodepositos::findFirstById($_POST['planpagodeposito_id']);
+        $resul->baja_logica = 0;
+        if ($resul->save()) {
+            $planpago = Planpagos::findFirstById($resul->planpago_id);
+            $this->modificacionplanpagos($planpago->contratoproducto_id);
+            $this->modificacionmora($planpago->id);
+            $msm = 'Exito: Se elimino correctamente';
+        }else{
+            $msm = 'Error: No se elimino el registro';
+        }
 
-
+        $this->view->disable();
+        echo json_encode($msm);
+    }
 
 }

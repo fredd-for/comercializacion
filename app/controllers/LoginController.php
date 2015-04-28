@@ -25,10 +25,12 @@ class LoginController extends \Phalcon\Mvc\Controller {
                 $user->lastlogin = time();
                 $user->save();
                 $this->_registerSession($user);
-                $this->flashSession->success('Bienvenido <i>' . $user->nombre . '</i>');
+                //$this->flashSession->success('Bienvenido <i>' . $user->nombre . '</i>');
                 $this->response->redirect('/');
+            }else{
+                $this->flashSession->error('<b>Acceso denegado!</b> Usuario/contraseña incorrectos');    
             }
-            $this->flashSession->error('<b>Acceso denegado!</b> Usuario/contraseña incorrectos');
+            
         }     
     }
 

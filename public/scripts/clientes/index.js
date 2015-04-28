@@ -81,6 +81,10 @@ var dataFields = [
 { name: 'fecha_contrato', type: 'date' },
 { name: 'descripcion', type: 'string' },
 { name: 'num_productos', type: 'number' },
+{ name: 'dias_tolerancia', type: 'number' },
+{ name: 'porcentaje_mora', type: 'number' },
+{ name: 'responsable', type: 'string' },
+{ name: 'responsable_id', type: 'number' },
 ];
 
 var sourceSeg =
@@ -138,9 +142,12 @@ $("#jqxgrid_contratos").jqxGrid(
 			return "<div style='margin:4px;'>" + (value + 1) + "</div>";
 		}
 	},
-	{ text: 'Nro Contrato', datafield: 'contrato', filtertype: 'input',width: '17%' },
-	{ text: 'Descripción', datafield: 'descripcion',filtertype: 'input', width: '60%' },
-	{ text: 'Fecha Contrato', datafield: 'fecha_contrato', filtertype: 'range', width: '20%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
+	{ text: 'Responsable', datafield: 'responsable', filtertype: 'input',width: '17%' },
+	{ text: 'Nro Contrato', datafield: 'contrato', filtertype: 'input',width: '10%' },
+	{ text: 'Descripción', datafield: 'descripcion',filtertype: 'input', width: '40%' },
+	{ text: 'Fecha Contrato', datafield: 'fecha_contrato', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
+	{ text: 'Dias Tolerancia', datafield: 'dias_tolerancia', filtertype: 'input',width: '10%' },
+	{ text: '% Mora', datafield: 'porcentaje_mora', filtertype: 'input',width: '10%' },
 	{ text: 'Nro Productos', datafield: 'num_productos', filtertype: 'input',width: '5%' }
 	]
 });
@@ -311,6 +318,8 @@ $("#edit_contrato").click(function(){
  		var fc = $.jqx.dataFormat.formatdate(dataRecord.fecha_contrato, 'dd-MM-yyyy');
  		$("#fecha_contrato").val(fc);
  		$("#cliente_id").val(dataRecord.cliente_id);
+ 		
+ 		$("#responsable_id").val(dataRecord.responsable_id);
 
  		$('#myModal_contrato').modal('show');
  	}
