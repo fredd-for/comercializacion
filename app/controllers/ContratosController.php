@@ -38,6 +38,7 @@ class ContratosController extends ControllerBase
                 ->addJs('/jqwidgets/globalization/globalize.js')
                 ->addJs('/jqwidgets/jqxgrid.aggregates.js')
                 ->addJs('/media/plugins/bootbox/bootbox.min.js')
+                ->addJs('/jqwidgets/jqxtooltip.js')
                 // ->addJs('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js')
                 // ->addJs('/media/plugins/form-validation/jquery.validate.min.js')
                 // ->addJs('/assets/js/plugins.js')
@@ -53,6 +54,7 @@ class ContratosController extends ControllerBase
         $resul = $modelas->lista();
         $this->view->disable();
         foreach ($resul as $v) {
+            echo "<p>-->".$v->razon_social."</p>";
             $customers[] = array(
                 'id' => $v->id,
                 'razon_social' => $v->razon_social,

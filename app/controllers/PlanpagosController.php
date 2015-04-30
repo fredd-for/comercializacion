@@ -123,18 +123,22 @@ private function htmlcontrolpagos($contratoproducto_id)
                 <table class="table table-vcenter table-striped table-hover table-condensed">
                             <thead>
                                 <tr>
-                                    <th>#</th>
                                     <th>Fecha Programado</th>
                                     <th>Monto Programado</th>
-                                    <th>Nro Deposito</th>
+                                    <th class="tdFacDep">Nro Factura</th>
+                                    <th>Fecha Factura</th>
+                                    <th>Monto Facturado</th>
+                                    <th class="tdFacDep">Nro Deposito</th>
                                     <th>Fecha Deposito</th>
                                     <th>Monto Deposito</th>
                                     <th>Dias Atraso</th>
                                     <th>Mora</th>
-                                    <th>Nro Deposito Mora</th>
+                                    <th class="tdFacDep">Nro Deposito Mora</th>
                                     <th>Fecha Deposito Mora</th>
                                     <th>Monto Deposito Mora</th>
-                                    <th style="width: 150px;" class="text-center">Acción</th>
+                                    <th style="width: 150px;" class="text-center">Acción
+                                    <a href="javascript:void(0)" data-toggle="tooltip" title="Ver Nro de Facturas y Nro Deposito" id="verFacDep"><i class="fa fa-search-plus"></i></a>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>';
@@ -161,9 +165,12 @@ private function htmlcontrolpagos($contratoproducto_id)
                     $diff_text = '<span class="label label-primary">'.$diff.'</span>';
                 }
                 $html.='<tr id="html'.$v->id.'">
-                            <td class="active">'.$v->id.'</td>
-                            <td class="active">'.date("d-m-Y",strtotime($v->fecha_programado)).'</td>
-                            <td class="active text-right">'.$diff_text.' '.number_format($v->monto_reprogramado,2,'.',' ').'</td>';
+                            
+                            <td >'.date("d-m-Y",strtotime($v->fecha_programado)).'</td>
+                            <td class="text-right">'.$diff_text.' '.number_format($v->monto_reprogramado,2,'.',',').'</td>
+                            <td class="tdFacDep"></td>
+                            <td ></td>
+                            <td ></td>';
                                 $total_deposito = 0;
                                 
                                 $color = '';
@@ -173,14 +180,14 @@ private function htmlcontrolpagos($contratoproducto_id)
                                     if ($datos[$v->id][$k]['tipo_deposito']==1) {
                                         $div_nrodeposito .=$datos[$v->id][$k]['nro_deposito'].'<br>';
                                         $div_fecha_deposito .=date("d-m-Y",strtotime($datos[$v->id][$k]['fecha_deposito'])).'<br>';
-                                        $div_monto_deposito .=number_format($datos[$v->id][$k]['monto_deposito'],2,'.',' ').'<br>';    
+                                        $div_monto_deposito .=number_format($datos[$v->id][$k]['monto_deposito'],2,'.',',').'<br>';    
                                         $total_deposito += $datos[$v->id][$k]['monto_deposito'];
                                         $t_deposito+=$datos[$v->id][$k]['monto_deposito'];
                                     }else{
                                         $div_nrodeposito_mora .=$datos[$v->id][$k]['nro_deposito'].'<br>';
                                         $fdm=$datos[$v->id][$k]['fecha_deposito']!='' ? date("d-m-Y",strtotime($datos[$v->id][$k]['fecha_deposito'])) : '';
                                         $div_fecha_deposito_mora .= $fdm .'<br>';
-                                        $div_monto_deposito_mora .= number_format($datos[$v->id][$k]['monto_deposito'],2,'.',' ').'<br>';    
+                                        $div_monto_deposito_mora .= number_format($datos[$v->id][$k]['monto_deposito'],2,'.',',').'<br>';    
                                         $total_deposito_mora+=$datos[$v->id][$k]['monto_deposito'];
                                     }
                                     
@@ -236,12 +243,12 @@ private function htmlcontrolpagos($contratoproducto_id)
                                 }
                                 
 
-                                $html.='<td class="'.$color.'">'.$div_nrodeposito.'</td>
+                                $html.='<td class="'.$color.' tdFacDep">'.$div_nrodeposito.'</td>
                                 <td class="'.$color.'">'.$div_fecha_deposito.'</td>
-                                <td class="'.$color.' text-right"> '.$diff_text.' '.$masmenos.' '.$div_monto_deposito.' </td>
+                                <td class="'.$color.' text-right"> '.$masmenos.' '.$div_monto_deposito.' '.$diff_text.'</td>
                                 <td class="'.$color_mora.' ">'.$dias_atraso.'</td>
-                                <td class="'.$color_mora.' text-right">'.number_format($mora, 2, '.', ' ').'</td>
-                                <td class="'.$color_mora.'">'.$div_nrodeposito_mora.'</td>
+                                <td class="'.$color_mora.' text-right">'.number_format($mora, 2, '.',',').'</td>
+                                <td class="'.$color_mora.' tdFacDep">'.$div_nrodeposito_mora.'</td>
                                 <td class="'.$color_mora.'">'.$div_fecha_deposito_mora.'</td>
                                 <td class="'.$color_mora.' text-right">'.$div_monto_deposito_mora.'</td>
                                 <td class="text-center">
@@ -257,17 +264,20 @@ private function htmlcontrolpagos($contratoproducto_id)
             $id = $v->id;
         }
          $html .='<tr class= "text-right">
-                                    <td></td>
+                                    
                                     <th>TOTAL</th>
-                                    <td>'.number_format($total,2,'.',' ').'</td>
+                                    <td>'.number_format($total,2,'.',',').'</td>
+                                    <td class="tdFacDep"></td>
                                     <td></td>
+                                    <td>'.number_format($t_deposito,2,'.',',').'</td>
+                                    <td class="tdFacDep"></td>
                                     <td></td>
-                                    <td>'.number_format($t_deposito,2,'.',' ').'</td>
+                                    <td>'.number_format($t_deposito,2,'.',',').'</td>
                                     <td></td>
-                                    <td>'.number_format($total_mora,2,'.',' ').'</td>
+                                    <td>'.number_format($total_mora,2,'.',',').'</td>
+                                    <tdclass="tdFacDep"></td>
                                     <td></td>
-                                    <td></td>
-                                    <td>'.number_format($total_deposito_mora,2,'.',' ').'</td>
+                                    <td>'.number_format($total_deposito_mora,2,'.',',').'</td>
                                     <td></td>
                                 </tr>'; 
         $html .='</tbody>

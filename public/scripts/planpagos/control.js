@@ -213,6 +213,11 @@ function htmldepositos(planpago_id) {
 	$('#myModal_editdeposito').modal('show');
 }
 
+$(".tdFacDep").hide();
+ $("#verFacDep").click(function(){
+ 	$(".tdFacDep").toggle();
+ });
+
 $("#fecha_deposito, #fecha_deposito_derechollave, #fecha_deposito_garantia, #fecha_devolucion_garantia").datepicker({
 	autoclose:true,
 });
