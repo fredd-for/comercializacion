@@ -109,22 +109,6 @@ class IndexController extends ControllerRrhh {
         echo json_encode(array_values($organigrama),JSON_NUMERIC_CHECK);
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     public function listar($id, $oficina, $sigla) {
         $h = organigramas::count("padre_id='$id'");
         $this->lista.='<li id="org" style="display:none">
@@ -203,4 +187,5 @@ class IndexController extends ControllerRrhh {
         }
     }
 
+   
 }
