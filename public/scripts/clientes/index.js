@@ -1,7 +1,8 @@
 $(document).ready(function (){
-	cargar();	
-	function cargar(){	
-		var source =
+
+cargar();
+function cargar(){
+	var source =
 		{
 			datatype: "json",
 			datafields: [
@@ -70,9 +71,6 @@ $(document).ready(function (){
 			{ text: 'PERSONA DE CONTACTO', align: 'center', name: 'contacto' }
 			]
 		});
-
-
-
 /*	Segunda Grilla*/
 var dataFields = [
 { name: 'id', type: 'number' },
@@ -152,10 +150,8 @@ $("#jqxgrid_contratos").jqxGrid(
 	]
 });
 
-
-
 }
-
+		
 /*
 adicionar 
 */
@@ -318,9 +314,7 @@ $("#edit_contrato").click(function(){
  		var fc = $.jqx.dataFormat.formatdate(dataRecord.fecha_contrato, 'dd-MM-yyyy');
  		$("#fecha_contrato").val(fc);
  		$("#cliente_id").val(dataRecord.cliente_id);
- 		
  		$("#responsable_id").val(dataRecord.responsable_id);
-
  		$('#myModal_contrato').modal('show');
  	}
  	else
@@ -393,9 +387,10 @@ $("#testForm_contrato").submit(function() {
             	url:'/clientes/savecontrato/',
             	type:'POST',
             	datatype: 'json',
-            	data:{contrato_id:$("#contrato_id").val(),cliente_id:$("#cliente_id").val(),contrato:$("#contrato").val(),fecha_contrato:$("#fecha_contrato").val(),arrendador:$("#arrendador").val(),arrendador_rep_legal:$("#arrendador_rep_legal").val(),arrendador_cargo:$("#arrendador_cargo").val(),descripcion:$("#descripcion").val(),dias_tolerancia:$("#dias_tolerancia").val(),porcentaje_mora:$("#porcentaje_mora").val()},
-				success: function(data) { cargar(); 
+            	data:{contrato_id:$("#contrato_id").val(),cliente_id:$("#cliente_id").val(),contrato:$("#contrato").val(),fecha_contrato:$("#fecha_contrato").val(),arrendador:$("#arrendador").val(),arrendador_rep_legal:$("#arrendador_rep_legal").val(),arrendador_cargo:$("#arrendador_cargo").val(),descripcion:$("#descripcion").val(),dias_tolerancia:$("#dias_tolerancia").val(),porcentaje_mora:$("#porcentaje_mora").val(),responsable_id:$("#responsable_id").val()},
+				success: function(data) { 
 					if ($("#contrato_id").val()>0) {
+						cargar();
 						$("#divMsjeExito").show();
                     	$("#divMsjeExito").addClass('alert alert-info alert-dismissable');
                     	$("#aMsjeExito").html('Guardado Correctamente'); 

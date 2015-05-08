@@ -219,6 +219,13 @@ class ContratosController extends ControllerBase
                 $resul->fecha_fin = $fecha_fin;
                 $resul->cantidad = $cantidad;
                 $resul->total = $this->request->getPost('total');
+                
+                $datetime1 = new DateTime($fecha_inicio);
+                $datetime2 = new DateTime($fecha_fin);
+                $interval = $datetime1->diff($datetime2);
+                $nro_dias = $interval->format('%a')+1;
+                $resul->nro_dias = $nro_dias;
+                
                 $resul->baja_logica = 1;
                 if ($resul->save()) {
                     $resul2 = Productos::findFirstById($this->request->getPost('producto_id'));
@@ -284,7 +291,7 @@ class ContratosController extends ControllerBase
         }
         $costo = $costo * $_POST['cantidad'];
         $this->view->disable();
-        echo $costo;
+        echo number_format($costo,2,'.','');
     }
 
 // Listado de plan de pagos
@@ -345,6 +352,7 @@ public function saveppAction()
                 $resul = Planpagos::findFirstById($_POST['id']);
                 $resul->fecha_programado = date("Y-m-d",strtotime($_POST['fecha_programado']));
                 $resul->monto_programado = $_POST['monto_programado'];
+                $resul->monto_reprogramado = $_POST['monto_programado'];
                 if ($resul->save()) {
                     $msm = 'Exito: Se guardo correctamente';
                 }else{
@@ -358,6 +366,7 @@ public function saveppAction()
                 $resul->producto_id = $_POST['producto_id'];
                 $resul->fecha_programado = date("Y-m-d",strtotime($_POST['fecha_programado']));
                 $resul->monto_programado = $_POST['monto_programado'];
+                $resul->monto_reprogramado = $_POST['monto_programado'];
                 $resul->baja_logica = 1;
                 if ($resul->save()) {
                     $msm = 'Exito: Se guardo correctamente';
@@ -449,6 +458,7 @@ public function mensual_planpagos($fecha_inicio='2014-12-14',$fecha_fin='2015-02
             $resul->producto_id = $producto_id;
             $resul->fecha_programado = $mes_anio_i.'-'.$nro_dias;
             $resul->monto_programado = $monto_programado;
+            $resul->monto_reprogramado = $monto_programado;
             $resul->baja_logica = 1;
             if ($resul->save()==false) {
                 $msm = 1;
@@ -475,6 +485,7 @@ public function mensual_planpagos($fecha_inicio='2014-12-14',$fecha_fin='2015-02
             $resul->producto_id = $producto_id;
             $resul->fecha_programado = $mes_anio_i.'-'.$nro_dias;
             $resul->monto_programado = $monto_programado;
+            $resul->monto_reprogramado = $monto_programado;
             $resul->baja_logica = 1;
             if ($resul->save()==false) {
                 $msm = 1;
@@ -499,6 +510,7 @@ public function mensual_planpagos($fecha_inicio='2014-12-14',$fecha_fin='2015-02
         $resul->producto_id = $producto_id;
         $resul->fecha_programado = $fecha_fin;
         $resul->monto_programado = $monto_programado;
+        $resul->monto_reprogramado = $monto_programado;
         $resul->baja_logica = 1;
        if ($resul->save()==false) {
                 $msm = 1;
@@ -521,6 +533,7 @@ public function mensual_planpagos($fecha_inicio='2014-12-14',$fecha_fin='2015-02
         $resul->producto_id = $producto_id;
         $resul->fecha_programado = $fecha_fin;
         $resul->monto_programado = $monto_programado;
+        $resul->monto_reprogramado = $monto_programado;
         $resul->baja_logica = 1;
         if ($resul->save()==false) {
                 $msm = 1;
@@ -542,6 +555,7 @@ public function mensual_planpagos($fecha_inicio='2014-12-14',$fecha_fin='2015-02
         $resul->producto_id = $producto_id;
         $resul->fecha_programado = $fecha_fin;
         $resul->monto_programado = $monto_programado;
+        $resul->monto_reprogramado = $monto_programado;
         $resul->baja_logica = 1;
         if ($resul->save()==false) {
                 $msm = 1;

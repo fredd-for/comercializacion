@@ -58,24 +58,11 @@ class ClientesController extends ControllerBase
                 'useEmpty' => true,
                 'emptyText' => '(Selecionar)',
                 'emptyValue' => '',
-                'class' => 'form-control'
+                'class' => 'form-control',
+                'required' => 'required'
                 )
             );
         $this->view->setVar('responsable',$responsable);
-
-        // $nivelsalarial = $this->tag->select(
-        //     array(
-        //         'codigo_nivel',
-        //         Nivelsalariales::find(array('baja_logica=1',"order"=>"id ASC","columns" => "id,CONCAT(denominacion, ' (', sueldo, ' Bs.)') as fullname")),
-        //         //Nivelsalariales::find(array('baja_logica=1','order' => 'id ASC')),
-        //         'using' => array('id', "fullname"),
-        //         'useEmpty' => true,
-        //         'emptyText' => '(Selecionar)',
-        //         'emptyValue' => '',
-        //         'class' => 'form-control'
-        //         )
-        //     );
-
 
 	}
 
@@ -124,7 +111,7 @@ class ClientesController extends ControllerBase
                 'num_productos' => $v->num_productos,
                 'dias_tolerancia' => $v->dias_tolerancia,
                 'porcentaje_mora' => $v->porcentaje_mora*100,
-                'responsable' =>utf8_encode($v->responsable),
+                'responsable' =>$v->responsable,
                 'responsable_id' => $v->responsable_id,
             );
         }
@@ -230,6 +217,7 @@ class ClientesController extends ControllerBase
                 $resul->descripcion = $this->request->getPost('descripcion');
                 $resul->dias_tolerancia = $this->request->getPost('dias_tolerancia');
                 $resul->porcentaje_mora = $this->request->getPost('porcentaje_mora')/100;
+                $resul->responsable_id = $this->request->getPost('responsable_id');
                 if ($resul->save()) {
                     $contrato_id = $resul->id;
                 }
@@ -248,6 +236,7 @@ class ClientesController extends ControllerBase
                 $resul->descripcion = $this->request->getPost('descripcion');
                 $resul->dias_tolerancia = $this->request->getPost('dias_tolerancia');
                 $resul->porcentaje_mora = $this->request->getPost('porcentaje_mora')/100;
+                $resul->responsable_id = $this->request->getPost('responsable_id');
                 if ($resul->save()) {
                     $this->flashSession->success("Exito: Registro guardado correctamente...");
                     $contrato_id =$resul->id; 

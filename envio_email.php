@@ -15,17 +15,27 @@ INNER JOIN clientes cl ON c.cliente_id = cl.id
 INNER JOIN usuarios u ON c.responsable_id = u.id 
 INNER JOIN usuarios us ON c.usuario_reg = us.id 
 WHERE (CURDATE()=pp.fecha_programado OR ADDDATE(CURDATE(),INTERVAL 5 DAY)=pp.fecha_programado OR ADDDATE(CURDATE(),INTERVAL 10 DAY)=pp.fecha_programado) and pp.baja_logica = 1 
+AND pp.id NOT IN (SELECT planpago_id FROM envioscorreos WHERE fecha_envio = CURDATE() AND estado = 1)
 GROUP BY pp.id,pp.monto_reprogramado
-HAVING IFNULL((SUM(ppd.monto_deposito)), 0)<pp.monto_reprogramado
-";
+HAVING IFNULL((SUM(ppd.monto_deposito)), 0)<pp.monto_reprogramado";
 $resul = mysql_query($sql,$link);
+
 $html = '';
 while ($f = mysql_fetch_assoc($resul)) {
-	if ($f['diferencia']=='10') {
+	$html = '';
+	if ($f['diferencia']=='10' ) {
+		$motivo = 'Notificacion 10 dias antes de la fecha programada';
+	}elseif ($f['diferencia']=='5') {
+		$motivo = 'Notificacion 5 dias antes de la fecha programada';
+	}elseif ($f['diferencia']=='0') {
+		$motivo = 'Notificacion 0 dias antes de la fecha programada';
+	}else{
+		$motivo = '';
+	}
 		$html .= '<div>Señor(es),</div>
 		<div><b>'.$f['razon_social'].'</b></div>
 		<BR>
-		<p>La Empresa Estatal de Transporte por Cable "Mi Teleférico", le comunica que tiene que realizar el deposito del alquiler del siguiente producto</p>
+		<p>La Empresa Estatal de Transporte por Cable "Mi Teleférico", le comunica que tiene que realizar el deposito de alquiler del siguiente producto:</p>
 		<div><b>Linea:</b> '.$f['linea'].'</div>
 		<div><b>Estación:</b> '.$f['estacion'].'</div>
 		<div><b>Nro Contrato:</b> '.$f['contrato'].'</div>
@@ -36,13 +46,14 @@ while ($f = mysql_fetch_assoc($resul)) {
 		<p>Se lo insinua realizar el pago antes de la fecha programada para no pasar a mora.</p>
 		<p>Saludos,</p>
 		<p><b>EMPRESA DE TRANSPORTE POR CABLE MI TELEFERICO</b></p>';
-		
+
 		$concopia ='';
 		$concopia_email = '';
-		$remitente = utf8_decode("\"MI TELEFERICO\"");
+        
+		$remitente = utf8_decode("MI TELEFERICO");
 		$remitente_correo = "rrhh@miteleferico.bo";
 		$mail = new PHPMailer();
-		$mail->IsSMTP();
+		$mail->IsSMTP(); 	
 		$mail->SMTPAuth = true;
 		$mail->SMTPSecure = "ssl";
 		$mail->Host = "correo.miteleferico.bo";
@@ -67,14 +78,14 @@ while ($f = mysql_fetch_assoc($resul)) {
 		$concopia_email.=$f['administrador_email'];
 		$mail->IsHTML(true);
 		if(!$mail->Send()) {
-			$sql = "INSERT INTO envioscorreos VALUES ('',1,$remitente,$remitente_correo,$f['razon_social'],$f['correo'],'Notificacion 10 dias antes de la fecha programada',$html,1,$f['fecha_programado'],CURDATE(),$f['diferencia'],1,$concopia,$concopia_email)";
+            $sql = "INSERT INTO envioscorreos VALUES ('','".$f['id']."','".$remitente."','".$remitente_correo."','".$f['razon_social']."','".$f['correo']."','".$motivo."','".$html."',0,'".$f['fecha_programado']."','".date("Y-m-d")."','".$f['diferencia']."',1,'".$concopia."','".$concopia_email."')";
 			$sms = "<strong>Error: </strong>El correo electronico no existe.";
 		} else{
-			$sql = "INSERT INTO envioscorreos VALUES ('',1,$remitente,$remitente_correo,$f['razon_social'],$f['correo'],'Notificacion 10 dias antes de la fecha programada',$html,1,$f['fecha_programado'],CURDATE(),$f['diferencia'],0,$concopia,$concopia_email)";
-			$sms = "<strong>Exito: </strong>Revise su correo electronico ".$correo_destinatario.", se le envio la contraseña para postularse. ";
+			$sql = "INSERT INTO envioscorreos VALUES ('','".$f['id']."','".$remitente."','".$remitente_correo."','".$f['razon_social']."','".$f['correo']."','".$motivo."','".$html."',1,'".$f['fecha_programado']."','".date("Y-m-d")."','".$f['diferencia']."',1,'".$concopia."','".$concopia_email."')";
+			$sms = "<strong>Exito: </strong>Se envio correctamente. ";
 		}
 		$resul2 = mysql_query($sql,$link);
-	}
+	
 }
 echo utf8_decode($html);
 mysql_close($link);

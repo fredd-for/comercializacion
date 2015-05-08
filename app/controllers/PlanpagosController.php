@@ -231,7 +231,7 @@ private function htmlcontrolpagos($contratoproducto_id)
                                                 $datetime2 = new DateTime(date("Y-m-d"));
                                                 $interval = $datetime1->diff($datetime2);
                                                 $dias_atraso = $interval->format('%R%a');
-                                                $mora=($rm->total*$rm->porcentaje_mora)*$dias_atraso;
+                                                $mora=($rm->total/$rm->nro_dias*$rm->porcentaje_mora)*$dias_atraso;
                                                 $color_mora = 'danger';    
                                             }else{
                                                 $color_mora = 'success';   
@@ -329,7 +329,7 @@ function modificacionmora($planpago_id)
             if ($nro_dias>0) {
                 $planpago = Planpagos::findFirstById($planpago_id);
                 $planpago->dias_atraso = $nro_dias;
-                $planpago->mora = ($v->total*$v->porcentaje_mora)*$nro_dias;
+                $planpago->mora = ($v->total/$v->nro_dias*$v->porcentaje_mora)*$nro_dias;
                 $planpago->save();    
             }else{
                 $planpago = Planpagos::findFirstById($planpago_id);
@@ -639,7 +639,7 @@ public function savegarantiaAction()
     }   
 }
 $html = '
-<td><a href="javascript:void(0)" id="'.$AddEdit_derechollave.'" garantia_id="'.$garantia_id.'" fecha_deposito="'.$fecha_deposito.'" nro_deposito="'.$nro_deposito.'" monto_deposito="'.$monto_deposito.'" fecha_devolucion="'.$fecha_devolucion.'" nro_devolucion="'.$nro_devolucion.'" monto_devolucion="'.$monto_devolucion.'" ><strong>DERECHO DE LLAVE </strong></a></td>
+<td><a href="javascript:void(0)" id="'.$AddEdit_derechollave.'" garantia_id="'.$garantia_id.'" fecha_deposito="'.$fecha_deposito.'" nro_deposito="'.$nro_deposito.'" monto_deposito="'.$monto_deposito.'" fecha_devolucion="'.$fecha_devolucion.'" nro_devolucion="'.$nro_devolucion.'" monto_devolucion="'.$monto_devolucion.'" ><strong>GARANTIA </strong></a></td>
 <td><strong>Fecha Deposito: </strong> '.$fecha_deposito.'</td>
 <td><strong>Nro Deposito: </strong> '.$nro_deposito.'</td>
 <td><strong>Monto Depositado: </strong> '.$monto_deposito.'</td>

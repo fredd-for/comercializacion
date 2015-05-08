@@ -29,7 +29,7 @@ class Planpagodepositos extends \Phalcon\Mvc\Model
 
 	public function getdatosverificar($planpago_id,$tipo_deposito)
 	{
-		$sql="SELECT pp.*,cp.total, cp.nro_dias,co.dias_tolerancia,porcentaje_mora,MAX(d.fecha_deposito) as fecha,SUM(d.monto_deposito) as deposito
+		$sql="SELECT pp.*,cp.total, cp.nro_dias,co.dias_tolerancia,co.porcentaje_mora,MAX(d.fecha_deposito) as fecha,SUM(d.monto_deposito) as deposito
 		FROM planpagos pp
 		INNER JOIN contratosproductos cp ON pp.contratoproducto_id = cp.id
 		INNER JOIN contratos co ON cp.contrato_id = co.id
