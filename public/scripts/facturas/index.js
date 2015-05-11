@@ -57,7 +57,7 @@ cargar();
 			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '15%' },
 			{ text: 'Fecha Programado', datafield: 'fecha_programado', filtertype: 'range', width: '7%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
 			{ text: 'Monto Programado Bs.', datafield: 'monto_reprogramado', filtertype: 'number', width: '7%',cellsformat: "c2", cellsalign: 'right'},
-	        { text: 'Diferencia Dias', datafield: 'diferencia_dias', filtertype: 'number', width: '7%',cellsalign: 'right'},
+	        { text: 'Dias Atraso', datafield: 'diferencia_dias', filtertype: 'number', width: '7%',cellsalign: 'right'},
 			],
 			//groups: ['razon_social','contrato']
 		});

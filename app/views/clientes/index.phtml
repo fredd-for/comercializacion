@@ -26,6 +26,7 @@
 							</div>
 						</div>
 					</div>
+					<?php if ($user->nivel==2) { ?>
 					<div class="row">
 						<div class="col-md-12">
 							<div class="pull-right">
@@ -36,6 +37,7 @@
 							</div>
 						</div>
 					</div>
+					<?php } ?>
 					<div class="row">
 						<div class="col-md-12">
 							<div id="jqxgrid" style="height: 550px; width: 100%;" ></div>
@@ -66,8 +68,10 @@
 							</div>
 							<div class="pull-right">
 								<button class="btn btn-sm btn-default" type="button" id="ver_productos"><i class="fa fa-pencil fa-fw"></i> Ver Productos</button>
+								<?php if ($user->nivel==2) { ?>
 								<button class="btn btn-sm btn-warning" type="button" id="edit_contrato"><i class="fa fa-pencil fa-fw"></i> Editar</button>
 								<button class="btn btn-sm btn-danger" type="button" id="delete_contrato"><i class="fa fa-trash-o fa-fw"></i> Eliminar</button>
+								<?php } ?>
 							</div>
 						</div>
 					</div> 

@@ -20,24 +20,35 @@
                     <div id="domshortcuttiles" class="tab-pane active">
                         <div class="row">
                             <div class="col-md-2">
-                                <a class="shortcut-tiles tiles-info animated fadeInDownBig" href="/relaciones">
+                                <a class="shortcut-tiles tiles-info animated fadeInDownBig" href="/clientes">
                                     <div class="tiles-body">
                                         <div class="pull-left"><i class="fa fa-users"></i></div>
-                                        <div class="pull-right"><span class="badge animated rubberBand">Clientes: <?php echo $personal ?></span></div>
+                                        <div class="pull-right"><span class="badge animated rubberBand">Clientes : <?php echo $clientes ?></span></div>
                                     </div>
                                     <div class="tiles-footer">
-                                        Clientes con Contrato
+                                        Clientes con Contrato Activos
                                     </div>
                                 </a>
                             </div>
                             <div class="col-md-2">
-                                    <a class="shortcut-tiles tiles-indigo animated fadeInLeftBig" href="/cargos">
+                                    <a class="shortcut-tiles tiles-danger animated fadeInLeftBig" href="/productos">
                                     <div class="tiles-body">
-                                        <div class="pull-left"><i class="fa fa-glass"></i></div>
-                                        <div class="pull-right"><span class="badge animated rubberBand">Productos: <?php echo $acefalos ?></span></div>
+                                        <div class="pull-left"><i class="fa fa-gears"></i></div>
+                                        <div class="pull-right"><span class="badge animated rubberBand">Productos: <?php echo $productossinalquilar ?></span></div>
                                     </div>
                                     <div class="tiles-footer">
                                         Productos para Alquilar
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-2">
+                                <a class="shortcut-tiles tiles-indigo animated fadeInDownBig" href="#">
+                                    <div class="tiles-body">
+                                        <div class="pull-left"><i class="fa fa-gears"></i></div>
+                                        <div class="pull-right"><span class="badge animated animated fadeInDownBig">Productos: <?php echo $productosalquilados ?></span></div>
+                                    </div>
+                                    <div class="tiles-footer">
+                                        Productos Alquilados
                                     </div>
                                 </a>
                             </div>
@@ -45,29 +56,19 @@
                             <div class="col-md-2">
                                 <a class="shortcut-tiles tiles-magenta animated fadeInRightBig" href="#">
                                     <div class="tiles-body">
-                                        <div class="pull-left"><i class="fa fa-credit-card"></i></div>
-                                        <div class="pull-right"><span class="badge animated rubberBand">Contratos: <?php echo $procesos?></span></div>
+                                        <div class="pull-left"><i class="fa fa-file-text"></i></div>
+                                        <div class="pull-right"><span class="badge animated rubberBand">Contratos: <?php echo $contratosActivos?></span></div>
                                     </div>
                                     <div class="tiles-footer">
                                         Contratos Activos
                                     </div>
                                 </a>
                             </div>
-                            <div class="col-md-2">
-                                <a class="shortcut-tiles tiles-danger animated fadeInDownBig" href="#">
-                                    <div class="tiles-body">
-                                        <div class="pull-left"><i class="fa fa-folder"></i></div>
-                                        <div class="pull-right"><span class="badge animated animated fadeInDownBig">Contratos</span></div>
-                                    </div>
-                                    <div class="tiles-footer">
-                                        Contratos Por Finalizar
-                                    </div>
-                                </a>
-                            </div>
+                            
                             <div class="col-md-2">
                                     <a class="shortcut-tiles tiles-orange animated fadeInLeftBig" href="#">
                                     <div class="tiles-body">
-                                        <div class="pull-left"><i class="fa fa-archive"></i></div>
+                                        <div class="pull-left"><i class="fa fa-usd"></i></div>
                                         <div class="pull-right"><span class="badge animated ">Ganancia</span></div>
                                     </div>
                                     <div class="tiles-footer">
@@ -76,9 +77,9 @@
                                 </a>
                             </div>
                             <div class="col-md-2">
-                                <a class="shortcut-tiles tiles-warning animated fadeInDownBig" href="/personas">
+                                <a class="shortcut-tiles tiles-danger animated fadeInDownBig" href="/personas">
                                     <div class="tiles-body">
-                                        <div class="pull-left"><i class="fa fa-user"></i></div>
+                                        <div class="pull-left"><i class="fa fa-usd"></i></div>
                                         <div class="pull-right"><span class="badge animated fadeInUpBig">Mora: <?php echo $personas?></span></div>
                                     </div>
                                     <div class="tiles-footer">

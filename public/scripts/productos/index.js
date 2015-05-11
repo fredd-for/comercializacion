@@ -56,6 +56,15 @@ $(document).ready(function (){
 		var barra = function(statusbar) {
 		};
 
+		var cellsrenderer = function (row, column, value, defaultHtml){                
+			if (row == 0 || row == 2 || row == 5) {
+				var element = $(defaultHtml);
+				element.css({'background-color': 'Yellow', 'width': '100%', 'height': '100%', 'margin': '0px','vertical-aling':'middle' });
+				return element[0].outerHTML;
+			}
+			return defaultHtml;
+		}
+
 
 		$("#jqxgrid").jqxGrid({
 
@@ -82,15 +91,15 @@ $(document).ready(function (){
                         }
             },
 			// { text: 'ID', datafield: 'id', filtertype: 'input',width: '5%' },
-			{ text: 'linea', datafield: 'linea', filtertype: 'input',width: '10%' },
-			{ text: 'Estación', datafield: 'estacion', filtertype: 'input',width: '10%' },
-			{ text: 'Grupo', datafield: 'grupo', filtertype: 'input',width: '10%' },
-			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '20%' },
-			{ text: 'Codigo', datafield: 'codigo', filtertype: 'input',width: '5%' },
-			{ text: 'Descripción', datafield: 'descripcion', filtertype: 'input',width: '25%' },
-			{ text: 'Precio Unitario', datafield: 'precio_unitario', filtertype: 'input',width: '7%' },
-			{ text: 'Cantidad', datafield: 'uso_string',filtertype: 'input', width: '5%' },
-			{ text: 'Tiempo', datafield: 'tiempo',filtertype: 'input', width: '5%' },
+			{ text: 'linea', datafield: 'linea', filtertype: 'input',width: '8%' ,cellsrenderer: cellsrenderer},
+			{ text: 'Estación', datafield: 'estacion', filtertype: 'input',width: '10%' ,cellsrenderer: cellsrenderer},
+			{ text: 'Grupo', datafield: 'grupo', filtertype: 'input',width: '10%',cellsrenderer: cellsrenderer },
+			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '20%' ,cellsrenderer: cellsrenderer},
+			{ text: 'Codigo', datafield: 'codigo', filtertype: 'input',width: '5%' ,cellsrenderer: cellsrenderer},
+			{ text: 'Descripción', datafield: 'descripcion', filtertype: 'input',width: '24%' ,cellsrenderer: cellsrenderer},
+			{ text: 'Precio Unitario', datafield: 'precio_unitario', filtertype: 'input',width: '7%' ,cellsrenderer: cellsrenderer},
+			{ text: 'Cantidad', datafield: 'cantidad',filtertype: 'input', width: '5%',cellsrenderer: cellsrenderer },
+			{ text: 'Tiempo', datafield: 'tiempo',filtertype: 'input', width: '5%',cellsrenderer: cellsrenderer},
 			]
 		});
 

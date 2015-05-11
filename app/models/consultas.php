@@ -5,37 +5,18 @@ use Phalcon\Mvc\Model\Resultset\Simple as Resultset;
 class Consultas extends \Phalcon\Mvc\Model {
     /* personal activo de la instatitucion */
 
-    public static function fileActivo($id) {
-        $sql = "SELECT r.id,r.num_contrato,CONCAT(p.p_nombre,' ',p.s_nombre,' ',p.p_apellido,' ',p.s_apellido) as nombre,c.codigo,p.e_civil, p.nacionalidad,p.grupo_sanguineo,
-                c.cargo,n.denominacion,n.sueldo,e.estado,to_char(r.fecha_ini, 'DD-mm-YYYY') as fecha_ini,
-                to_char(r.fecha_incor, 'DD-mm-YYYY') as fecha_incorporacion,p.id as persona_id,
-                to_char(p.fecha_nac, 'DD-mm-YYYY') as fecha_nac,p.ci,p.expd,o.unidad_administrativa,p.foto,x.direccion_dom,x.telefono_fijo,x.celular_per,x.e_mail_per
-                FROM  (SELECT * FROM relaborales
-                WHERE id='$id' ) as r
-                INNER JOIN personas p ON r.persona_id=p.id
-                INNER JOIN organigramas o ON r.organigrama_id=o.id
-                INNER JOIN cargos c ON r.cargo_id=c.id
-                INNER JOIN nivelsalariales n ON r.nivelsalarial_id=n.id
-                INNER JOIN cargosestados e ON c.cargo_estado_id=e.id
-                INNER JOIN personascontactos x ON p.id=x.persona_id
-                WHERE r.baja_logica='1'";
-        $db = new personas();
+    public static function clientesContrato() {
+        $sql = "SELECT c.cliente_id
+        FROM contratosproductos cp
+        INNER JOIN contratos c ON cp.contrato_id = c.id AND c.baja_logica = 1
+        WHERE cp.baja_logica =1 AND CURDATE()<=cp.fecha_fin
+        GROUP BY c.cliente_id";
+        $db = new Clientes();
         return new Resultset(null, $db, $db->getReadConnection()->query($sql));
     }
-    public static function personalActivo() {
-        $sql = "SELECT r.id,r.num_contrato,CONCAT(p.p_nombre,' ',p.s_nombre,' ',p.p_apellido,' ',p.s_apellido) as nombre,c.codigo, 
-                c.cargo,n.denominacion,n.sueldo,e.estado,to_char(r.fecha_ini, 'DD-mm-YYYY') as fecha_ini,to_char(r.fecha_incor, 'DD-mm-YYYY') as fecha_incorporacion,
-                to_char(p.fecha_nac, 'DD-mm-YYYY') as fecha_nac,CONCAT(p.ci,' ',p.expd) as ci,o.unidad_administrativa,p.foto
-                FROM  (SELECT * FROM relaborales
-                WHERE estado >='1' ) as r
-                INNER JOIN personas p ON r.persona_id=p.id
-                INNER JOIN organigramas o ON r.organigrama_id=o.id
-                INNER JOIN cargos c ON r.cargo_id=c.id
-                INNER JOIN nivelsalariales n ON r.nivelsalarial_id=n.id
-                INNER JOIN cargosestados e ON c.cargo_estado_id=e.id
-                WHERE r.baja_logica='1'
-                ORDER BY r.estado";
-        $db = new personas();
+    public static function productosSinAlquilar() {
+        $sql = "SELECT SUM(cantidad) as cantidad FROM productos WHERE baja_logica = 1 AND cantidad >0";
+        $db = new Clientes();
         return new Resultset(null, $db, $db->getReadConnection()->query($sql));
     }
     public static function personigramacargo($id) {

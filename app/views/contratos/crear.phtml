@@ -48,10 +48,12 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="pull-right">
+								<?php if ($user->nivel==2) { ?>
 								<button class="btn btn-sm btn-default" type="button" id="definir_pp"><i class="fa fa-plus fa-fw"></i>Definir Plan Pagos</button>
-								<button class="btn btn-sm btn-primary" type="button" id="ver_pp_todo"><i class="fa fa-plus fa-fw"></i>Ver Plan Pagos</button>
-								<!-- <button class="btn btn-sm btn-warning" type="button" id="ver_planpagos"><i class="fa fa-pencil fa-fw"></i> Ver Plan de Pagos</button> -->
 								<button class="btn btn-sm btn-danger" type="button" id="quitar"><i class="fa fa-trash-o fa-fw"></i> Quitar Producto</button>
+								<?php } ?>
+								<button class="btn btn-sm btn-primary" type="button" id="ver_pp_todo"><i class="fa fa-plus fa-fw"></i>Ver Plan Pagos</button>
+								
 							</div>
 						</div>
 					</div> 
@@ -70,21 +72,20 @@
 		</div>
 	</div>
 </div>
-
-				<div class="row">
-					<div class="col-md-12">
-						<div class="pull-right">
-							<button class="btn btn-sm btn-primary" type="button" id="add_contrato"><i class="fa fa-plus fa-fw"></i>Añadir a Contrato</button>
-								<!-- <button class="btn btn-sm btn-warning" type="button" id="edit"><i class="fa fa-pencil fa-fw"></i> Editar</button>
-								<button class="btn btn-sm btn-danger" type="button" id="delete"><i class="fa fa-trash-o fa-fw"></i> Eliminar</button> -->
-							</div>
-						</div>
-					</div> 
-					<div class="row">
-						<div class="col-md-12">
-							<div id="jqxgrid" style="height: 550px; width: 100%;" ></div>
-						</div>
-					</div>
+<?php if ($user->nivel==2) { ?>
+<div class="row">
+	<div class="col-md-12">
+		<div class="pull-right">
+			<button class="btn btn-sm btn-primary" type="button" id="add_contrato"><i class="fa fa-plus fa-fw"></i>Añadir a Contrato</button>
+		</div>
+	</div>
+</div> 
+<?php } ?>
+<div class="row">
+	<div class="col-md-12">
+		<div id="jqxgrid" style="height: 550px; width: 100%;" ></div>
+	</div>
+</div>
 
 
 					<!-- Modal añadir a contrato -->

@@ -135,11 +135,13 @@ private function htmlcontrolpagos($contratoproducto_id)
                                     <th>Mora</th>
                                     <th class="tdFacDep">Nro Deposito Mora</th>
                                     <th>Fecha Deposito Mora</th>
-                                    <th>Monto Deposito Mora</th>
-                                    <th style="width: 150px;" class="text-center">Acción
-                                    <a href="javascript:void(0)" data-toggle="tooltip" title="Ver Nro de Facturas y Nro Deposito" id="verFacDep"><i class="fa fa-search-plus"></i></a>
-                                    </th>
-                                </tr>
+                                    <th>Monto Deposito Mora</th>';
+                                    if ($this->_user->nivel==2) {
+                                        $html.='<th style="width: 150px;" class="text-center">Acción
+                                        <a href="javascript:void(0)" data-toggle="tooltip" title="Ver Nro de Facturas y Nro Deposito" id="verFacDep"><i class="fa fa-search-plus"></i></a>
+                                        </th>';    
+                                    }
+                                $html.='</tr>
                             </thead>
                             <tbody>';
         
@@ -250,15 +252,17 @@ private function htmlcontrolpagos($contratoproducto_id)
                                 <td class="'.$color_mora.' text-right">'.number_format($mora, 2, '.',',').'</td>
                                 <td class="'.$color_mora.' tdFacDep">'.$div_nrodeposito_mora.'</td>
                                 <td class="'.$color_mora.'">'.$div_fecha_deposito_mora.'</td>
-                                <td class="'.$color_mora.' text-right">'.$div_monto_deposito_mora.'</td>
-                                <td class="text-center">
+                                <td class="'.$color_mora.' text-right">'.$div_monto_deposito_mora.'</td>';
+                                if ($this->_user->nivel==2) {
+                        $html.='<td class="text-center">
                                     <div class="btn-group btn-group-xs">
                                         <a href="javascript:void(0)" data-toggle="tooltip" title="Realizar deposito" class="btn btn-primary reg_deposito" planpago_id ="'.$v->id.'" tipo_deposito="1" texto="Registrar Deposito"><i class="fa fa-tag"></i></a>
                                         <a href="javascript:void(0)" data-toggle="tooltip" title="Editar Depositos" class="btn btn-warning edit_deposito" planpago_id ="'.$v->id.'"><i class="fa fa-pencil"></i></a>
                                         <a href="javascript:void(0)" data-toggle="tooltip" title="Realizar deposito" class="btn btn-default reg_deposito" planpago_id ="'.$v->id.'" tipo_deposito="2" texto="Registrar Deposito Mora"><i class="fa fa-tags"></i></a>
                                     </div>
-                                </td>
-                        </tr>';
+                                </td>';
+                                }
+                        $html.='</tr>';
                 }
                            
             $id = $v->id;
@@ -277,9 +281,11 @@ private function htmlcontrolpagos($contratoproducto_id)
                                     <td>'.number_format($total_mora,2,'.',',').'</td>
                                     <tdclass="tdFacDep"></td>
                                     <td></td>
-                                    <td>'.number_format($total_deposito_mora,2,'.',',').'</td>
-                                    <td></td>
-                                </tr>'; 
+                                    <td>'.number_format($total_deposito_mora,2,'.',',').'</td>';
+                                    if ($this->_user->nivel==2) {
+                                    $html .='<td></td>';
+                                    }
+                                $html .='</tr>'; 
         $html .='</tbody>
                 </table>
                 </div>';

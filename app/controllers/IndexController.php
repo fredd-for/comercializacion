@@ -25,15 +25,18 @@ class IndexController extends ControllerRrhh {
                 ;
         // $this->view->setVar('lista', $this->lista);
         $this->view->setVar('usuario', $this->_user);
-  //       $personal = consultas::personalActivo()->count();
-  //       $personas = consultas::personasActivo()->count();
+        
+        $clientes = consultas::clientesContrato()->count();
+        $productossinalquilar = Productos::sum(array("baja_logica=1 and cantidad>0", 'column' => 'cantidad'));
+        $productosalquilados = Contratosproductos::sum(array("baja_logica=1 and cantidad>0", 'column' => 'cantidad'));
+        $contratosActivos = Contratos::count(array("baja_logica=1"));
   //       $acefalos = consultas::acefalos()->count();
   //       $model = new Procesoscontrataciones();
 		// $procesos= $model->lista()->count();
-  //       $this->view->setVar('personal', $personal);
-  //       $this->view->setVar('personas', $personas);
-  //       $this->view->setVar('acefalos', $acefalos);
-  //       $this->view->setVar('procesos', $procesos);
+         $this->view->setVar('clientes', $clientes);
+         $this->view->setVar('productossinalquilar', $productossinalquilar);
+         $this->view->setVar('productosalquilados', $productosalquilados);
+         $this->view->setVar('contratosActivos', $contratosActivos);
     }
 
     //organigrma
