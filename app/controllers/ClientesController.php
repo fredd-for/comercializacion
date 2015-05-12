@@ -68,7 +68,9 @@ class ClientesController extends ControllerBase
 
 	public function listAction()
 	{
-		$resul = Clientes::find(array('baja_logica=1', 'order'=>'id ASC'));
+		//$resul = Clientes::find(array('baja_logica=1', 'order'=>'id ASC'));
+        $model = new Clientes();
+        $resul = $model->lista();
         $this->view->disable();
         foreach ($resul as $v) {
             $customers[] = array(
@@ -86,7 +88,8 @@ class ClientesController extends ControllerBase
                 'nombre_ref' => $v->nombre_ref,
                 'ci_ref' => $v->ci_ref,
                 'celular_ref' => $v->celular_ref,
-                'correo_ref' => $v->correo_ref
+                'correo_ref' => $v->correo_ref,
+                'estado' => $v->estado
             );
         }
         echo json_encode($customers);

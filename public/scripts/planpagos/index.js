@@ -29,6 +29,11 @@ cargar();
 		var tooltiprenderer = function (element) {
                 $(element).jqxTooltip({position: 'mouse', content: $(element).text() });
         };
+        var totalcolumnrenderer = function (row, column, cellvalue) {
+                var cellvalue = $.jqx.dataFormat.formatnumber(cellvalue, 'c2');
+                //return '<span style="margin: 6px 3px; font-size: 12px; float: right; font-weight: bold;">' + cellvalue + '</span>';
+                return cellvalue;
+            };
 		$("#jqxgrid").jqxGrid({
 
 			width: '100%',
@@ -53,7 +58,7 @@ cargar();
 					return "<div style='margin:4px;'>" + (value + 1) + "</div>";
 				}
 			},
-			{ text: 'Grupo', datafield: 'grupo', filtertype: 'checkedlist',width: '8%', rendered: tooltiprenderer },
+			// { text: 'Grupo', datafield: 'grupo', filtertype: 'checkedlist',width: '8%', rendered: tooltiprenderer },
 			{ text: 'Linea', datafield: 'linea', filtertype: 'checkedlist',width: '7%' },
 			{ text: 'Estación', datafield: 'estacion', filtertype: 'checkedlist',width: '10%' },
 			{ text: 'Cliente / Razón Social', datafield: 'razon_social', filtertype: 'input',width: '10%' },
@@ -62,10 +67,10 @@ cargar();
 			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '10%' },
 			{ text: 'Fecha Inicio', datafield: 'fecha_inicio', filtertype: 'range', width: '7%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
 			{ text: 'Fecha Final', datafield: 'fecha_fin', filtertype: 'range', width: '7%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
-			{ text: 'Total Bs.', datafield: 'total', filtertype: 'number', width: '7%',cellsformat: "c2", cellsalign: 'right'},
-	        { text: 'Deposito Bs.', datafield: 'deposito', filtertype: 'number', width: '7%',cellsformat: "c2", cellsalign: 'right'},
-			{ text: 'Por Cobrar Bs.', datafield: 'cobrar', filtertype: 'number',width: '7%',cellsformat: "c2", cellsalign: 'right' },
- 			{ text: 'Mora Bs.', datafield: 'mora', filtertype: 'number', width: '7%',cellsformat: "c2", cellsalign: 'right'},
+			{ text: 'Total Bs.', datafield: 'total', filtertype: 'number', width: '8%',cellsformat: "c2", cellsalign: 'right'},
+	        { text: 'Deposito Bs.', datafield: 'deposito', filtertype: 'number', width: '8%',cellsformat: "c2", cellsalign: 'right'},
+			{ text: 'Por Cobrar Bs.', datafield: 'cobrar', filtertype: 'number',width: '8%',cellsformat: "c2", cellsalign: 'right' },
+ 			{ text: 'Mora Bs.', datafield: 'mora', filtertype: 'number', width: '8%',cellsformat: "c2", cellsalign: 'right'},
 			]
 			//groups: ['grupo']
 		});

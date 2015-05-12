@@ -55,7 +55,13 @@ $(document).ready(function (){
 		}
 		var barra = function(statusbar) {
 		};
-
+		var cellclass = function (row, columnfield, value) {
+			if (value > '0') {
+				return 'green';
+			}else{
+				return 'red';
+			}
+		}
 
 		$("#jqxgrid").jqxGrid({
 
@@ -88,7 +94,7 @@ $(document).ready(function (){
 			{ text: 'Codigo', datafield: 'codigo', filtertype: 'input',width: '5%' },
 			{ text: 'Descripción', datafield: 'descripcion', filtertype: 'input',width: '25%' },
 			{ text: 'Precio Unitario', datafield: 'precio_unitario', filtertype: 'input',width: '5%' },
-			{ text: 'Cantidad', datafield: 'cantidad',filtertype: 'input', width: '5%' },
+			{ text: 'Cantidad', datafield: 'cantidad',filtertype: 'input', width: '5%', cellclassname: cellclass },
 			{ text: 'Tiempo', datafield: 'tiempo',filtertype: 'input', width: '5%' },
 			]
 		});
@@ -175,8 +181,8 @@ cargar2();
 			{ text: 'Estación', datafield: 'estacion', filtertype: 'checkedlist',width: '17%' },
 			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '25%' },
 			{ text: 'Precio Bs. / Tiempo', datafield: 'precio_tiempo', filtertype: 'input',width: '15%' },
-			{ text: 'Fecha Inicio', datafield: 'fecha_inicio', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy HH:mm', align:'center'},
-	        { text: 'Fecha Finalización', datafield: 'fecha_fin', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy HH:mm', align:'center'},
+			{ text: 'Fecha Inicio', datafield: 'fecha_inicio', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
+	        { text: 'Fecha Finalización', datafield: 'fecha_fin', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
 			//{ text: 'Sub Total', datafield: 'total', filtertype: 'number',width: '10%' },
 			{ text: 'Sub Total', datafield: 'total', cellsalign: 'right', cellsformat: 'c2', aggregates: ['sum', 'avg'] },
 			]
@@ -205,7 +211,7 @@ $("#add_contrato").click(function() {
  			$("#tiempo_text").text('('+dataRecord.tiempo+')');
  			$('#myModal').modal('show');
  		}else{
- 			bootbox.alert("<strong>¡Mensaje!</strong> El producto ya fue alqado.");		
+ 			bootbox.alert("<strong>¡Mensaje!</strong> El producto ya fue alquilado.");		
  		}
  		
  	}
