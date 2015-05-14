@@ -68,11 +68,11 @@ class EstacionesController extends ControllerBase
             'id' => $v->id,
             'linea_id' => $v->linea_id,
             'linea' => $v->linea,
-            'estacion' => $v->estacion,
+            'estacion' =>$v->estacion,
             );
-    }
+        }
     echo json_encode($customers);
-}
+    }
 
 
 public function saveAction()
@@ -118,8 +118,213 @@ public function deleteAction(){
 
 public function pruebaAction()
 {
-    $password = hash_hmac('sha256', 'tpinaya741', '2, 4, 6, 7, 9, 15, 20, 23, 25, 30');
+    $password = hash_hmac('sha256', 'lucas', '2, 4, 6, 7, 9, 15, 20, 23, 25, 30');
     echo $password;
+}
+
+public function pruebapdfAction()
+{
+// Include the main TCPDF library (search for installation path).
+require_once('tcpdf/examples/tcpdf_include.php');
+
+// create new PDF document
+$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+// set document information
+$pdf->SetCreator(PDF_CREATOR);
+$pdf->SetAuthor('Nicola Asuni');
+$pdf->SetTitle('TCPDF Example 001');
+$pdf->SetSubject('TCPDF Tutorial');
+$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+
+// set default header data
+$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001', PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
+$pdf->setFooterData(array(0,64,0), array(0,64,128));
+
+// set header and footer fonts
+$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+// set default monospaced font
+$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+// set margins
+$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+// set auto page breaks
+$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+// set image scale factor
+$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+// set some language-dependent strings (optional)
+if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+    require_once(dirname(__FILE__).'/lang/eng.php');
+    $pdf->setLanguageArray($l);
+}
+
+// ---------------------------------------------------------
+
+// set default font subsetting mode
+$pdf->setFontSubsetting(true);
+
+// Set font
+// dejavusans is a UTF-8 Unicode font, if you only need to
+// print standard ASCII chars, you can use core fonts like
+// helvetica or times to reduce file size.
+$pdf->SetFont('dejavusans', '', 14, '', true);
+
+// Add a page
+// This method has several options, check the source code documentation for more information.
+$pdf->AddPage();
+
+// set text shadow effect
+$pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
+
+// Set some content to print
+$html = '<table style="font-size:8px">
+    <thead>
+        <tr>
+            <th>Nro</th>
+            <th>Ubicación</th>
+            <th>Sector</th>
+            <th>Tipo</th>
+            <th>Fecha</th>
+            <th>Descripción</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>hols</td>
+            <td>hols</td>
+            <td>hols</td>
+            <td>hols</td>
+            <td>hols</td>
+            <td>todo ll qoue tu akdjflaks djflaksdj fklajsdf alskd jflak dfjlkasd jflkasjdf laksdjf laksdj</td>
+        </tr>
+    </tbody>
+</table>';
+
+// Print text using writeHTMLCell()
+$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+
+// ---------------------------------------------------------
+
+// Close and output PDF document
+// This method has several options, check the source code documentation for more information.
+$pdf->Output('example_001.pdf', 'I');
+
+//============================================================+
+// END OF FILE
+//============================================================+
+
+$this->view->disable();
+}
+
+public function pruebatbsAction()
+{
+$this->view->disable();   
+// Include classes
+include_once('tbs_us/tbs_class.php'); // Load the TinyButStrong template engine
+include_once ('tbs_us/tbs_plugin_opentbs.php'); // Load the OpenTBS plugin
+
+// prevent from a PHP configuration problem when using mktime() and date()
+if (version_compare(PHP_VERSION,'5.1.0')>=0) {
+    if (ini_get('date.timezone')=='') {
+        date_default_timezone_set('America/La Paz');
+    }
+}
+
+// Initialize the TBS instance
+$TBS = new clsTinyButStrong; // new instance of TBS
+$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN); // load the OpenTBS plugin
+
+// ------------------------------
+// Prepare some data for the demo
+// ------------------------------
+
+// Retrieve the user name to display
+$yourname = (isset($_POST['yourname'])) ? $_POST['yourname'] : '';
+$yourname = trim(''.$yourname);
+if ($yourname=='') $yourname = "(no name)";
+
+// A recordset for merging tables
+$data = array();
+$data[] = array('rank'=> 'A', 'firstname'=>'Sandra' , 'name'=>'Hill'      , 'number'=>'1523d', 'score'=>200, 'email_1'=>'sh@tbs.com',  'email_2'=>'sandra@tbs.com',  'email_3'=>'s.hill@tbs.com');
+$data[] = array('rank'=> 'A', 'firstname'=>'Roger'  , 'name'=>'Smith'     , 'number'=>'1234f', 'score'=>800, 'email_1'=>'rs@tbs.com',  'email_2'=>'robert@tbs.com',  'email_3'=>'r.smith@tbs.com' );
+$data[] = array('rank'=> 'B', 'firstname'=>'William', 'name'=>'Mac Dowell', 'number'=>'5491y', 'score'=>130, 'email_1'=>'wmc@tbs.com', 'email_2'=>'william@tbs.com', 'email_3'=>'w.m.dowell@tbs.com' );
+
+// Other single data items
+$x_num = 3152.456;
+$x_pc = 0.2567;
+$x_dt = mktime(13,0,0,2,15,2010);
+$x_bt = true;
+$x_bf = false;
+$x_delete = 1;
+
+// -----------------
+// Load the template
+// -----------------
+
+$template = 'file/template/demo_ms_excel.xlsx';
+$TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8); // Also merge some [onload] automatic fields (depends of the type of document).
+
+// ----------------------
+// Debug mode of the demo
+// ----------------------
+if (isset($_POST['debug']) && ($_POST['debug']=='current')) $TBS->Plugin(OPENTBS_DEBUG_XML_CURRENT, true); // Display the intented XML of the current sub-file, and exit.
+if (isset($_POST['debug']) && ($_POST['debug']=='info'))    $TBS->Plugin(OPENTBS_DEBUG_INFO, true); // Display information about the document, and exit.
+if (isset($_POST['debug']) && ($_POST['debug']=='show'))    $TBS->Plugin(OPENTBS_DEBUG_XML_SHOW); // Tells TBS to display information when the document is merged. No exit.
+
+// --------------------------------------------
+// Merging and other operations on the template
+// --------------------------------------------
+
+// Merge data in the first sheet
+$TBS->MergeBlock('a,b', $data);
+
+// Merge cells (extending columns)
+$TBS->MergeBlock('cell1,cell2', $data);
+
+// Change the current sheet
+$TBS->PlugIn(OPENTBS_SELECT_SHEET, 2);
+
+// Merge data in Sheet 2
+$TBS->MergeBlock('cell1,cell2', 'num', 3);
+$TBS->MergeBlock('b2', $data);
+
+// Merge pictures of the current sheet
+//$x_picture = 'pic_1523d.gif';
+$TBS->PlugIn(OPENTBS_MERGE_SPECIAL_ITEMS);
+
+// Delete a sheet
+$TBS->PlugIn(OPENTBS_DELETE_SHEETS, 'Delete me');
+
+
+// Display a sheet (make it visible)
+$TBS->PlugIn(OPENTBS_DISPLAY_SHEETS, 'Display me');
+
+// -----------------
+// Output the result
+// -----------------
+
+// Define the name of the output file
+$save_as = (isset($_POST['save_as']) && (trim($_POST['save_as'])!=='') && ($_SERVER['SERVER_NAME']=='localhost')) ? trim($_POST['save_as']) : '';
+$output_file_name = str_replace('.', '_'.date('Y-m-d').$save_as.'.', $template);
+if ($save_as==='') {
+    // Output the result as a downloadable file (only streaming, no data saved in the server)
+    $TBS->Show(OPENTBS_DOWNLOAD, $output_file_name); // Also merges all [onshow] automatic fields.
+    // Be sure that no more output is done, otherwise the download file is corrupted with extra data.
+    exit();
+} else {
+    // Output the result as a file on the server.
+    $TBS->Show(OPENTBS_FILE, $output_file_name); // Also merges all [onshow] automatic fields.
+    // The script can continue.
+    exit("File [$output_file_name] has been created.");
+}
+
 }
 
 }

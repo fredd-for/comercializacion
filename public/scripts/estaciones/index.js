@@ -26,7 +26,7 @@ $(document).ready(function (){
 			pagerMode: 'advanced',
 			theme: 'custom',
 			//scrollmode: 'deferred',
-			showstatusbar: true,
+			//showstatusbar: true,
 			showfilterrow: true,
 			filterable: true,
 			autorowheight: true,

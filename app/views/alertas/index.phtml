@@ -1,0 +1,74 @@
+<style>     
+        .green {
+            color: black\9;
+            background-color: #b6ff00\9;
+        }
+        .yellow {
+            color: black\9;
+            background-color: yellow\9;
+        }
+        .red {
+            color: black\9;
+            background-color: #e83636\9;
+        }
+
+        .green:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected), .jqx-widget .green:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected) {
+            color: black;
+            background-color: #b6ff00;
+        }
+        .yellow:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected), .jqx-widget .yellow:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected) {
+            color: black;
+            background-color: yellow;
+        }
+        .red:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected), .jqx-widget .red:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected) {
+            color: black;
+            background-color: #e83636;
+        }
+    </style>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel">
+			<div class="panel-heading">
+				<h4>Alerta Pagos Pendientes</h4>
+				<div class="options">
+					<ul class="nav nav-tabs">
+						<li class="active"><a data-toggle="tab" href="#domshortcuttiles"><i class="fa fa-users"></i></a></li>
+						<li><a data-toggle="tab" href="#codeshortcuttiles"><i class="fa fa-code"></i></a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div class="tab-content">
+					<div class="row">
+						<div class="col-md-12">
+							<div id="divMsjeExito" class="msjs-alert" hidden="hidden">
+								<button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
+								<h5>
+									<i class="fa fa-check-circle"></i>
+									<a class="alert-link" href="javascript:void(0)" id="aMsjeExito"></a>
+								</h5>
+								
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div id="jqxgrid" style="height: 500px; width: 100%;" ></div>
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-md-12">
+							<h4>Alerta Productos por Finalizar Contrato</h4>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div id="jqxgrid_contratos" style="height: 500px; width: 100%;" ></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

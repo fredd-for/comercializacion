@@ -54,6 +54,23 @@ return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($s
 		return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));	
 	}
 
+	public function listacontrolpago($contratoproducto_id)
+	{
+		$sql="SELECT pp.*, 
+			(SELECT SUM(monto_factura)
+			FROM planpagofacturas
+			WHERE planpago_id=pp.id and baja_logica = 1) as factura_total,
+			(SELECT SUM(monto_deposito)
+			FROM planpagodepositos 
+			WHERE planpago_id=pp.id and baja_logica = 1 AND tipo_deposito =1) as deposito_total,(SELECT SUM(monto_deposito)
+			FROM planpagodepositos 
+			WHERE planpago_id=pp.id and baja_logica = 1 AND tipo_deposito =2) as mora_total
+			FROM planpagos pp
+			WHERE pp.contratoproducto_id = '$contratoproducto_id' AND pp.baja_logica=1";
+			$this->_db = new Planpagos();
+			return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));		
+	}
+
 	public function getcontrato($contratoproducto_id)
 	{
 		$sql = "SELECT cl.razon_social,c.cliente_id,c.contrato,c.fecha_contrato,c.descripcion,p.producto,p.codigo,g.grupo,e.estacion,l.linea,
@@ -66,6 +83,16 @@ return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($s
 		INNER JOIN estaciones e ON p.estacion_id = e.id
 		INNER JOIN lineas l ON e.linea_id = l.id
 		WHERE c.baja_logica =1 AND cp.baja_logica = 1 AND cp.id = '$contratoproducto_id'";
+		$this->_db = new Planpagos();
+		return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));	
+	}
+
+	public function datoscontrato($contratoproducto_id)
+	{
+		$sql = "SELECT c.*,cp.total,cp.nro_dias 
+		FROM contratosproductos cp
+		INNER JOIN contratos c ON cp.contrato_id=c.id
+		WHERE cp.id = '$contratoproducto_id'";
 		$this->_db = new Planpagos();
 		return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));	
 	}

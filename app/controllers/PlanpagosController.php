@@ -66,6 +66,160 @@ class PlanpagosController extends ControllerBase
     echo json_encode($customers);
 }
 
+public function controlpagoAction($contratoproducto_id)
+{
+        $this->assets
+        ->addCss('/jqwidgets/styles/jqx.base.css')
+        ->addCss('/jqwidgets/styles/jqx.custom.css');
+        $this->assets
+        ->addJs('/jqwidgets/jqxcore.js')
+        ->addJs('/jqwidgets/jqxmenu.js')
+        ->addJs('/jqwidgets/jqxdropdownlist.js')
+        ->addJs('/jqwidgets/jqxlistbox.js')
+        ->addJs('/jqwidgets/jqxcheckbox.js')
+        ->addJs('/jqwidgets/jqxscrollbar.js')
+        ->addJs('/jqwidgets/jqxgrid.js')
+        ->addJs('/jqwidgets/jqxdata.js')
+        ->addJs('/jqwidgets/jqxgrid.sort.js')
+        ->addJs('/jqwidgets/jqxgrid.pager.js')
+        ->addJs('/jqwidgets/jqxgrid.filter.js')
+        ->addJs('/jqwidgets/jqxgrid.selection.js')
+        ->addJs('/jqwidgets/jqxgrid.grouping.js')
+        ->addJs('/jqwidgets/jqxgrid.columnsreorder.js')
+        ->addJs('/jqwidgets/jqxgrid.columnsresize.js')
+        ->addJs('/jqwidgets/jqxdatetimeinput.js')
+        ->addJs('/jqwidgets/jqxcalendar.js')
+        ->addJs('/jqwidgets/jqxbuttons.js')
+        ->addJs('/jqwidgets/jqxdata.export.js')
+        ->addJs('/jqwidgets/jqxgrid.export.js')
+        ->addJs('/jqwidgets/globalization/globalize.js')
+        ->addJs('/jqwidgets/jqxgrid.aggregates.js')
+        ->addJs('/jqwidgets/jqxtooltip.js')
+        ->addJs('/scripts/planpagos/controlpago.js')
+        ->addJs('/media/plugins/bootbox/bootbox.min.js')
+        ;
+
+        $model = new Planpagos();
+        $resul = $model->getcontrato($contratoproducto_id);
+        // $contratoproducto = array();
+        // foreach ($resul as $v) {
+        //     $contratoproducto = $v;
+        // }
+        $this->view->setVar('contratoproducto',$resul[0]);
+
+        // $html = $this->htmlcontrolpagos($contratoproducto_id);
+        // $this->view->setVar('htmlp',$html);
+        //$this->view->setVar('contratoproducto_id',$contratoproducto_id);
+
+        $garantia = Garantias::findFirst(array('baja_logica=1 and tipo=1 and contratoproducto_id = '.$contratoproducto_id, 'order'=>'tipo ASC'));
+        $this->view->setVar('garantia',$garantia);
+
+        $derechollave = Garantias::findFirst(array('baja_logica=1 and tipo=2 and contratoproducto_id = '.$contratoproducto_id, 'order'=>'tipo ASC'));
+        $this->view->setVar('derechollave',$derechollave);    
+        
+}
+
+public function listcontrolpagoAction($contratoproducto_id)
+{
+    $model = new Planpagos();
+    $resul = $model->listacontrolpago($contratoproducto_id);
+    $contrato = $model->datoscontrato($contratoproducto_id);
+    $hoy = date("Y-m-d");
+    $dias =10;
+    $fecha_10 = date("Y-m-d",strtotime( '+'.$dias.' day' , strtotime($hoy)));
+    foreach ($resul as $v) {
+        $html = $this->depositos($v->id,$v->diferencia);
+
+        $diff = $v->monto_programado-$v->monto_reprogramado;
+        $diff_text = '';
+        if($diff>0){
+        $diff_text = '<span class="label label-primary" style="float:left">'.number_format($diff,2,".",",").'</span>';
+        }
+
+        /* calculo de mora */
+        $dias_atraso = '';
+        $mora='';
+        $fecha_tolerancia = date("Y-m-d",strtotime( '+'.$contrato[0]->dias_tolerancia.' day' , strtotime($v->fecha_programado)));
+        if ($fecha_tolerancia<date("Y-m-d")) {
+            if ($v->mora>0) {
+                $dias_atraso = $v->dias_atraso;
+                $mora=$v->mora;
+            }elseif($v->deposito_total<$v->monto_reprogramado) {
+                $datetime1 = new DateTime($fecha_tolerancia);
+                $datetime2 = new DateTime(date("Y-m-d"));
+                $interval = $datetime1->diff($datetime2);
+                $dias_atraso = $interval->format('%R%a');
+                $mora=($contrato[0]->total/$contrato[0]->nro_dias*$contrato[0]->porcentaje_mora)*$dias_atraso;
+            }
+        }
+        /* fin calculo de mora*/
+        $customers[] = array(
+            'id' => $v->id,
+            'fecha_programado' => $v->fecha_programado,
+            'monto_programado' => $v->monto_programado,
+            'monto_reprogramado_div' => $diff_text.' '.$v->monto_reprogramado,
+            'monto_reprogramado' => $v->monto_reprogramado,
+            'dias_atraso' =>$dias_atraso,
+            'mora' =>$mora,
+            'diferencia' =>$v->diferencia,
+            'factura_total' =>$v->factura_total,
+            'deposito_total' =>$v->deposito_total,
+            'mora_total' =>$v->mora_total,
+            'nro_deposito' =>$html[0],
+            'fecha_deposito' =>$html[1],
+            'monto_deposito' =>$html[2],
+            'nro_deposito_mora' =>$html[3],
+            'fecha_deposito_mora' =>$html[4],
+            'monto_deposito_mora' =>$html[5],
+            'nro_factura' =>$html[6],
+            'fecha_factura' =>$html[7],
+            'monto_factura' =>$html[8],
+            'fecha_actual' =>$hoy,
+            'fecha_10' =>$fecha_10,
+            );
+    }
+    $this->view->disable();
+    echo json_encode($customers);
+}
+
+public function depositos($planpago_id='',$diferencia)
+{
+    $resul = Planpagodepositos::find(array("planpago_id ='$planpago_id' AND baja_logica = 1 AND tipo_deposito = 1 ",'order'=>'fecha_deposito ASC'));
+    $resul2 = Planpagodepositos::find(array("planpago_id ='$planpago_id' AND baja_logica = 1 AND tipo_deposito = 2 ",'order'=>'fecha_deposito ASC'));
+    $resul3 = Planpagofacturas::find(array("planpago_id ='$planpago_id' AND baja_logica = 1 ",'order'=>'fecha_factura ASC'));
+    $nro_deposito = '';
+    $fecha_deposito ='';
+    $monto_deposito = '';
+    if ($diferencia>0) {
+        $monto_deposito.="<span class='label label-primary' style='float:left'>".$diferencia."</span>";    
+    }
+    
+    foreach ($resul as $v) {
+        $nro_deposito.="<div>".$v->nro_deposito."</div>";
+        $fecha_deposito.="<div>".$v->fecha_deposito."</div>";
+        $monto_deposito.="<div>".$v->monto_deposito."</div>";
+    }
+
+    $nro_deposito_mora = '';
+    $fecha_deposito_mora ='';
+    $monto_deposito_mora = '';
+    foreach ($resul2 as $v) {
+        $nro_deposito_mora.="<div>".$v->nro_deposito."</div>";
+        $fecha_deposito_mora.="<div>".$v->fecha_deposito."</div>";
+        $monto_deposito_mora.="<div>".$v->monto_deposito."</div>";
+    }
+    $nro_factura = '';
+    $fecha_factura ='';
+    $monto_factura = '';
+    foreach ($resul3 as $v) {
+        $nro_factura.="<div>".$v->nro_factura."</div>";
+        $fecha_factura.="<div>".$v->fecha_factura."</div>";
+        $monto_factura.="<div>".$v->monto_factura."</div>";
+    }
+    $res = array($nro_deposito,$fecha_deposito,$monto_deposito,$nro_deposito_mora,$fecha_deposito_mora,$monto_deposito_mora,$nro_factura,$fecha_factura,$monto_factura);
+    return $res;
+}
+
 public function controlAction($contratoproducto_id)
 {
         $model = new Planpagos();

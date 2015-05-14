@@ -11,6 +11,8 @@ $loader->registerDirs(
         $config->application->modelsDir,
         $config->application->phpexcel,
         $config->application->fpdf,
+        $config->application->tcpdf,
+        $config->application->tsb,
 
     )
 )->register();

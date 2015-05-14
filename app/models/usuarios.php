@@ -19,4 +19,13 @@ class Usuarios extends \Phalcon\Mvc\Model {
         return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));
     }
     
+
+    //datos de usuario
+    public function profileUsuario($id) {
+        $sql = "SELECT * 
+        FROM usuarios
+        WHERE id = '$id'";
+        $this->_db = new Usuarios();
+        return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));
+    }
 }

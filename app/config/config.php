@@ -25,6 +25,8 @@
         // Cargar librería fpdf
         'fpdf'        => __DIR__ . '/../../app/libs/fpdf/',
         'phpexcel'    => __DIR__ . '/../../app/libs/phpexcel178/',
+        'tcpdf'    => __DIR__ . '/../../app/libs/tcpdf/',
+        'tsb'    => __DIR__ . '/../../app/libs/tsb/',
         'baseUri'        => '',
     )
 ));
