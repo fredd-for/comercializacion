@@ -98,7 +98,6 @@ public function controlpagoAction($contratoproducto_id)
         ->addJs('/scripts/planpagos/controlpago.js')
         ->addJs('/media/plugins/bootbox/bootbox.min.js')
         ;
-
         $model = new Planpagos();
         $resul = $model->getcontrato($contratoproducto_id);
         // $contratoproducto = array();
@@ -157,7 +156,7 @@ public function listcontrolpagoAction($contratoproducto_id)
             'id' => $v->id,
             'fecha_programado' => $v->fecha_programado,
             'monto_programado' => $v->monto_programado,
-            'monto_reprogramado_div' => $diff_text.' '.$v->monto_reprogramado,
+            'monto_reprogramado_div' => $diff_text.' '.number_format($v->monto_reprogramado,2,'.',','),
             'monto_reprogramado' => $v->monto_reprogramado,
             'dias_atraso' =>$dias_atraso,
             'mora' =>$mora,
@@ -176,6 +175,7 @@ public function listcontrolpagoAction($contratoproducto_id)
             'monto_factura' =>$html[8],
             'fecha_actual' =>$hoy,
             'fecha_10' =>$fecha_10,
+            'fecha_tolerancia' =>$fecha_tolerancia,
             );
     }
     $this->view->disable();
@@ -197,7 +197,7 @@ public function depositos($planpago_id='',$diferencia)
     foreach ($resul as $v) {
         $nro_deposito.="<div>".$v->nro_deposito."</div>";
         $fecha_deposito.="<div>".$v->fecha_deposito."</div>";
-        $monto_deposito.="<div>".$v->monto_deposito."</div>";
+        $monto_deposito.="<div>".number_format($v->monto_deposito,2,'.',',')."</div>";
     }
 
     $nro_deposito_mora = '';
@@ -206,7 +206,7 @@ public function depositos($planpago_id='',$diferencia)
     foreach ($resul2 as $v) {
         $nro_deposito_mora.="<div>".$v->nro_deposito."</div>";
         $fecha_deposito_mora.="<div>".$v->fecha_deposito."</div>";
-        $monto_deposito_mora.="<div>".$v->monto_deposito."</div>";
+        $monto_deposito_mora.="<div>".number_format($v->monto_deposito,2,'.',',')."</div>";
     }
     $nro_factura = '';
     $fecha_factura ='';
@@ -214,7 +214,7 @@ public function depositos($planpago_id='',$diferencia)
     foreach ($resul3 as $v) {
         $nro_factura.="<div>".$v->nro_factura."</div>";
         $fecha_factura.="<div>".$v->fecha_factura."</div>";
-        $monto_factura.="<div>".$v->monto_factura."</div>";
+        $monto_factura.="<div>".number_format($v->monto_factura,2,'.',',')."</div>";
     }
     $res = array($nro_deposito,$fecha_deposito,$monto_deposito,$nro_deposito_mora,$fecha_deposito_mora,$monto_deposito_mora,$nro_factura,$fecha_factura,$monto_factura);
     return $res;
@@ -245,7 +245,7 @@ public function controlAction($contratoproducto_id)
 
     
 }
-
+/*Funcion para borrar */
 private function htmlcontrolpagos($contratoproducto_id)
 {
     $cp = Contratosproductos::findFirstById($contratoproducto_id);
@@ -522,7 +522,41 @@ public function pruebaAction()
 }
 
 
+public function savedepositopagoAction()
+{
+    if (isset($_POST['planpago_id'])) {
+        if ($_POST['planpago_id']>0) {
+         $fecha_deposito = date("Y-m-d",strtotime($this->request->getPost('fecha_deposito')));
+         $resul = new Planpagodepositos();
+         $resul->planpago_id = $this->request->getPost('planpago_id');
+         $resul->fecha_deposito = $fecha_deposito;
+         $resul->nro_deposito = $this->request->getPost('nro_deposito');
+         $resul->monto_deposito = $this->request->getPost('monto_deposito');
+         $resul->tipo_deposito = $this->request->getPost('tipo_deposito');
+         $resul->fecha_reg = date("Y-m-d H:i:s");
+         $resul->usuario_reg = $this->_user->id;
+         $resul->baja_logica = 1;
+         if ($resul->save()) {
+            if ($this->request->getPost('tipo_deposito') ==1) {
+                /*Realizamos la modificacion de montos en el caso de que esta sea mas o menos*/
+                $this->modificacionplanpagos($this->request->getPost('contratoproducto_id'));
 
+                /*Verificamos dias de mora y el monto*/
+                $this->modificacionmora($_POST['planpago_id']);
+                /*end*/
+
+            }
+            $msm = 'Exito: Se guardo correctamente';
+        }else{
+            $msm = 'Error: No se guardo el registro';
+        }
+    }
+}
+
+$this->view->disable();
+echo $msm;
+}
+/*codigo para borrar*/
 public function savedepositoAction()
 {
     $html = '';
@@ -557,79 +591,6 @@ public function savedepositoAction()
         
         $html = $this->htmlcontrolpagos($this->request->getPost('contratoproducto_id'));
         $msm = 'Exito: Se guardo correctamente';
-        // $fecha_deposito_mora = '';
-        // $fecha_deposito =date("d-m-Y",strtotime($resul->fecha_deposito));
-        // if ($resul->fecha_deposito_mora != null) {
-        //     $fecha_deposito_mora = date("d-m-Y",strtotime($resul->fecha_deposito_mora));
-        // }
-
-        // $model = new Planpagodepositos();
-        // $resul2 = $model->listadodeposito($this->request->getPost('planpago_id'));
-
-        // $datos = array();
-        // $id = 0;
-        // $total_deposito = 0;
-        // $total_mora = 0;
-        // foreach ($resul2 as $v) {
-        //     $datos[$v->id][$v->planpagodeposito_id]['id']=$v->planpagodeposito_id;
-        //     $datos[$v->id][$v->planpagodeposito_id]['fecha_programado']=$v->fecha_programado;
-        //     $datos[$v->id][$v->planpagodeposito_id]['monto_reprogramado']=$v->monto_reprogramado;
-        //     $datos[$v->id][$v->planpagodeposito_id]['mora']=$v->mora;
-        //     $datos[$v->id][$v->planpagodeposito_id]['dias_atraso']=$v->dias_atraso;
-        //     $datos[$v->id][$v->planpagodeposito_id]['nro_deposito']=$v->nro_deposito;
-        //     $datos[$v->id][$v->planpagodeposito_id]['fecha_deposito']=$v->fecha_deposito;
-        //     $datos[$v->id][$v->planpagodeposito_id]['monto_deposito']=$v->monto_deposito;
-        //     $datos[$v->id][$v->planpagodeposito_id]['tipo_deposito']=$v->tipo_deposito;
-        // }
-
-        // foreach ($resul2 as $v) {
-        //     if ($id != $v->id) {
-        //         $div_nrodeposito = '';
-        //         $div_fecha_deposito = '';
-        //         $div_monto_deposito = '';
-
-        //         $div_nrodeposito_mora = '';
-        //         $div_fecha_deposito_mora = '';
-        //         $div_monto_deposito_mora = '';
-
-        //         $html.='<td>'.$v->id.'</td>
-        //         <td>'.$v->fecha_programado.'</td>
-        //         <td>'.$v->monto_reprogramado.'</td>';
-        //         foreach ($datos[$v->id] as $k => $m) {
-        //             if ($datos[$v->id][$k]['tipo_deposito']==1) {
-        //                 $div_nrodeposito .=$datos[$v->id][$k]['nro_deposito'].'<br>';
-        //                 $div_fecha_deposito .=$datos[$v->id][$k]['fecha_deposito'].'<br>';
-        //                 $div_monto_deposito .=$datos[$v->id][$k]['monto_deposito'].'<br>';
-        //                 $total_deposito+=$datos[$v->id][$k]['monto_deposito'];    
-        //             }else{
-        //                 $div_nrodeposito_mora .=$datos[$v->id][$k]['nro_deposito'].'<br>';
-        //                 $div_fecha_deposito_mora .=$datos[$v->id][$k]['fecha_deposito'].'<br>';
-        //                 $div_monto_deposito_mora .=$datos[$v->id][$k]['monto_deposito'].'<br>';    
-        //                 $total_mora+=$datos[$v->id][$k]['monto_deposito'];
-        //             }
-
-
-        //         }
-
-
-        //         $html.='<td>'.$div_nrodeposito.'</td>
-        //         <td>'.$div_fecha_deposito.'</td>
-        //         <td><a class="label label-warning" href="javascript:void(0)">Trial</a>'.$div_monto_deposito.'</td>
-        //         <td>'.$v->dias_atraso.'</td>
-        //         <td>'.$v->mora.'</td>
-        //         <td>'.$div_nrodeposito_mora.'</td>
-        //         <td>'.$div_fecha_deposito_mora.'</td>
-        //         <td>'.$div_monto_deposito_mora.'</td>
-        //         <td class="text-center">
-        //             <div class="btn-group btn-group-xs">
-        //                 <a href="javascript:void(0)" data-toggle="tooltip" title="Realizar deposito" class="btn btn-primary reg_deposito" planpago_id ="'.$v->id.'" tipo_deposito = "1" texto="Registrar Deposito"><i class="fa fa-plus"></i></a>
-        //                 <a href="javascript:void(0)" data-toggle="tooltip" title="Editar Depositos" class="btn btn-warning"><i class="fa fa-pencil"></i></a>
-        //                 <a href="javascript:void(0)" data-toggle="tooltip" title="Realizar deposito Mora" class="btn btn-default reg_deposito" tipo_deposito = "2" texto="Registrar Deposito Mora"><i class="fa fa-plus"></i></a>
-        //             </div>
-        //         </td>';
-        //     }
-        //     $id = $v->id;
-        // }
     }else{
         $msm = 'Error: No se guardo el registro';
     }

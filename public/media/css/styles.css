@@ -14336,3 +14336,30 @@ fieldset[disabled] .datepicker table tr td span.active.disabled:hover.active {
 
 
 div.amChartsCompareList div{ height: 25px !important;}
+
+/*Adicionado por freddy*/
+.green {
+            color: black\9;
+            background-color: #ccefa7\9;
+        }
+        .yellow {
+            color: black\9;
+            background-color: #ffeb90\9;
+        }
+        .red {
+            color: black\9;
+            background-color: #f4adad\9;
+        }
+
+        .green:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected), .jqx-widget .green:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected) {
+            color: black;
+            background-color: #ccefa7;
+        }
+        .yellow:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected), .jqx-widget .yellow:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected) {
+            color: black;
+            background-color: #ffeb90;
+        }
+        .red:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected), .jqx-widget .red:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected) {
+            color: black;
+            background-color: #f4adad;
+        }

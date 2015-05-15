@@ -107,7 +107,7 @@ $(document).ready(function (){
         var visibleRows = $('#jqxgrid').jqxGrid('getrows');
         var count = visibleRows.length;        
         $('#statusbarjqxgrid').html('Total: <b>' + count + '</b>');
-    });
+    	});
     $("#jqxgrid").bind("bindingcomplete", function(event) {
         var visibleRows = $('#jqxgrid').jqxGrid('getrows');
         var count = visibleRows.length;

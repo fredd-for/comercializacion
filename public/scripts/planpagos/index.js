@@ -87,7 +87,7 @@ $("#control_pagos").click(function() {
 	{
 		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
 		$("#id").val(dataRecord.id);
-		$(location).attr('href','/planpagos/control/'+dataRecord.id);
+		$(location).attr('href','/planpagos/controlpago/'+dataRecord.id);
 	}
 	else
 	{
