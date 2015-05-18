@@ -209,6 +209,11 @@ class ClientesController extends ControllerBase
         ;
     }
 
+    public function viewAction($id='')
+    {
+        
+    }
+
      public function savecontratoAction()
     {
         if (isset($_POST['contrato_id'])) {
