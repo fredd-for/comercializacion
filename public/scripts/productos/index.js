@@ -25,102 +25,70 @@ $(document).ready(function (){
 		};
 		var dataAdapter = new $.jqx.dataAdapter(source);
 
-		var toThemeProperty = function(className) {
-			return className + " " + className + "-" + theme;
-		}
-		var groupsrenderer = function(text, group, expanded, data) {
-			if (data.subItems.length > 0) {
-				var aggregate = this.getcolumnaggregateddata('id', ['sum'], true, data.subItems);
-				var total = this.getcolumnaggregateddata('suma', ['sum'], true, data.subItems);
-			}
-			else {
-				var rows = new Array();
-				var getRows = function(group, rows) {
-					if (group.subGroups.length > 0) {
-						for (var i = 0; i < group.subGroups.length; i++) {
-							getRows(group.subGroups[i], rows);
-						}
-					}
-					else {
-						for (var i = 0; i < group.subItems.length; i++) {
-							rows.push(group.subItems[i]);
-						}
-					}
-				}
-				getRows(data, rows);
-				var aggregate = this.getcolumnaggregateddata('id', ['sum'], true, rows);
-				var total = this.getcolumnaggregateddata('suma', ['sum'], true, rows);
-			}
-			return '<div class="' + toThemeProperty('jqx-grid-groups-row') + '" style="position: absolute "><span style="margin: 5px 0 0 0;">' + text + ' (' + total.sum + ') , </span>' + '<span class="' + toThemeProperty('jqx-grid-groups-row-details') + '">' + "Cantidad Valores:<b>" + 1 + "</b>, Monto Bs: " + '<b>' + 1 + '</b>' + '</span></div>';
-		}
-		var barra = function(statusbar) {
-		};
-
 		var cellclass = function (row, columnfield, value) {
-                if (value < 0) {
-                    return 'red';
-                }
-                else if (value >0) {
-                    return 'green';
-                }
-                else return 'yellow';
-        }
+			if (value < 0) {
+				return 'red';
+			}
+			else if (value >0) {
+				return 'green';
+			}
+			else return 'yellow';
+		}
 
 		$("#jqxgrid").jqxGrid({
-
 			width: '100%',
+			height: 600,
 			source: dataAdapter,
 			sortable: true,
-			altRows: true,
-			showstatusbar: true,
-			statusbarheight: 25,
+			altrows: true,
+			columnsresize: true,
+			pageable: true,
 			pagerMode: 'advanced',
 			theme: 'custom',
+			scrollmode: 'deferred',
+			showstatusbar: true,
+			statusbarheight: 25,
 			showfilterrow: true,
 			filterable: true,
-			scrollmode: 'deferred',
-			renderstatusbar: barra,
+			autorowheight: true,
+			// autoheight: true,
+			// keyboardnavigation: false,
+			rowsheight: 80,
+
+
 			scrollfeedback: function (row)
 			{
-				return '<table style="height: 150px;"><tr><td><img src="' + row.foto + '"  height="90"/></td></tr><tr><td>' + row.producto + '</td></tr></table>';
+				return '<table style="height: 80px;"><tr><td><img src="' + row.foto + '"  height="90"/></td></tr><tr><td>' + row.producto + '</td></tr></table>';
 			},
-			rowsheight: 90,
 			columns: [
 			{text: 'Image', datafield: 'foto', width: 100, cellsrenderer: function (row, column, value) {
-                            return '<img src="' + value + '" height="90"/>';
-                        }
-            },
-			// { text: 'ID', datafield: 'id', filtertype: 'input',width: '5%' },
-			{ text: 'linea', datafield: 'linea', filtertype: 'input',width: '8%' },
-			{ text: 'Estación', datafield: 'estacion', filtertype: 'input',width: '10%' },
-			{ text: 'Grupo', datafield: 'grupo', filtertype: 'input',width: '10%'},
-			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '20%' },
-			{ text: 'Codigo', datafield: 'codigo', filtertype: 'input',width: '5%' },
-			{ text: 'Descripción', datafield: 'descripcion', filtertype: 'input',width: '24%' },
-			{ text: 'Precio Unitario', datafield: 'precio_unitario', filtertype: 'input',width: '7%' },
-			{ text: 'Cantidad', datafield: 'cantidad',filtertype: 'input', width: '5%',cellclassname: cellclass},
-			{ text: 'Tiempo', datafield: 'tiempo',filtertype: 'input', width: '5%'},
-			]
-		});
+				return '<img style="margin-left: 5px;" height="80" width="100%" src="' + value + '" />';
+				}
+			},
+					// { text: 'ID', datafield: 'id', filtertype: 'input',width: '5%' },
+					{ text: 'linea', datafield: 'linea', filtertype: 'input',width: '8%' },
+					{ text: 'Estación', datafield: 'estacion', filtertype: 'input',width: '10%' },
+					{ text: 'Grupo', datafield: 'grupo', filtertype: 'input',width: '10%'},
+					{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '20%' },
+					{ text: 'Codigo', datafield: 'codigo', filtertype: 'input',width: '5%' },
+					{ text: 'Descripción', datafield: 'descripcion', filtertype: 'input',width: '24%' },
+					{ text: 'Precio Unitario', datafield: 'precio_unitario', filtertype: 'input',width: '7%' },
+					{ text: 'Cantidad', datafield: 'cantidad',filtertype: 'input', width: '5%',cellclassname: cellclass},
+					{ text: 'Tiempo', datafield: 'tiempo',filtertype: 'input', width: '5%'},
+					]
+				});
 
-		$("#jqxgrid").bind("filter", function(event) {
-        var visibleRows = $('#jqxgrid').jqxGrid('getrows');
-        var count = visibleRows.length;        
-        $('#statusbarjqxgrid').html('Total: <b>' + count + '</b>');
-    	});
-    $("#jqxgrid").bind("bindingcomplete", function(event) {
-        var visibleRows = $('#jqxgrid').jqxGrid('getrows');
-        var count = visibleRows.length;
-        var total_venta = 0;
-        var total = 0;
-        $.each(visibleRows, function(i, e) {
-            total += e.suma;
-            
-        });
-        $('#statusbarjqxgrid').html('Total: <b>' + count + '</b>');
-        $('#fecha').addClass('animated');
-        $('#fecha').addClass('fadeIn');
-    });
+$("#jqxgrid").bind("bindingcomplete", function(event) {
+	var visibleRows = $('#jqxgrid').jqxGrid('getrows');
+	var count = visibleRows.length;
+	var total_venta = 0;
+	var total = 0;
+	$.each(visibleRows, function(i, e) {
+		total += e.suma;
+
+	});
+	$('#statusbarjqxgrid').html('Total: <b>' + count + '</b>');
+});
 
 }
 

@@ -2,7 +2,7 @@
 	<div class="col-sm-12">
 		<div class="panel">
 			<div class="panel-heading">
-				<h4>Listado de Clientes</h4>
+				<h4><?php echo $cliente->razon_social ?></h4>
 				<div class="options">
 					<ul class="nav nav-tabs">
 						<li class="active"><a data-toggle="tab" href="#domshortcuttiles"><i class="fa fa-users"></i></a></li>
@@ -13,29 +13,30 @@
 			<div class="panel-body">
 				<div class="tab-content">
 					<div class="row">
-						<div class="col-sm-6 col-lg-3">
+						<div class="col-lg-3">
 							<div class="widget">
+								
 								<div class="widget-simple">
-									<a href="./page_ready_user_profile.php.html">
-										<img src="/images/a1.jpg" alt="avatar" class="widget-image img-circle pull-left" />
+									<a href="javascript:void(0)">
+										<img src="/images/bmsc.jpg" alt="avatar" class="widget-image img-circle pull-left" />
 									</a>
-									<h4 class="widget-content">
-										<a href="./page_ready_user_profile.php.html" class="themed-color">
-											<strong class="text-primary">Nelica Blanco</strong>
+									<h4 class="widget-content text-right">
+										<a href="javascript:void(0)" class="themed-color">
+											<strong class="text-primary "><?php echo $cliente->razon_social ?></strong>
 										</a>
-										<small class="text-success">Cel. 70669687</small>
-										<span class="label label-primary">Contacto</span>
+										<small class="text-success text-right">Tel. <?php echo $cliente->telefono ?> - Cel. <?php echo $cliente->celular ?></small>
+										<small class="text-success text-right"><a href="javascript:void(0)"><?php echo $cliente->correo ?></a></small>
 									</h4>
 								</div>
 								<div class="panel panel-primary">
-								<div class="panel-heading" align="center"> CONTRATOS </div>
+									<div class="panel-heading" align="center"> CONTRATOS </div>
 									<div class="panel-body" align="center">
 										<div class="col-xs-6">
-											<div><b>56</b></div>
+											<div><b><?php echo $contratos_concluido ?></b></div>
 											<div>Concluidos</div>
 										</div>
 										<div class="col-xs-6">
-											<div><b>56</b></div>
+											<div><b><?php echo $contratos_activos ?></b></div>
 											<div>Activos</div>
 										</div>
 									</div>
@@ -44,19 +45,19 @@
 									<div class="row text-center themed-background-dark">
 										<div class="col-xs-4">
 											<h3 class="widget-content-light">
-												<small>25,000.00</small><br>
+												<small><?php echo number_format($contratoTotal,2,'.',',') ?> Bs.</small><br>
 												<small>TOTAL</small><br />
 											</h3>
 										</div>
 										<div class="col-xs-4">
 											<h3 class="widget-content-light">
-												<small>25,000.00</small><br>
+												<small><?php echo number_format($depositoTotal,2,'.',',') ?> Bs.</small><br>
 												<small>DEPOSITOS</small>
 											</h3>
 										</div>
 										<div class="col-xs-4">
 											<h3 class="widget-content-light">
-												<small>25,000.00</small><br>
+												<small><?php echo number_format($moraTotal,2,'.',',')  ?> Bs.</small><br>
 												<small>MORA</small><br />
 											</h3>
 										</div>
@@ -67,11 +68,174 @@
 							</div>
 						</div>
 						<div class="col-lg-9">
-							hola como askdfjlaskdjf
+							<div class="tab-container">
+								<div class="tabbable">
+									<ul class="nav nav-tabs">
+										<li class="active">
+											<a href="#tab1" data-toggle="tab">Contratos</a>
+										</li>
+										<li>
+											<a href="#tab2" data-toggle="tab">Productos</a></li>
+									<!-- <li>
+									<a href="#tab3" data-toggle="tab">Mora</a>
+								</li> -->
+								<li>
+									<a href="#tab4" data-toggle="tab">Perfil</a>
+								</li>
+							</ul>
+							<div class="tab-content">
+								<div class="tab-pane active" id="tab1">
+									<div id="jqxgrid" style="height: 300px; width: 100%;" ></div>	
+								</div>
+								<div class="tab-pane" id="tab2">
+									<div id="jqxgrid_producto" style="height: 300px; width: 100%;" ></div>	
+								</div>
+
+								<div class="tab-pane" id="tab3">
+									<table class="table table-vcenter table-striped tabla1">
+										<thead>
+											<tr>
+												<td>FORMACIÓN ACADEMICA</td>
+												<td>EXPERIENCIA GENERAL</td>
+												<td>EXPERIENCIA PROFESIONAL</td>
+												<td>EXPERIENCAI RELACIONADO AL CARGO</td>
+											</tr>  
+										</thead>
+										<tbody id="text_formacion_academica">
+
+										</tbody>
+
+
+									</table>
+								</div>
+
+								<div class="tab-pane" id="tab4">
+									<div class="row">
+									<form action="" method="post" class="form-horizontal form-bordered"/>
+									<input type="hidden" name="cliente_id" id="cliente_id" value="<?php echo $cliente->id ?>">
+										<div class="col-sm-4">
+											<div class="block">
+												<div class="block-title">
+													<h4>Empresao y/o Cliente</h4>
+												</div>
+												<div class="form-group">
+											<label class="col-md-4 control-label">Razón Social<span class="text-danger">*</span>:</label>
+											<div class="col-md-8">
+												<input type="text" name="razon_social" id="razon_social" class="form-control" title="campo requerido" value="<?php echo $cliente->razon_social ?>" required>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-4 control-label">NIT<span class="text-danger">*</span>:</label>
+											<div class="col-md-8">
+												<input type="text" name="nit" id="nit" class="form-control" title="campo requerido" value="<?php echo $cliente->nit ?>" required>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-4 control-label">Telefono<span class="text-danger">*</span>:</label>
+											<div class="col-md-8">
+												<input type="number" name="telefono" id="telefono" class="form-control" title="campo requerido" value="<?php echo $cliente->telefono ?>" required>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-4 control-label">Celular:</label>
+											<div class="col-md-8">
+												<input type="text" name="celular" id="celular" class="form-control" value="<?php echo $cliente->celular ?>">
+											</div>
+										</div>
+										<div class="form-group" >
+											<label class="col-md-4 control-label">Correo Electronico<span class="text-danger">*</span>:</label>
+											<div class="col-md-8">
+												<input type="email" name="correo" id="correo" class="form-control" title="campo requerido" value="<?php echo $cliente->correo ?>" required>
+											</div>
+										</div>
+										<div class="form-group" >
+											<label class="col-md-4 control-label">Dirección<span class="text-danger">*</span>:</label>
+											<div class="col-md-8">
+												<input type="text" name="direccion" id="direccion" class="form-control" title="campo requerido" value="<?php echo $cliente->direccion ?>" required>
+											</div>
+										</div>												
+										</div>
+									</div>
+									<div class="col-sm-4">
+											<div class="block">
+												<div class="block-title">
+													<h4>Representante Legal</h4>
+												</div>
+												<div class="form-group" >
+											<label class="col-md-4 control-label">Nombre Completo</label>
+											<div class="col-md-8">
+												<input type="text" name="representante_legal" id="representante_legal" class="form-control" value="<?php echo $cliente->representante_legal ?>">
+											</div>
+										</div>
+										<div class="form-group" >
+											<label class="col-md-4 control-label">C.I</label>
+											<div class="col-md-8">
+												<input type="text" name="ci_representante_legal" id="ci_representante_legal" class="form-control" value="<?php echo $cliente->ci_representante_legal ?>">
+											</div>
+										</div>
+										<div class="form-group" >
+											<label class="col-md-4 control-label">Celular:</label>
+											<div class="col-md-8">
+												<input type="number" name="celular_representante_legal" id="celular_representante_legal" class="form-control" value="<?php echo $cliente->celular_representante_legal ?>">
+											</div>
+										</div>
+										<div class="form-group" >
+											<label class="col-md-4 control-label">Correo Electronico:</label>
+											<div class="col-md-8">
+												<input type="email" name="correo_representante_legal" id="correo_representante_legal" class="form-control" value="<?php echo $cliente->correo_representante_legal ?>">
+											</div>
+										</div>
+												
+										</div>
+									</div>
+									<div class="col-sm-4">
+											<div class="block">
+												<div class="block-title">
+													<h4>Persona de Contacto</h4>
+												</div>
+												<div class="form-group" >
+												<label class="col-md-4 control-label">Nombre Completo</label>
+												<div class="col-md-8">
+													<input type="text" name="nombre_ref" id="nombre_ref" class="form-control" value="<?php echo $cliente->nombre_ref ?>">
+												</div>
+											</div>
+											<div class="form-group" >
+												<label class="col-md-4 control-label">C.I</label>
+												<div class="col-md-8">
+													<input type="text" name="ci_ref" id="ci_ref" class="form-control" value="<?php echo $cliente->ci_ref ?>">
+												</div>
+											</div>
+											<div class="form-group" >
+												<label class="col-md-4 control-label">Celular:</label>
+												<div class="col-md-8">
+													<input type="number" name="celular_ref" id="celular_ref" class="form-control" value="<?php echo $cliente->celular_ref ?>">
+												</div>
+											</div>
+											<div class="form-group" >
+												<label class="col-md-4 control-label">Correo Electronico:</label>
+												<div class="col-md-8">
+													<input type="email" name="correo_ref" id="correo_ref" class="form-control" value="<?php echo $cliente->correo_ref ?>">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="form-group form-actions">
+													<div class="col-xs-12 text-center">
+														<button type="submit" class="btn btn-sm btn-primary">Actualizar</button>
+													</div>
+												</div>
+											</form>
+								</div>
+							</div>
+
 						</div>
 					</div>
 				</div>
+
 			</div>
 		</div>
 	</div>
+</div>
+</div>
+</div>
 </div>

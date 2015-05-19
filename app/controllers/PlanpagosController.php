@@ -40,8 +40,8 @@ class PlanpagosController extends ControllerBase
 
     }
 
-    public function listAction()
-    {
+public function listAction()
+{
       $model = new Planpagos();
       $resul = $model->lista();
       $this->view->disable();
@@ -65,6 +65,33 @@ class PlanpagosController extends ControllerBase
     }
     echo json_encode($customers);
 }
+
+public function listproductosclientesAction($cliente_id)
+{
+      $model = new Planpagos();
+      $resul = $model->lista($cliente_id);
+      $this->view->disable();
+      foreach ($resul as $v) {
+        $customers[] = array(
+            'id' => $v->id,
+            'grupo' => $v->grupo,
+            'razon_social' => $v->razon_social,
+            'linea' => $v->linea,
+            'estacion' => $v->estacion,
+            'producto' => '<a href="/planpagos/controlpago/'.$v->id.'">'.$v->producto.'</a>',
+            'contrato' => $v->contrato,
+            'fecha_contrato' => $v->fecha_contrato,
+            'fecha_inicio' => $v->fecha_inicio,
+            'fecha_fin' => $v->fecha_fin,
+            'total' => $v->total,
+            'deposito' => $v->deposito,
+            'cobrar' => $v->total-$v->deposito,
+            'mora' => $v->mora
+            );
+    }
+    echo json_encode($customers);
+}
+
 
 public function controlpagoAction($contratoproducto_id)
 {

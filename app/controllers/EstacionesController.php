@@ -174,41 +174,54 @@ $pdf->setFontSubsetting(true);
 // dejavusans is a UTF-8 Unicode font, if you only need to
 // print standard ASCII chars, you can use core fonts like
 // helvetica or times to reduce file size.
-$pdf->SetFont('dejavusans', '', 14, '', true);
+$pdf->SetFont('helvetica', '', 10, '', true);
 
 // Add a page
 // This method has several options, check the source code documentation for more information.
 $pdf->AddPage();
+$pdf->SetFillColor(224, 235, 255);
+        $pdf->SetTextColor(0);
+        $pdf->SetFont('');
+        $fill = 0;
 
-// set text shadow effect
-$pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
+$pdf->Cell(10, 6, 'Nro', 1, 0, 'L', $fill);
+$pdf->Cell(30, 6, 'Ubicación', 1, 0, 'L', $fill);
+$pdf->Cell(30, 6, 'Sector', 1, 0, 'R', $fill);
+$pdf->Cell(30, 6, 'Fecha', 1, 0, 'R', $fill);
+$pdf->Cell(90, 6, 'Descripción', 1, 0, 'R', $fill);
+$pdf->Ln();
 
-// Set some content to print
-$html = '<table style="font-size:8px">
-    <thead>
-        <tr>
-            <th>Nro</th>
-            <th>Ubicación</th>
-            <th>Sector</th>
-            <th>Tipo</th>
-            <th>Fecha</th>
-            <th>Descripción</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>hols</td>
-            <td>hols</td>
-            <td>hols</td>
-            <td>hols</td>
-            <td>hols</td>
-            <td>todo ll qoue tu akdjflaks djflaksdj fklajsdf alskd jflak dfjlkasd jflkasjdf laksdjf laksdj</td>
-        </tr>
-    </tbody>
-</table>';
-
-// Print text using writeHTMLCell()
-$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+for ($i=0; $i <1000 ; $i++) { 
+    $maxnocells = 0;
+    $cellcount = 0;
+    //write text first
+    $startX = $pdf->GetX();
+    $startY = $pdf->GetY();
+    //draw cells and record maximum cellcount
+    //cell height is 6 and width is 80
+    $cellcount = $pdf->MultiCell(10,6,'1',0,'L',0,0);
+    if ($cellcount > $maxnocells ) {$maxnocells = $cellcount;}
+    $cellcount = $pdf->MultiCell(30,6,'Cochabamba',0,'L',0,0);
+    if ($cellcount > $maxnocells ) {$maxnocells = $cellcount;}
+    $cellcount = $pdf->MultiCell(30,6,'Sector',0,'L',0,0);
+    if ($cellcount > $maxnocells ) {$maxnocells = $cellcount;}
+    $cellcount = $pdf->MultiCell(30,6,'Sector',0,'L',0,0);
+    if ($cellcount > $maxnocells ) {$maxnocells = $cellcount;}
+    $cellcount = $pdf->MultiCell(90,6,'añsdklfjalskd fjalksdjf laksdj flkajdf lkasjd flkasjd flkasjd flkasj dflkasj dflkasdj',0,'L',0,0);
+    if ($cellcount > $maxnocells ) {$maxnocells = $cellcount;}
+    $pdf->SetXY($startX,$startY);
+ 
+    //now do borders and fill
+    //cell height is 6 times the max number of cells
+    $pdf->MultiCell(10,$maxnocells * 6,'','LB','L',1,0);
+    $pdf->MultiCell(30,$maxnocells * 6,'','LB','L',0,0);
+    $pdf->MultiCell(30,$maxnocells * 6,'','LB','L',0,0);
+    $pdf->MultiCell(30,$maxnocells * 6,'','LB','L',0,0);
+    $pdf->MultiCell(90,$maxnocells * 6,'','LRB','L',0,0);
+ 
+ 
+    $pdf->Ln();
+}
 
 // ---------------------------------------------------------
 

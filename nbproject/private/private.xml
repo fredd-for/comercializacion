@@ -13,6 +13,7 @@
             <file>file:/var/www/html/comercializacion/app/config/config.php</file>
             <file>file:/var/www/html/comercializacion/app/controllers/ClientesController.php</file>
             <file>file:/var/www/html/comercializacion/app/models/Planpagodepositos.php</file>
+            <file>file:/var/www/html/comercializacion/app/views/planpagos/controlpago.phtml</file>
             <file>file:/var/www/html/comercializacion/public/index.php</file>
             <file>file:/var/www/html/comercializacion/envio_email.php</file>
             <file>file:/var/www/html/comercializacion/index.php</file>

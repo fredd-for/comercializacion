@@ -19,4 +19,19 @@ class Clientes extends \Phalcon\Mvc\Model
 	$this->_db = new Clientes();
 	return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));
 }	
+
+	public function listContratosCliente($cliente_id)
+	{
+		$sql="SELECT c.*, CONCAT(COALESCE(u.paterno,' '),' ',COALESCE(u.materno,' '),' ',COALESCE(u.nombre,' ')) as responsable,
+		COUNT(c.id) as num_productos,
+		(CASE WHEN MIN(cp.fecha_inicio)>CURDATE() THEN 'Pasivo' WHEN CURDATE()<MAX(cp.fecha_fin) AND CURDATE()>MIN(cp.fecha_inicio) THEN 'Activo' ELSE 'Concluido' END) as estado
+		FROM contratos c
+		INNER JOIN usuarios u ON c.responsable_id = u.id
+		LEFT JOIN contratosproductos cp ON c.id = cp.contrato_id AND cp.baja_logica=1
+		WHERE c.baja_logica = 1 AND c.cliente_id = '$cliente_id'
+		GROUP BY c.id
+		ORDER BY c.fecha_contrato DESC";
+		$this->_db = new Clientes();
+		return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));
+	}
 }

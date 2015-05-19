@@ -7,6 +7,7 @@ function cargar(){
 			datatype: "json",
 			datafields: [
 			{ name: 'id',type: 'number'},
+			{ name: 'razon_social_href',type: 'string'},
 			{ name: 'razon_social',type: 'string'},
 			{ name: 'nit',type: 'string'},
 			{ name: 'telefono',type: 'number'},
@@ -64,7 +65,7 @@ function cargar(){
 					return "<div style='margin:4px;'>" + (value + 1) + "</div>";
 				}
 			},
-			{ text: 'Razón Social', columngroup: 'cliente',datafield: 'razon_social', filtertype: 'input',width: '15%' },
+			{ text: 'Razón Social', columngroup: 'cliente',datafield: 'razon_social_href', filtertype: 'input',width: '15%' },
 			{ text: 'NIT', columngroup: 'cliente',datafield: 'nit', filtertype: 'input',width: '8%' },
 			{ text: 'Telefono', columngroup: 'cliente',datafield: 'telefono', filtertype: 'input',width: '8%'},
 			{ text: 'Celular', columngroup: 'cliente',datafield: 'celular', filtertype: 'input',width: '8%'},
@@ -191,6 +192,25 @@ $("#add").click(function(){
 
 	$('#myModal').modal('show');
 });
+
+/*
+Ver
+ */
+
+ $("#view").click(function() {
+ 	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+ 	if (rowindex > -1)
+ 	{
+ 		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
+ 		window.location.href = 'clientes/view/'+dataRecord.id;
+ 	}
+ 	else
+ 	{
+ 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para ver.");
+ 	}
+
+ });
+
 
 /*
 Editar
