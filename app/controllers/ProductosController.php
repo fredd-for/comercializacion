@@ -201,6 +201,15 @@ class ProductosController extends ControllerBase
 
     public function galeriaAction($producto_id)
     {
+            $this->assets
+                ->addCss('/js/fileinput/css/fileinput.min.css')
+                ;
+            $this->assets
+                ->addJs('/js/fileinput/js/fileinput.min.js')
+                ->addJs('/scripts/productos/galeria.js')
+                
+            ;
+
         if ($this->request->hasFiles() == true) {
                 foreach ($this->request->getUploadedFiles() as $file) {
                 //Move the file into the application
@@ -217,7 +226,7 @@ class ProductosController extends ControllerBase
                         $resul3->fecha_reg = date("Y-m-d h:i:s");
                         $resul3->estado = 1;
                         $resul3->baja_logica = 1;
-                        
+                        $resul3->tabla = 1;
                         if ($resul3->save()) {
                             $this->flashSession->success("Exito: Registro guardado correctamente...");    
                         }else{

@@ -10,6 +10,7 @@ class ClientesController extends ControllerBase
 		$this->assets
                 ->addCss('/jqwidgets/styles/jqx.base.css')
                 ->addCss('/jqwidgets/styles/jqx.custom.css')
+                ->addCss('/js/fileinput/css/fileinput.min.css')
                 //->addCss('/media/plugins/form-stepy/jquery.stepy.css')
                 ;
         $this->assets
@@ -42,6 +43,8 @@ class ClientesController extends ControllerBase
                 ->addJs('/scripts/clientes/index.js')
                 ->addJs('/assets/js/plugins.js')
                 ->addJs('/assets/js/pages/formsValidation.js')
+                ->addJs('/js/fileinput/js/fileinput.min.js')
+                // ->addJs('/scripts/productos/galeria.js')
         ;
 
         $empresa= Empresas::findFirst(array('baja_logica=1'));
@@ -75,7 +78,7 @@ class ClientesController extends ControllerBase
         foreach ($resul as $v) {
             $customers[] = array(
                 'id' => $v->id,
-                'razon_social_href' => '<a href="/clientes/view/'.$v->id.'"><b>'.$v->razon_social.'</b></a>',
+                'razon_social_href' => '<a href="/clientes/view/'.$v->id.'">'.$v->razon_social.'</a>',
                 'razon_social' => $v->razon_social,
                 'nit' => $v->nit,
                 'telefono' => $v->telefono,
@@ -90,7 +93,8 @@ class ClientesController extends ControllerBase
                 'ci_ref' => $v->ci_ref,
                 'celular_ref' => $v->celular_ref,
                 'correo_ref' => $v->correo_ref,
-                'estado' => $v->estado
+                'estado' => $v->estado,
+                'foto' => $this->foto($v->carpeta,$v->nombre_archivo)
             );
         }
         echo json_encode($customers);
@@ -274,6 +278,7 @@ class ClientesController extends ControllerBase
         $this->assets
                 ->addCss('/jqwidgets/styles/jqx.base.css')
                 ->addCss('/jqwidgets/styles/jqx.custom.css')
+                 ->addCss('/js/fileinput/css/fileinput.min.css')
                 //->addCss('/media/plugins/form-stepy/jquery.stepy.css')
                 ;
         $this->assets
@@ -306,6 +311,7 @@ class ClientesController extends ControllerBase
                 ->addJs('/scripts/clientes/view.js')
                 ->addJs('/assets/js/plugins.js')
                 ->addJs('/assets/js/pages/formsValidation.js')
+                ->addJs('/js/fileinput/js/fileinput.min.js')
         ;
 
         $model = new Contratos();
@@ -329,6 +335,16 @@ class ClientesController extends ControllerBase
 
         $resul = Clientes::findFirstById($cliente_id);
         $this->view->setVar('cliente',$resul);
+
+        $imagen = Archivos::findFirst("baja_logica = 1 and tabla=2 and producto_id ='$cliente_id'");
+        
+        $logo['imagen'] = '/file/clientes/logo_comodin.jpg';
+        $logo['archivo_id'] = 0;
+        if ($imagen!=false) {
+            $logo['imagen'] = $this->foto($imagen->carpeta,$imagen->nombre_archivo);    
+            $logo['archivo_id'] = $imagen->id;    
+        }
+        $this->view->setVar('logo',$logo);        
     }
 
      public function savecontratoAction()
@@ -386,5 +402,59 @@ class ClientesController extends ControllerBase
         $this->view->disable();
         echo $msm;
     }
+
+    public function logoaddAction()
+        {
+             if ($this->request->hasFiles() == true) {
+                foreach ($this->request->getUploadedFiles() as $file) {
+                //Move the file into the application
+                $carpeta = "file/clientes/";
+                    $path = $carpeta.date("Ymd_his").$file->getName();
+                    if($file->moveTo($path)) {
+                        $model = new Archivos();
+                        $resul = $model->deleteImagenCliente($this->request->getPost('cliente_id'));
+
+                        $resul3 = new Archivos();
+                        $resul3->producto_id = $this->request->getPost('cliente_id');
+                        $resul3->tipo_archivo = $file->getType();
+                        $resul3->nombre_archivo = date("Ymd_his").$file->getName();
+                        $resul3->carpeta = $carpeta;
+                        $resul3->tamanio = $file->getSize();
+                        $resul3->usuario_reg = $this->_user->id;
+                        $resul3->fecha_reg = date("Y-m-d h:i:s");
+                        $resul3->estado = 1;
+                        $resul3->baja_logica = 1;
+                        $resul3->tabla = 2;
+                        if ($resul3->save()) {
+                            $this->flashSession->success("Exito: Registro guardado correctamente...");    
+                        }else{
+                            $this->flashSession->error("Error: no se a guardado el registro...");    
+                        }
+                    } else {
+                        die("Acurrio algun error.");    
+                    } 
+                }
+            }
+
+            $this->response->redirect('/clientes/view/'.$this->request->getPost('cliente_id'));
+
+        }
+        public function logodeleteAction($archivo_id,$cliente_id){
+            $resul = Archivos::findFirstById($archivo_id);
+            $resul->baja_logica = 0;
+            if ($resul->save()) {
+                $this->flashSession->success("Exito: Registro eliminado correctamente...");    
+            }else{
+                $this->flashSession->error("Error: no se a eliminado el registro...");    
+            }
+            $this->response->redirect('/clientes/view/'.$cliente_id);
+        }
+    public function foto($carpeta='', $archivo) {
+        $file = "/file/clientes/logo_comodin.jpg";
+        if (file_exists($carpeta . $archivo)) {
+            $file = "/".$carpeta . $archivo;
+        } 
+        return $file;
+    }    
 
 }

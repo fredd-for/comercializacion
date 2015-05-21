@@ -23,6 +23,7 @@ function cargar(){
 			{ name: 'celular_ref',type:'celular'},
 			{ name: 'correo_ref',type:'string'},
 			{ name: 'estado',type:'string'},
+			{ name: 'foto'},
 			],
 			url: '/clientes/list',
 			cache: false
@@ -43,6 +44,7 @@ function cargar(){
 
 		$("#jqxgrid").jqxGrid({
 			width: '100%',
+			height: '550',
 			source: dataAdapter,
 			sortable: true,
 			altRows: true,
@@ -51,18 +53,27 @@ function cargar(){
 			pagerMode: 'advanced',
 			theme: 'custom',
 			//scrollmode: 'deferred',
-			showstatusbar: true,
+			// showstatusbar: true,
 			showfilterrow: true,
 			filterable: true,
 			autorowheight: true,
 			keyboardnavigation: false,
-			columns: [
+			scrollfeedback: function (row)
 			{
-				text: '#', sortable: false, filterable: false, editable: false,
-				groupable: false, draggable: false, resizable: false,
-				datafield: '', columntype: 'number', width: '3%',
-				cellsrenderer: function (row, column, value) {
-					return "<div style='margin:4px;'>" + (value + 1) + "</div>";
+				return '<table style="height: 80px;"><tr><td><img src="' + row.foto + '"  height="90"/></td></tr><tr><td>' + row.producto + '</td></tr></table>';
+			},
+
+			columns: [
+			// {
+			// 	text: '#', sortable: false, filterable: false, editable: false,
+			// 	groupable: false, draggable: false, resizable: false,
+			// 	datafield: '', columntype: 'number', width: '3%',
+			// 	cellsrenderer: function (row, column, value) {
+			// 		return "<div style='margin:4px;'>" + (value + 1) + "</div>";
+			// 	}
+			// },
+			{text: 'Image', datafield: 'foto', width: 100, cellsrenderer: function (row, column, value) {
+				return '<img style="margin-left: 5px;" height="70" width="100%" src="' + value + '" />';
 				}
 			},
 			{ text: 'Razón Social', columngroup: 'cliente',datafield: 'razon_social_href', filtertype: 'input',width: '15%' },
@@ -135,6 +146,7 @@ $("#jqxgrid").on('rowselect', function (event) {
 $("#jqxgrid_contratos").jqxGrid(
 {
 	width: '100%',
+	height: '300',
 	source: dataAdapter,
 	sortable: true,
 	altRows: true,
@@ -441,5 +453,8 @@ $("#testForm_contrato").submit(function() {
             $('#myModal_contrato').modal('hide');
             return false; // ajax used, block the normal submit
 	});
+
+
+
 
 })

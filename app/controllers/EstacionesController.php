@@ -128,7 +128,7 @@ public function pruebapdfAction()
 require_once('tcpdf/examples/tcpdf_include.php');
 
 // create new PDF document
-$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LETTER', true, 'UTF-8', false);
 
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
@@ -174,7 +174,7 @@ $pdf->setFontSubsetting(true);
 // dejavusans is a UTF-8 Unicode font, if you only need to
 // print standard ASCII chars, you can use core fonts like
 // helvetica or times to reduce file size.
-$pdf->SetFont('helvetica', '', 10, '', true);
+$pdf->SetFont('helvetica', '', 9, '', true);
 
 // Add a page
 // This method has several options, check the source code documentation for more information.
@@ -190,8 +190,11 @@ $pdf->Cell(30, 6, 'Sector', 1, 0, 'R', $fill);
 $pdf->Cell(30, 6, 'Fecha', 1, 0, 'R', $fill);
 $pdf->Cell(90, 6, 'Descripción', 1, 0, 'R', $fill);
 $pdf->Ln();
+$sum = 0;
+$sw =0;
+for ($i=1; $i <100 ; $i++) { 
 
-for ($i=0; $i <1000 ; $i++) { 
+    
     $maxnocells = 0;
     $cellcount = 0;
     //write text first
@@ -199,7 +202,7 @@ for ($i=0; $i <1000 ; $i++) {
     $startY = $pdf->GetY();
     //draw cells and record maximum cellcount
     //cell height is 6 and width is 80
-    $cellcount = $pdf->MultiCell(10,6,'1',0,'L',0,0);
+    $cellcount = $pdf->MultiCell(10,6,$i,0,'L',0,0);
     if ($cellcount > $maxnocells ) {$maxnocells = $cellcount;}
     $cellcount = $pdf->MultiCell(30,6,'Cochabamba',0,'L',0,0);
     if ($cellcount > $maxnocells ) {$maxnocells = $cellcount;}
@@ -207,20 +210,25 @@ for ($i=0; $i <1000 ; $i++) {
     if ($cellcount > $maxnocells ) {$maxnocells = $cellcount;}
     $cellcount = $pdf->MultiCell(30,6,'Sector',0,'L',0,0);
     if ($cellcount > $maxnocells ) {$maxnocells = $cellcount;}
-    $cellcount = $pdf->MultiCell(90,6,'añsdklfjalskd fjalksdjf laksdj flkajdf lkasjd flkasjd flkasjd flkasj dflkasj dflkasdj',0,'L',0,0);
+    $cellcount = $pdf->MultiCell(90,6,' fjalañsdklfjalskd ',0,'L',0,0);
     if ($cellcount > $maxnocells ) {$maxnocells = $cellcount;}
     $pdf->SetXY($startX,$startY);
- 
+    
     //now do borders and fill
     //cell height is 6 times the max number of cells
-    $pdf->MultiCell(10,$maxnocells * 6,'','LB','L',1,0);
-    $pdf->MultiCell(30,$maxnocells * 6,'','LB','L',0,0);
-    $pdf->MultiCell(30,$maxnocells * 6,'','LB','L',0,0);
-    $pdf->MultiCell(30,$maxnocells * 6,'','LB','L',0,0);
-    $pdf->MultiCell(90,$maxnocells * 6,'','LRB','L',0,0);
- 
- 
+    $pdf->MultiCell(10,$maxnocells * 5,'','LB','L',$sw,0);
+    $pdf->MultiCell(30,$maxnocells * 5,'','LB','L',$sw,0);
+    $pdf->MultiCell(30,$maxnocells * 5,'','LB','L',$sw,0);
+    $pdf->MultiCell(30,$maxnocells * 5,'','LB','L',$sw,0);
+    $pdf->MultiCell(90,$maxnocells * 5,'','LRB','L',$sw,0);
     $pdf->Ln();
+    $sw=!$sw;
+    $sum +=$maxnocells;
+    if ($sum > 42) {
+        $pdf->AddPage();
+        $sum=0;
+    }
+    
 }
 
 // ---------------------------------------------------------
@@ -235,6 +243,9 @@ $pdf->Output('example_001.pdf', 'I');
 
 $this->view->disable();
 }
+
+
+
 
 public function pruebatbsAction()
 {

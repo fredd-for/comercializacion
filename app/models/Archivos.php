@@ -25,4 +25,11 @@ class Archivos extends \Phalcon\Mvc\Model {
         return new Resultset(null, $db, $db->getReadConnection()->query($sql));
     }
 
+    public function deleteImagenCliente($cliente_id)
+    {
+        $sql="UPDATE archivos SET baja_logica=0 WHERE producto_id ='$cliente_id' and tabla=2";
+        $this->_db = new Clientes();
+        return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));   
+    }
+
 }

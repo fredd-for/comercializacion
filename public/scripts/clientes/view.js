@@ -236,4 +236,14 @@ $("#testForm_contrato").submit(function() {
             return false; // ajax used, block the normal submit
         });
 
+$("#imagen_cliente").fileinput({
+		// showUpload: false,
+		showCaption: false,
+		allowedFileExtensions : ['jpg', 'png','gif'],
+		maxFileSize: 1000,
+		browseClass: "btn btn-primary btn-lg",
+		fileType: "any",
+        previewFileIcon: "<i class='glyphicon glyphicon-king'></i>"
+	});
+
 })

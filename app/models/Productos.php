@@ -13,7 +13,7 @@ class Productos extends \Phalcon\Mvc\Model
 		INNER JOIN grupos g ON p.grupo_id=g.id
 		INNER JOIN estaciones e ON p.estacion_id = e.id
 		INNER JOIN lineas l ON e.linea_id = l.id
-		LEFT JOIN archivos a ON p.id = a.producto_id and a.estado = 1
+		LEFT JOIN archivos a ON p.id = a.producto_id and a.estado = 1 AND a.baja_logica = 1 AND tabla = 1
 		WHERE p.baja_logica = 1 ORDER BY p.id ASC";
 		$this->_db = new Productos();
 		return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));
