@@ -203,6 +203,7 @@ class ProductosController extends ControllerBase
     {
             $this->assets
                 ->addCss('/js/fileinput/css/fileinput.min.css')
+                ->addCss('/assets/css/main.css')
                 ;
             $this->assets
                 ->addJs('/js/fileinput/js/fileinput.min.js')
