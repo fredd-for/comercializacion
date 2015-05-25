@@ -28,9 +28,45 @@
 		<button type="reset" class="btn btn-default">Reset</button>
 	</form>
 </div> -->
-<div class="container kv-main">
+
+
+
+
 <div class="row">
- <form method="post" action="" class="form-horizontal" id="testForm" enctype="multipart/form-data">
+	
+	<div class="widget">
+		<div class="widget-advanced widget-advanced-alt">
+			<div class="widget-header text-left">
+				<h3 class="widget-content widget-content-image widget-content-light clearfix">
+					<a href="javascript:void(0)" class="widget-icon pull-right">
+						<i class="fa fa-picture-o"></i>
+					</a>
+					<a href="javascript:void(0)" class="themed-color-default"><?php echo $producto->codigo ?><strong> - <?php echo $producto->producto ?></strong></a><br />
+					<small><?php echo $producto->descripcion ?></small>
+				</h3>
+			</div>
+			<div class="col-lg-8">
+				<div class="widget-main">
+					<div class="gallery gallery-widget" data-toggle="lightbox-gallery">
+						<div class="row">
+							<?php foreach ($archivo as $v) {
+								if (file_exists($v->carpeta.$v->nombre_archivo)) { ?>
+								<div class="col-xs-6 col-sm-3">
+									<a href="/<?php echo $v->carpeta.$v->nombre_archivo ?>" class="gallery-link" title="Producto">
+										<img src="/<?php echo $v->carpeta.$v->nombre_archivo ?>" alt="imagen" />
+									</a>
+
+								</div>			
+								<?php } ?>
+								
+								<?php } ?>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4">
+
+					<form method="post" action="" class="form-horizontal" id="testForm" enctype="multipart/form-data">
 
  <!-- <div class="form-group">
 			<label class="col-lg-2 control-label">Adicinar Imagen</label>
@@ -39,76 +75,16 @@
 			</div>
 		</div> -->
 
-		<div class="form-group">
-                    <label>Preview File Icon</label>
-                    <input id="file-3" type="file" >
-                </div>
-                
-</form>
-</div>
-</div>
+		<div class="form-group pull-right">
+			<label>Agregar Imagenes</label>
+			<input id="file-1" name="file-1[]" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="1">
+			<!-- <input id="file-5" class="file" type="file" multiple data-preview-file-type="any" data-upload-url="#" data-preview-file-icon=""> -->
+		</div>
 
-<div class="row">
-	<div class="col-lg-12">
-		<div class="widget">
-				<div class="widget-advanced widget-advanced-alt">
-					<div class="widget-header text-left">
-						<h3 class="widget-content widget-content-image widget-content-light clearfix">
-							<a href="javascript:void(0)" class="widget-icon pull-right">
-								<i class="fa fa-picture-o"></i>
-							</a>
-							<a href="javascript:void(0)" class="themed-color-default">Todos <strong>Productos</strong></a><br />
-							<small>8 Photos</small>
-						</h3>
-					</div>
-					<div class="widget-main">
-						<div class="gallery gallery-widget" data-toggle="lightbox-gallery">
-							<div class="row">
-								<div class="col-xs-6 col-sm-3">
-									<a href="/file/productos/photo21.jpg" class="gallery-link" title="Image Info">
-										<img src="/file/productos/photo21.jpg" alt="image" />
-									</a>
-								</div>
-								<div class="col-xs-6 col-sm-3">
-									<a href="/file/productos/photo22.jpg" class="gallery-link" title="Image Info">
-										<img src="/file/productos/photo22.jpg" alt="image" />
-									</a>
-								</div>
-								<div class="col-xs-6 col-sm-3">
-									<a href="/file/productos/photo18.jpg" class="gallery-link" title="Image Info">
-										<img src="/file/productos/photo18.jpg" alt="image" />
-									</a>
-								</div>
-								<div class="col-xs-6 col-sm-3">
-									<a href="/file/productos/photo14.jpg" class="gallery-link" title="Image Info">
-										<img src="/file/productos/photo14.jpg" alt="image" />
-									</a>
-								</div>
-								<div class="col-xs-6 col-sm-3">
-									<a href="/file/productos/photo5.jpg" class="gallery-link" title="Image Info">
-										<img src="/file/productos/photo5.jpg" alt="image" />
-									</a>
-								</div>
-								<div class="col-xs-6 col-sm-3">
-									<a href="/file/productos/photo24.jpg" class="gallery-link" title="Image Info">
-										<img src="/file/productos/photo24.jpg" alt="image" />
-									</a>
-								</div>
-								<div class="col-xs-6 col-sm-3">
-									<a href="/file/productos/photo16.jpg" class="gallery-link" title="Image Info">
-										<img src="/file/productos/photo16.jpg" alt="image" />
-									</a>
-								</div>
-								<div class="col-xs-6 col-sm-3">
-									<a href="/file/productos/photo20.jpg" class="gallery-link" title="Image Info">
-										<img src="/file/productos/photo20.jpg" alt="image" />
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-	</div>
+	</form>
+
+</div>
+</div>			
+</div>
 </div>
 

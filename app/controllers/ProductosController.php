@@ -201,15 +201,6 @@ class ProductosController extends ControllerBase
 
     public function galeriaAction($producto_id)
     {
-            $this->assets
-                ->addCss('/js/fileinput/css/fileinput.min.css')
-                ->addCss('/assets/css/main.css')
-                ;
-            $this->assets
-                ->addJs('/js/fileinput/js/fileinput.min.js')
-                ->addJs('/scripts/productos/galeria.js')
-                
-            ;
 
         if ($this->request->hasFiles() == true) {
                 foreach ($this->request->getUploadedFiles() as $file) {
@@ -239,15 +230,22 @@ class ProductosController extends ControllerBase
                 }
             }
 
-            
+             $this->assets
+                ->addCss('/assets/css/widget_galeria.css')
+                ->addCss('/js/fileinput/css/fileinput.min.css')
+                ;
+            $this->assets
+                ->addJs('/assets/js/app.js')
+                ->addJs('/assets/js/plugins.js')
+                ->addJs('/scripts/productos/galeria.js')
+                ->addJs('/js/fileinput/js/fileinput.min.js')
+            ;
 
-        // $model = new Productos();
-        // $resul = $model->getProducto($producto_id);
-        // $producto_id = 0;
-        // foreach ($resul as $v) {
-        //     $producto_id = $v->id;
-        // }
-        $this->view->setVar('producto_id', $producto_id);
+        $resul = Productos::findFirstById($producto_id);
+        $this->view->setVar('producto',$resul);
+        $archivo = Archivos::find(array("baja_logica=1 and producto_id='$producto_id'"));
+        $this->view->setVar('archivo',$archivo);
+        // $this->view->setVar('producto_id', $producto_id);
 
 
     }
