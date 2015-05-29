@@ -455,6 +455,48 @@ class ClientesController extends ControllerBase
             $file = "/".$carpeta . $archivo;
         } 
         return $file;
+    }
+
+
+     public function reporteAction()
+     {
+        $this->view->disable();
+        $model = new Clientes();
+        $resul = $model->lista();
+        include_once('tbs_us/tbs_class.php'); // Load the TinyButStrong template engine
+        include_once ('tbs_us/tbs_plugin_opentbs/tbs_plugin_opentbs.php'); // Load the OpenTBS plugin
+
+        $TBS = new clsTinyButStrong; // new instance of TBS
+        $TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN); // load the OpenTBS plugin
+
+        $TBS->VarRef['usuario'] = $this->_user->nombre.' '.$this->_user->paterno;
+        $data = array();
+        $c=1;
+
+        foreach ($resul as $v) {
+            $data[] = array('rank'=> 'A', 'nro'=>$c ,'razon_social'=>$v->razon_social , 'nit'=>$v->nit, 'telefono'=>$v->telefono, 'celular'=>$v->celular, 'correo'=>$v->correo,'direccion'=>$v->direccion,'estado'=>$v->estado, 'representante_legal'=>$v->representante_legal,'celular_representante_legal'=>$v->celular_representante_legal,'correo_representante_legal'=>$v->correo_representante_legal,'nombre_ref'=>$v->nombre_ref,'celular_ref'=>$v->celular_ref,'correo_ref'=>$v->correo_ref);
+            $c++;
+        }
+        $template = 'file/template/temp_reporte_cliente.xlsx';
+        $TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8); // Also merge some [onload] automatic fields (depends of the type of document).
+        // ----------------------
+        // Debug mode of the demo
+        // ----------------------
+        // if (isset($_POST['debug']) && ($_POST['debug']=='current')) $TBS->Plugin(OPENTBS_DEBUG_XML_CURRENT, true); // Display the intented XML of the current sub-file, and exit.
+        // if (isset($_POST['debug']) && ($_POST['debug']=='info'))    $TBS->Plugin(OPENTBS_DEBUG_INFO, true); // Display information about the document, and exit.
+        // if (isset($_POST['debug']) && ($_POST['debug']=='show'))    $TBS->Plugin(OPENTBS_DEBUG_XML_SHOW); // Tells TBS to display information when the document is merged. No exit.
+
+        // Merge data in the first sheet
+        $TBS->MergeBlock('a,b', $data);
+
+        // -----------------
+        // Output the result
+        // -----------------
+        // $output_file_name = str_replace('.', '_'.date('Y-m-d').'.', $template);
+        $output_file_name = date('Y-m-d').' '.'reporte.xlsx';
+        $TBS->Show(OPENTBS_DOWNLOAD, $output_file_name); // Also merges all [onshow] automatic fields.
+        exit();
+
     }    
 
 }

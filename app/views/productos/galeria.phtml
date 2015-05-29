@@ -45,6 +45,7 @@
 					<small><?php echo $producto->descripcion ?></small>
 				</h3>
 			</div>
+			<?php  echo $this->flashSession->output(); ?>
 			<div class="col-lg-8">
 				<div class="widget-main">
 					<div class="gallery gallery-widget" data-toggle="lightbox-gallery">
@@ -52,21 +53,35 @@
 							<?php foreach ($archivo as $v) {
 								if (file_exists($v->carpeta.$v->nombre_archivo)) { ?>
 								<div class="col-xs-6 col-sm-3">
-									<a href="/<?php echo $v->carpeta.$v->nombre_archivo ?>" class="gallery-link" title="Producto">
-										<img src="/<?php echo $v->carpeta.$v->nombre_archivo ?>" alt="imagen" />
-									</a>
+									<div style="cursor: n-resize;">
+										<?php if ($v->estado ==1) { ?>
+										<a title="Imagen Inicial" href="javascript:void(0)">
+											<i class="fa fa-check fa-lg text-success"></i>
+										</a>	
+										<?php } ?>
+										<a title="Activar como imagen inicial" href="/productos/imagenactivar/<?php echo $v->id ?>">
+											<i class="fa fa-check fa-lg text-warning"></i>
+										</a>
+										<a title="eliminar imagen" href="/productos/imagendelete/<?php echo $v->id ?>">
+											<i class="fa fa-minus-circle fa-lg text-danger"></i>
+										</a>
+										<br>
+										<a href="/<?php echo $v->carpeta.$v->nombre_archivo ?>" class="gallery-link" title="Producto">
+											<img src="/<?php echo $v->carpeta.$v->nombre_archivo ?>" alt="imagen" />
+										</a>
+									</div>
+									
 
 								</div>			
-								<?php } ?>
-								
-								<?php } ?>
-							</div>
+								<?php }
+							} ?>
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-4">
+			</div>
+			<div class="col-lg-4">
 
-					<form method="post" action="" class="form-horizontal" id="testForm" enctype="multipart/form-data">
+				<form method="post" action="" class="form-horizontal" id="testForm" enctype="multipart/form-data">
 
  <!-- <div class="form-group">
 			<label class="col-lg-2 control-label">Adicinar Imagen</label>

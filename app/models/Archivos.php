@@ -32,4 +32,13 @@ class Archivos extends \Phalcon\Mvc\Model {
         return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));   
     }
 
+    public function desactivarTodo($archivo_id)
+    {
+        $sql="UPDATE archivos  
+        SET archivos.estado=0
+        WHERE archivos.producto_id = (SELECT * FROM(SELECT cast(aa.producto_id as UNSIGNED) FROM archivos aa WHERE aa.id='$archivo_id' limit 1)temp_table)";
+        $this->_db = new Archivos();
+        return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));   
+    }
+
 }

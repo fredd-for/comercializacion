@@ -15,7 +15,7 @@ $(document).ready(function (){
 $("#file-1").fileinput({
 		// showUpload: false,
 		// showCaption: false,
-		allowedFileExtensions : ['jpg', 'png','gif'],
+		allowedFileExtensions : ['jpg','jpeg', 'png','gif'],
 		maxFileSize: 1000,
 		// browseClass: "btn btn-primary btn-lg",
 		// fileType: "any",
