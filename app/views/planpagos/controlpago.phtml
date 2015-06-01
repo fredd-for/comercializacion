@@ -99,6 +99,33 @@
 						</div>
 
 					</div>
+					<!-- grid garantia y derecho de llave -->
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="pull-left">
+										<button class="btn btn-sm btn-default" type="button" id="dep_garantia" tipo='1'><i class="fa fa-plus fa-fw"></i>Deposito Garantia</button>
+										<button class="btn btn-sm btn-default" type="button" id="dep_derechollave" tipo='2'><i class="fa fa-plus fa-fw"></i>Deposito Derecho Llave</button>
+									</div>
+								</div>
+							</div>
+							<div id="jqxgrid_garantia" style="width: 100%;" ></div>
+						</div>
+						<div class="col-sm-6">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="pull-left">
+									<button class="btn btn-sm btn-default" type="button" id="dev_garantia" tipo='3'><i class="fa fa-plus fa-fw"></i>Devolución Garantia</button>
+									</div>
+								</div>
+							</div>
+							<div id="jqxgrid_devolucion" style="width: 100%;" ></div>
+						</div>
+					</div>
+					<br>
+					<!--  -->
+
 					<div class="row">
 						<div class="col-md-12">
 							<div class="pull-left">
@@ -195,6 +222,7 @@
 			<form class="form-horizontal" id="testForm_derechollave" data-toggle="validator" action="" method="post" />
 			<input type="hidden" name="contratoproducto_id" id="contratoproducto_id" value="<?php echo $contratoproducto_id ?>">
 			<input type="hidden" name="garantia_id" id="garantia_id" value="">
+			<input type="text" name="tipo" id="tipo" value="">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 				<h4 class="modal-title" id="titulo_derechollave">Editar</h4>

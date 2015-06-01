@@ -171,8 +171,108 @@ $(document).ready(function (){
 		});
 }
 
+// grid garantia
+garantia()
 
+function garantia(){	
+		var source =
+		{
+			datatype: "json",
+			datafields: [
+			{ name: 'id',type: 'number'},
+			{ name: 'tipo',type: 'number'},
+			{ name: 'tipo_text',type: 'string'},
+			{ name: 'fecha_deposito',type: 'date'},
+			{ name: 'nro_deposito',type: 'string'},
+			{ name: 'monto_deposito',type: 'number'},
+			],
+			url: '/planpagos/listgarantia/'+$("#contratoproducto_id").val(),
+			cache: false,
+		};
+		var dataAdapter = new $.jqx.dataAdapter(source);
+		$("#jqxgrid_garantia").jqxGrid({
+            width: '100%',
+            source: dataAdapter,
+            pageable: false,
+            autorowheight: true,
+            autoheight: true,
+            altrows: true,
+            theme: 'custom',
+            columnsresize: true,
+            // showstatusbar: true,
+            // statusbarheight: 25,
+            // showaggregates: true,
+            columns: [
+			{ text: 'Tipo', datafield: 'tipo_text', filtertype: 'input',width: '20%' },
+			{ text: 'Nro Deposito', datafield: 'nro_deposito', filtertype: 'input',width: '20%' },
+			{ text: 'Fecha Deposito', datafield: 'fecha_deposito', filtertype: 'range', width: '20%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
+			{ text: 'Monto Depositado', datafield: 'monto_deposito', filtertype: 'input',width: '40%', cellsformat: 'c2',cellsalign: 'right',align:'center'},
+			]
+		});
+}
 
+$("#dep_garantia, #dep_derechollave, #dev_garantia").click(function() {
+	// alert($(this).attr('tipo'));
+	$('#tipo').val($(this).attr('tipo'));
+	$('#titulo_derechollave').text('Adicionar Garantia');
+	$('#myModal_derechollave').modal('show');
+});
+
+$("#testForm_derechollave").submit(function(){
+	var v=$.ajax({
+		url:'/planpagos/savegarantia/',
+		type:'POST',
+		datatype: 'json',
+		data:{garantia_id:$("#garantia_id").val(),contratoproducto_id:$("#contratoproducto_id").val(),fecha_deposito:$("#fecha_deposito_derechollave").val(),nro_deposito:$("#nro_deposito_derechollave").val(),monto_deposito:$("#monto_deposito_derechollave").val(),tipo:$("#tipo").val()},
+		success: function(data) { 
+				garantia();
+				}, //mostramos el error
+				error: function() { alert('Se ha producido un error Inesperado'); }
+			});
+	$('#myModal_derechollave').modal('hide');
+    return false; // ajax used, block the normal submit
+});
+/*
+Devolucion Garantia
+ */
+devolucion();
+
+function devolucion(){	
+		var source =
+		{
+			datatype: "json",
+			datafields: [
+			{ name: 'id',type: 'number'},
+			{ name: 'tipo',type: 'number'},
+			{ name: 'tipo_text',type: 'string'},
+			{ name: 'fecha_deposito',type: 'date'},
+			{ name: 'nro_deposito',type: 'string'},
+			{ name: 'monto_deposito',type: 'number'},
+			],
+			url: '/planpagos/listdevoluciongarantia/'+$("#contratoproducto_id").val(),
+			cache: false,
+		};
+		var dataAdapter = new $.jqx.dataAdapter(source);
+		$("#jqxgrid_devolucion").jqxGrid({
+            width: '100%',
+            source: dataAdapter,
+            pageable: false,
+            autorowheight: true,
+            autoheight: true,
+            altrows: true,
+            theme: 'custom',
+            columnsresize: true,
+            // showstatusbar: true,
+            // statusbarheight: 25,
+            // showaggregates: true,
+            columns: [
+			{ text: 'Devolución', datafield: 'tipo_text', filtertype: 'input',width: '20%' },
+			{ text: 'Nro Deposito', datafield: 'nro_deposito', filtertype: 'input',width: '20%' },
+			{ text: 'Fecha Deposito', datafield: 'fecha_deposito', filtertype: 'range', width: '20%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
+			{ text: 'Monto Depositado', datafield: 'monto_deposito', filtertype: 'input',width: '40%', cellsformat: 'c2',cellsalign: 'right',align:'center'},
+			]
+		});
+}
 /*
 Adicionar Derecho de llave
  */
@@ -190,30 +290,30 @@ $("#edit_derechollave").click(function() {
 	$('#myModal_derechollave').modal('show');
 });
 
-$("#testForm_derechollave").submit(function(){
-	var v=$.ajax({
-		url:'/planpagos/savederechollave/',
-		type:'POST',
-		datatype: 'json',
-		data:{garantia_id:$("#garantia_id").val(),contratoproducto_id:$("#contratoproducto_id").val(),fecha_deposito:$("#fecha_deposito_derechollave").val(),nro_deposito:$("#nro_deposito_derechollave").val(),monto_deposito:$("#monto_deposito_derechollave").val()},
-		complete:function(){
-			$("#edit_derechollave").click(function() {
-				$('#titulo_derechollave').text('Editar Derecho de LLave');
-				$("#garantia_id").val($(this).attr('garantia_id'));
-				$("#fecha_deposito_derechollave").val($(this).attr('fecha_deposito'));
-				$("#nro_deposito_derechollave").val($(this).attr('nro_deposito'));
-				$("#monto_deposito_derechollave").val($(this).attr('monto_deposito'));
-				$('#myModal_derechollave').modal('show');
-			});	
-		},
-		success: function(data) { 
-			$("#html_derechollave").html(data); 
-				}, //mostramos el error
-				error: function() { alert('Se ha producido un error Inesperado'); }
-			});
-	$('#myModal_derechollave').modal('hide');
-    return false; // ajax used, block the normal submit
-});
+// $("#testForm_derechollave").submit(function(){
+// 	var v=$.ajax({
+// 		url:'/planpagos/savederechollave/',
+// 		type:'POST',
+// 		datatype: 'json',
+// 		data:{garantia_id:$("#garantia_id").val(),contratoproducto_id:$("#contratoproducto_id").val(),fecha_deposito:$("#fecha_deposito_derechollave").val(),nro_deposito:$("#nro_deposito_derechollave").val(),monto_deposito:$("#monto_deposito_derechollave").val()},
+// 		complete:function(){
+// 			$("#edit_derechollave").click(function() {
+// 				$('#titulo_derechollave').text('Editar Derecho de LLave');
+// 				$("#garantia_id").val($(this).attr('garantia_id'));
+// 				$("#fecha_deposito_derechollave").val($(this).attr('fecha_deposito'));
+// 				$("#nro_deposito_derechollave").val($(this).attr('nro_deposito'));
+// 				$("#monto_deposito_derechollave").val($(this).attr('monto_deposito'));
+// 				$('#myModal_derechollave').modal('show');
+// 			});	
+// 		},
+// 		success: function(data) { 
+// 			$("#html_derechollave").html(data); 
+// 				}, //mostramos el error
+// 				error: function() { alert('Se ha producido un error Inesperado'); }
+// 			});
+// 	$('#myModal_derechollave').modal('hide');
+//     return false; // ajax used, block the normal submit
+// });
 
 /*
 Adicionar Garantia

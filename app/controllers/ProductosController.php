@@ -276,6 +276,23 @@ class ProductosController extends ControllerBase
         $this->response->redirect('/productos/galeria/'.$resul->producto_id);
     }
 
+    public function alquilarAction()
+    {
+        $this->assets
+                ->addCss('/assets/css/widget_galeria.css')
+                ->addCss('/js/fileinput/css/fileinput.min.css')
+                ;
+        $this->assets
+                ->addJs('/assets/js/app.js')
+                ->addJs('/assets/js/plugins.js')
+                // ->addJs('/scripts/productos/alquilar.js')
+                ->addJs('/js/fileinput/js/fileinput.min.js')
+            ;
+        $model = new Productos();
+        $resul = $model->lista(1);
+        $this->view->setVar('producto',$resul);
+    }
+
     public function reporteAction()
     {
 $this->view->disable();

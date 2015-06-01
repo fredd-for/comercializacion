@@ -338,7 +338,7 @@ class ClientesController extends ControllerBase
 
         $imagen = Archivos::findFirst("baja_logica = 1 and tabla=2 and producto_id ='$cliente_id'");
         
-        $logo['imagen'] = '/file/clientes/logo_comodin.jpg';
+        $logo['imagen'] = '/file/clientes/logo_comodin.png';
         $logo['archivo_id'] = 0;
         if ($imagen!=false) {
             $logo['imagen'] = $this->foto($imagen->carpeta,$imagen->nombre_archivo);    
@@ -450,7 +450,7 @@ class ClientesController extends ControllerBase
             $this->response->redirect('/clientes/view/'.$cliente_id);
         }
     public function foto($carpeta='', $archivo) {
-        $file = "/file/clientes/logo_comodin.jpg";
+        $file = "/file/clientes/logo_comodin.png";
         if (file_exists($carpeta . $archivo)) {
             $file = "/".$carpeta . $archivo;
         } 
