@@ -95,32 +95,7 @@ $(document).ready(function (){
             showaggregates: true,
             renderstatusbar: barra,
 
-   //          width: '100%',
-			// source: dataAdapter,
-			// sortable: true,
-			// altRows: true,
-			// columnsresize: true,
-			// pageable: false,
-			// // pagerMode: 'advanced',
-			// theme: 'custom',
-			// // scrollmode: 'deferred',
-			// showstatusbar: true,
-			// showaggregates: true,
-			// statusbarheight: 25,
-			// // showfilterrow: true,
-			// // filterable: true,
-			// autorowheight: true,
-			// autoheight: true,
-			// // keyboardnavigation: false,
 			columns: [
-			// {
-			// 	text: '#', sortable: false, filterable: false, editable: false,
-			// 	groupable: false, draggable: false, resizable: false,
-			// 	datafield: '', columntype: 'number', width: '3%',
-			// 	cellsrenderer: function (row, column, value) {
-			// 		return "<div style='margin:4px;'>" + (value + 1) + "</div>";
-			// 	}
-			// },
 			{ text: 'Fecha Programado', datafield: 'fecha_programado', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
 			{ text: 'Monto Programado', datafield: 'monto_reprogramado_div', filtertype: 'input',width: '12%' ,cellsformat: 'c2',cellsalign: 'right',align:'center',aggregates: [{ '<b>Total Bs.</b>': 
                             function (aggregatedValue, currentValue, column, record) {
@@ -199,21 +174,91 @@ function garantia(){
             altrows: true,
             theme: 'custom',
             columnsresize: true,
-            // showstatusbar: true,
-            // statusbarheight: 25,
-            // showaggregates: true,
+            
             columns: [
-			{ text: 'Tipo', datafield: 'tipo_text', filtertype: 'input',width: '20%' },
-			{ text: 'Nro Deposito', datafield: 'nro_deposito', filtertype: 'input',width: '20%' },
-			{ text: 'Fecha Deposito', datafield: 'fecha_deposito', filtertype: 'range', width: '20%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
-			{ text: 'Monto Depositado', datafield: 'monto_deposito', filtertype: 'input',width: '40%', cellsformat: 'c2',cellsalign: 'right',align:'center'},
+            { text: 'Deposito', datafield: 'tipo_text', filtertype: 'input',width: '20%'},
+            { text: 'Nro Deposito', datafield: 'nro_deposito', filtertype: 'input',width: '20%' },
+            { text: 'Fecha Deposito', datafield: 'fecha_deposito', filtertype: 'range', width: '20%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
+            { text: 'Monto Depositado', datafield: 'monto_deposito', filtertype: 'input',width: '30%', cellsformat: 'c2',cellsalign: 'right',align:'center'},
+            { text: '', datafield: 'id', width: '10%;',align:'center' ,cellsalign:'center', sortable:false,showfilterrow:false, filterable:false,columntype: 'number',
+            cellsrenderer: function (rowline) {
+            	ctrlrow = rowline;
+            	var offset = $("#jqxgrid_garantia").offset();
+            	var dataRecord = $("#jqxgrid_garantia").jqxGrid('getrowdata', ctrlrow);
+            	var ids = dataRecord.id;
+            	return '<a class="btn btn-xs btn-warning editar" title="Editar"><i class="fa fa-pencil"></i></a>'+
+            			'<a class="btn btn-xs btn-danger eliminar" title="Eliminar"><i class="fa fa-times"></i></a>'
+            	;
+            	}
+        	}
+			// { text: '', datafield: 'edit', columntype: 'button',width: '10%', cellsrenderer: function () {
+   //                   return 'Editar';
+   //                }, buttonclick: function (row) {
+   //                   editrow = row;
+   //                   var offset = $("#jqxgrid_garantia").offset();
+   //                   var dataRecord = $("#jqxgrid_garantia").jqxGrid('getrowdata', editrow);
+   //                   // var dataRecord = $("#jqxgrid_garantia").jqxGrid('getrowdata', rowindex);
+			//  		$("#garantia_id").val(dataRecord.id);
+			//  		$("#tipo").val(dataRecord.tipo);
+			//  		var fe = $.jqx.dataFormat.formatdate(dataRecord.fecha_deposito, 'dd-MM-yyyy');
+			//  		$("#fecha_deposito_derechollave").val(fe);
+			//  		$("#nro_deposito_derechollave").val(dataRecord.nro_deposito);
+			//  		$("#monto_deposito_derechollave").val(dataRecord.monto_deposito);
+			//  		$('#myModal_derechollave').modal('show');
+   //               }
+   //          },
+			// { text: '', datafield: 'delete', columntype: 'button',width: '10%', cellsrenderer: function () {
+   //                   return 'Eliminar';
+   //                }, buttonclick: function (row) {
+   //                   editrow = row;
+   //                   var offset = $("#jqxgrid_garantia").offset();
+   //                   var dataRecord = $("#jqxgrid_garantia").jqxGrid('getrowdata', editrow);
+   //                   bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de eliminar el deposito?.", function(result) {
+			// 			if (result==true) {
+			// 				var v=$.ajax({
+			// 					url:'/planpagos/deletegarantia/',
+			// 					type:'POST',
+			// 					datatype: 'json',
+			// 					data:{id:dataRecord.id},
+			// 					success: function(data) { 
+			// 						garantia();
+			// 					},
+			// 					error: function() { alert('Se ha producido un error Inesperado'); }
+			// 				});
+			// 			}
+			// 		});
+   //               }
+   //          },
 			]
 		});
 }
 
+$(".editar").click(function() {
+	alert("hoals");
+	var rowindex = $('#jqxgrid_garantia').jqxGrid('getselectedrowindex');
+ 	if (rowindex > -1)
+ 	{
+ 		var dataRecord = $("#jqxgrid_garantia").jqxGrid('getrowdata', rowindex);
+ 		$("#garantia_id").val(dataRecord.id);
+ 		$("#tipo").val(dataRecord.tipo);
+ 		var fe = $.jqx.dataFormat.formatdate(dataRecord.fecha_deposito, 'dd-MM-yyyy');
+ 		$("#fecha_deposito_derechollave").val(fe);
+ 		$("#nro_deposito_derechollave").val(dataRecord.nro_deposito);
+ 		$("#monto_deposito_derechollave").val(dataRecord.monto_deposito);
+ 		$('#myModal_derechollave').modal('show');
+ 		
+ 	}
+ 	else
+ 	{
+ 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para editar.");
+ 	}
+ });
+
+
 $("#dep_garantia, #dep_derechollave, #dev_garantia").click(function() {
 	// alert($(this).attr('tipo'));
 	$('#tipo').val($(this).attr('tipo'));
+	$('#garantia_id').val('');
 	$('#titulo_derechollave').text('Adicionar Garantia');
 	$('#myModal_derechollave').modal('show');
 });
@@ -226,6 +271,7 @@ $("#testForm_derechollave").submit(function(){
 		data:{garantia_id:$("#garantia_id").val(),contratoproducto_id:$("#contratoproducto_id").val(),fecha_deposito:$("#fecha_deposito_derechollave").val(),nro_deposito:$("#nro_deposito_derechollave").val(),monto_deposito:$("#monto_deposito_derechollave").val(),tipo:$("#tipo").val()},
 		success: function(data) { 
 				garantia();
+				devolucion();
 				}, //mostramos el error
 				error: function() { alert('Se ha producido un error Inesperado'); }
 			});
@@ -269,26 +315,65 @@ function devolucion(){
 			{ text: 'Devolución', datafield: 'tipo_text', filtertype: 'input',width: '20%' },
 			{ text: 'Nro Deposito', datafield: 'nro_deposito', filtertype: 'input',width: '20%' },
 			{ text: 'Fecha Deposito', datafield: 'fecha_deposito', filtertype: 'range', width: '20%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
-			{ text: 'Monto Depositado', datafield: 'monto_deposito', filtertype: 'input',width: '40%', cellsformat: 'c2',cellsalign: 'right',align:'center'},
+			{ text: 'Monto Depositado', datafield: 'monto_deposito', filtertype: 'input',width: '20%', cellsformat: 'c2',cellsalign: 'right',align:'center'},
+			{ text: '', datafield: 'edit', columntype: 'button',width: '10%', cellsrenderer: function () {
+                     return 'Editar';
+                  }, buttonclick: function (row) {
+                     editrow = row;
+                     var offset = $("#jqxgrid_devolucion").offset();
+                     var dataRecord = $("#jqxgrid_devolucion").jqxGrid('getrowdata', editrow);
+                     // var dataRecord = $("#jqxgrid_garantia").jqxGrid('getrowdata', rowindex);
+			 		$("#garantia_id").val(dataRecord.id);
+			 		$("#tipo").val(dataRecord.tipo);
+			 		var fe = $.jqx.dataFormat.formatdate(dataRecord.fecha_deposito, 'dd-MM-yyyy');
+			 		$("#fecha_deposito_derechollave").val(fe);
+			 		$("#nro_deposito_derechollave").val(dataRecord.nro_deposito);
+			 		$("#monto_deposito_derechollave").val(dataRecord.monto_deposito);
+			 		$('#myModal_derechollave').modal('show');
+                 }
+            },
+			{ text: '', datafield: 'delete', columntype: 'button',width: '10%', cellsrenderer: function () {
+                     return 'Eliminar';
+                  }, buttonclick: function (row) {
+                     editrow = row;
+                     var offset = $("#jqxgrid_devolucion").offset();
+                     var dataRecord = $("#jqxgrid_devolucion").jqxGrid('getrowdata', editrow);
+                     bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de eliminar el deposito?.", function(result) {
+						if (result==true) {
+							var v=$.ajax({
+								url:'/planpagos/deletegarantia/',
+								type:'POST',
+								datatype: 'json',
+								data:{id:dataRecord.id},
+								success: function(data) { 
+									devolucion();
+								},
+								error: function() { alert('Se ha producido un error Inesperado'); }
+							});
+						}
+					});
+                 }
+            },
 			]
 		});
 }
-/*
-Adicionar Derecho de llave
- */
-$("#add_derechollave").click(function() {
-	$('#titulo_derechollave').text('Adicionar Derecho de LLave');
-	$('#myModal_derechollave').modal('show');
-});
+// /*
+// Adicionar Derecho de llave
+//  */
+// $("#add_derechollave").click(function() {
+// 	$('#titulo_derechollave').text('Adicionar Derecho de LLave');
+// 	$("#garantia_id").val('');
+// 	$('#myModal_derechollave').modal('show');
+// });
 
-$("#edit_derechollave").click(function() {
-	$('#titulo_derechollave').text('Editar Derecho de LLave');
-	$("#garantia_id").val($(this).attr('garantia_id'));
-	$("#fecha_deposito_derechollave").val($(this).attr('fecha_deposito'));
-	$("#nro_deposito_derechollave").val($(this).attr('nro_deposito'));
-	$("#monto_deposito_derechollave").val($(this).attr('monto_deposito'));
-	$('#myModal_derechollave').modal('show');
-});
+// $("#edit_derechollave").click(function() {
+// 	$('#titulo_derechollave').text('Editar Derecho de LLave');
+// 	$("#garantia_id").val($(this).attr('garantia_id'));
+// 	$("#fecha_deposito_derechollave").val($(this).attr('fecha_deposito'));
+// 	$("#nro_deposito_derechollave").val($(this).attr('nro_deposito'));
+// 	$("#monto_deposito_derechollave").val($(this).attr('monto_deposito'));
+// 	$('#myModal_derechollave').modal('show');
+// });
 
 // $("#testForm_derechollave").submit(function(){
 // 	var v=$.ajax({
@@ -318,54 +403,54 @@ $("#edit_derechollave").click(function() {
 /*
 Adicionar Garantia
  */
-$("#add_garantia").click(function() {
-	$('#titulo_garantia').text('Adicionar Garantia');
-	$('#myModal_garantia').modal('show');
-});
+// $("#add_garantia").click(function() {
+// 	$('#titulo_garantia').text('Adicionar Garantia');
+// 	$('#myModal_garantia').modal('show');
+// });
 
-$("#edit_garantia").click(function() {
-	$('#titulo_garantia').text('Editar Garantia');
-	$("#garantia_id").val($(this).attr('garantia_id'));
-	$("#fecha_deposito_garantia").val($(this).attr('fecha_deposito'));
-	$("#nro_deposito_garantia").val($(this).attr('nro_deposito'));
-	$("#monto_deposito_garantia").val($(this).attr('monto_deposito'));
+// $("#edit_garantia").click(function() {
+// 	$('#titulo_garantia').text('Editar Garantia');
+// 	$("#garantia_id").val($(this).attr('garantia_id'));
+// 	$("#fecha_deposito_garantia").val($(this).attr('fecha_deposito'));
+// 	$("#nro_deposito_garantia").val($(this).attr('nro_deposito'));
+// 	$("#monto_deposito_garantia").val($(this).attr('monto_deposito'));
 
-	$("#fecha_devolucion_garantia").val($(this).attr('fecha_devolucion'));
-	$("#nro_devolucion_garantia").val($(this).attr('nro_devolucion'));
-	$("#monto_devolucion_garantia").val($(this).attr('monto_devolucion'));
+// 	$("#fecha_devolucion_garantia").val($(this).attr('fecha_devolucion'));
+// 	$("#nro_devolucion_garantia").val($(this).attr('nro_devolucion'));
+// 	$("#monto_devolucion_garantia").val($(this).attr('monto_devolucion'));
 
-	$('#myModal_garantia').modal('show');
-});
+// 	$('#myModal_garantia').modal('show');
+// });
 
-$("#testForm_garantia").submit(function(){
-	var v=$.ajax({
-		url:'/planpagos/savegarantia/',
-		type:'POST',
-		datatype: 'json',
-		data:{garantia_id:$("#garantia_id").val(),contratoproducto_id:$("#contratoproducto_id").val(),fecha_deposito:$("#fecha_deposito_garantia").val(),nro_deposito:$("#nro_deposito_garantia").val(),monto_deposito:$("#monto_deposito_garantia").val(),fecha_devolucion:$("#fecha_devolucion_garantia").val(),nro_devolucion:$("#nro_devolucion_garantia").val(),monto_devolucion:$("#monto_devolucion_garantia").val()},
-		complete:function(){
-			$("#edit_garantia").click(function() {
-				$('#titulo_garantia').text('Editar Garantia');
-				$("#garantia_id").val($(this).attr('garantia_id'));
-				$("#fecha_deposito_garantia").val($(this).attr('fecha_garantia'));
-				$("#nro_deposito_garantia").val($(this).attr('nro_garantia'));
-				$("#monto_deposito_garantia").val($(this).attr('monto_garantia'));
+// $("#testForm_garantia").submit(function(){
+// 	var v=$.ajax({
+// 		url:'/planpagos/savegarantia/',
+// 		type:'POST',
+// 		datatype: 'json',
+// 		data:{garantia_id:$("#garantia_id").val(),contratoproducto_id:$("#contratoproducto_id").val(),fecha_deposito:$("#fecha_deposito_garantia").val(),nro_deposito:$("#nro_deposito_garantia").val(),monto_deposito:$("#monto_deposito_garantia").val(),fecha_devolucion:$("#fecha_devolucion_garantia").val(),nro_devolucion:$("#nro_devolucion_garantia").val(),monto_devolucion:$("#monto_devolucion_garantia").val()},
+// 		complete:function(){
+// 			$("#edit_garantia").click(function() {
+// 				$('#titulo_garantia').text('Editar Garantia');
+// 				$("#garantia_id").val($(this).attr('garantia_id'));
+// 				$("#fecha_deposito_garantia").val($(this).attr('fecha_garantia'));
+// 				$("#nro_deposito_garantia").val($(this).attr('nro_garantia'));
+// 				$("#monto_deposito_garantia").val($(this).attr('monto_garantia'));
 
-				$("#fecha_devolucion_garantia").val($(this).attr('fecha_devolucion'));
-				$("#nro_devolucion_garantia").val($(this).attr('nro_devolucion'));
-				$("#monto_devolucion_garantia").val($(this).attr('monto_devolucion'));
+// 				$("#fecha_devolucion_garantia").val($(this).attr('fecha_devolucion'));
+// 				$("#nro_devolucion_garantia").val($(this).attr('nro_devolucion'));
+// 				$("#monto_devolucion_garantia").val($(this).attr('monto_devolucion'));
 
-				$('#myModal_garantia').modal('show');
-			});	
-		},
-		success: function(data) { 
-			$("#html_garantia").html(data); 
-				}, //mostramos el error
-				error: function() { alert('Se ha producido un error Inesperado'); }
-			});
-	$('#myModal_garantia').modal('hide');
-    return false; // ajax used, block the normal submit
-});
+// 				$('#myModal_garantia').modal('show');
+// 			});	
+// 		},
+// 		success: function(data) { 
+// 			$("#html_garantia").html(data); 
+// 				}, //mostramos el error
+// 				error: function() { alert('Se ha producido un error Inesperado'); }
+// 			});
+// 	$('#myModal_garantia').modal('hide');
+//     return false; // ajax used, block the normal submit
+// });
 
 /*
 REgistro de deposito de pago

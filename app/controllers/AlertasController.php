@@ -14,7 +14,7 @@ class AlertasController extends ControllerBase
                 //->addCss('/media/plugins/form-stepy/jquery.stepy.css')
                 ;
         $this->assets
-                
+                ->addJs('/js/tinymce/tinymce.min.js')
                 ->addJs('/jqwidgets/jqxcore.js')
                 ->addJs('/jqwidgets/jqxmenu.js')
                 ->addJs('/jqwidgets/jqxdropdownlist.js')
@@ -58,6 +58,11 @@ class AlertasController extends ControllerBase
             $customers[] = array(
                 'id' => $v->id,
                 'razon_social' => $v->razon_social,
+                'correo' => $v->correo,
+                'representante_legal' => $v->representante_legal,
+                'correo_representante_legal' => $v->correo_representante_legal,
+                'nombre_ref' => $v->nombre_ref,
+                'correo_ref' => $v->correo_ref,
                 'nit' => $v->nit,
                 'grupo' => $v->grupo,
                 'linea' => $v->linea,

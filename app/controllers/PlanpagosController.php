@@ -4,7 +4,7 @@
 */
 class PlanpagosController extends ControllerBase
 {
-	
+	private $tipo = array('1' =>'Garantia','2'=>'Derecho de Llave','3'=>'Devolución Garantia','4'=>'Devolución Derecho de Llave' );
 	public function indexAction()
 	{
 		$this->assets
@@ -434,64 +434,64 @@ public function gethtmlcontrolpagosAction()
     echo $html;
 }
 
-public function savederechollaveAction()
-{
-    $garantia_id = '';
-    $fecha_deposito = '';
-    $nro_deposito = '';
-    $monto_deposito = '';
-    $AddEdit_derechollave = 'add_derechollave';
-    if (isset($_POST['garantia_id'])) {
-        if ($_POST['garantia_id']>0) {
-         $fecha_deposito = date("Y-m-d",strtotime($this->request->getPost('fecha_deposito')));
-         $resul = Garantias::findFirstById($_POST['garantia_id']);
-         $resul->fecha_deposito = $fecha_deposito;
-         $resul->nro_deposito = $this->request->getPost('nro_deposito');
-         $resul->monto_deposito = $this->request->getPost('monto_deposito');
-         if ($resul->save()) {
-            $msm = 'Exito: Se guardo correctamente';
-            $garantia_id = $resul->id;
-            $fecha_deposito = date("d-m-Y",strtotime($resul->fecha_deposito));
-            $nro_deposito = $resul->nro_deposito;
-            $monto_deposito = $resul->monto_deposito;
-            $AddEdit_derechollave = 'edit_derechollave';
+// public function savederechollaveAction()
+// {
+//     $garantia_id = '';
+//     $fecha_deposito = '';
+//     $nro_deposito = '';
+//     $monto_deposito = '';
+//     $AddEdit_derechollave = 'add_derechollave';
+//     if (isset($_POST['garantia_id'])) {
+//         if ($_POST['garantia_id']>0) {
+//          $fecha_deposito = date("Y-m-d",strtotime($this->request->getPost('fecha_deposito')));
+//          $resul = Garantias::findFirstById($_POST['garantia_id']);
+//          $resul->fecha_deposito = $fecha_deposito;
+//          $resul->nro_deposito = $this->request->getPost('nro_deposito');
+//          $resul->monto_deposito = $this->request->getPost('monto_deposito');
+//          if ($resul->save()) {
+//             $msm = 'Exito: Se guardo correctamente';
+//             $garantia_id = $resul->id;
+//             $fecha_deposito = date("d-m-Y",strtotime($resul->fecha_deposito));
+//             $nro_deposito = $resul->nro_deposito;
+//             $monto_deposito = $resul->monto_deposito;
+//             $AddEdit_derechollave = 'edit_derechollave';
 
-        }else{
-            $msm = 'Error: No se guardo el registro';
-        }
-    }
-    else{
-        $fecha_deposito = date("Y-m-d",strtotime($this->request->getPost('fecha_deposito')));
-        $resul = new Garantias();
-        $resul->contratoproducto_id = $this->request->getPost('contratoproducto_id');
-        $resul->tipo=2;
-        $resul->fecha_deposito = $fecha_deposito;
-        $resul->nro_deposito = $this->request->getPost('nro_deposito');
-        $resul->monto_deposito = $this->request->getPost('monto_deposito');
-        $resul->baja_logica = 1;
-        if ($resul->save()) {
-            $msm = 'Exito: Se guardo correctamente';
-            $garantia_id = $resul->id;
-            $fecha_deposito = date("d-m-Y",strtotime($resul->fecha_deposito));
-            $nro_deposito = $resul->nro_deposito;
-            $monto_deposito = $resul->monto_deposito;
-            $AddEdit_derechollave = 'edit_derechollave';
+//         }else{
+//             $msm = 'Error: No se guardo el registro';
+//         }
+//     }
+//     else{
+//         $fecha_deposito = date("Y-m-d",strtotime($this->request->getPost('fecha_deposito')));
+//         $resul = new Garantias();
+//         $resul->contratoproducto_id = $this->request->getPost('contratoproducto_id');
+//         $resul->tipo=2;
+//         $resul->fecha_deposito = $fecha_deposito;
+//         $resul->nro_deposito = $this->request->getPost('nro_deposito');
+//         $resul->monto_deposito = $this->request->getPost('monto_deposito');
+//         $resul->baja_logica = 1;
+//         if ($resul->save()) {
+//             $msm = 'Exito: Se guardo correctamente';
+//             $garantia_id = $resul->id;
+//             $fecha_deposito = date("d-m-Y",strtotime($resul->fecha_deposito));
+//             $nro_deposito = $resul->nro_deposito;
+//             $monto_deposito = $resul->monto_deposito;
+//             $AddEdit_derechollave = 'edit_derechollave';
 
-        }else{
-            $msm = 'Error: No se guardo el registro';
-        }
-    }   
-}
-$html = '
-<td><a href="javascript:void(0)" id="'.$AddEdit_derechollave.'" garantia_id="'.$garantia_id.'" fecha_deposito="'.$fecha_deposito.'" nro_deposito="'.$nro_deposito.'" monto_deposito="'.$monto_deposito.'" ><strong>DERECHO DE LLAVE </strong></a></td>
-<td><strong>Fecha Deposito: </strong> '.$fecha_deposito.'</td>
-<td><strong>Nro Deposito: </strong> '.$nro_deposito.'</td>
-<td><strong>Monto Depositado: </strong> '.$monto_deposito.'</td>
-<td colspan="3"></td>
-';
-$this->view->disable();
-echo $html;
-}
+//         }else{
+//             $msm = 'Error: No se guardo el registro';
+//         }
+//     }   
+// }
+// $html = '
+// <td><a href="javascript:void(0)" id="'.$AddEdit_derechollave.'" garantia_id="'.$garantia_id.'" fecha_deposito="'.$fecha_deposito.'" nro_deposito="'.$nro_deposito.'" monto_deposito="'.$monto_deposito.'" ><strong>DERECHO DE LLAVE </strong></a></td>
+// <td><strong>Fecha Deposito: </strong> '.$fecha_deposito.'</td>
+// <td><strong>Nro Deposito: </strong> '.$nro_deposito.'</td>
+// <td><strong>Monto Depositado: </strong> '.$monto_deposito.'</td>
+// <td colspan="3"></td>
+// ';
+// $this->view->disable();
+// echo $html;
+// }
 
 
 // public function savegarantiaAction()
@@ -627,8 +627,8 @@ $this->view->disable();
 $model = new Planpagos();
 $resul = $model->getcontrato($contratoproducto_id);
 $this->view->setVar('contratoproducto',$resul[0]);
-$garantia = Garantias::findFirst(array('baja_logica=1 and tipo=1 and contratoproducto_id = '.$contratoproducto_id, 'order'=>'tipo ASC'));
-$derechollave = Garantias::findFirst(array('baja_logica=1 and tipo=2 and contratoproducto_id = '.$contratoproducto_id, 'order'=>'tipo ASC'));
+$garantia = Garantias::find(array('baja_logica=1 and contratoproducto_id = '.$contratoproducto_id, 'order'=>'tipo,fecha_deposito ASC'));
+// $derechollave = Garantias::findFirst(array('baja_logica=1 and tipo=2 and contratoproducto_id = '.$contratoproducto_id, 'order'=>'tipo ASC'));
 
 
 
@@ -683,36 +683,13 @@ $data = array();
 
         $data[] = array('rank'=> 'A', 'fecha_programado'=>date("d-m-Y",strtotime($v->fecha_programado)) , 'monto_programado'=>$v->monto_reprogramado, 'nro_factura'=>str_replace("</div>","\n",str_replace("<div>", "" , $html[6])),'fecha_factura'=>str_replace("</div>","\n",str_replace("<div>", "" , $html[7])), 'monto_factura'=>str_replace("</div>","\n",str_replace("<div>", "" , $html[8])), 'nro_deposito'=>str_replace("</div>","\n",str_replace("<div>", "" , $html[0])),'fecha_deposito'=>str_replace("</div>","\n",str_replace("<div>", "" , $html[1])),'monto_deposito'=>str_replace("</div>","\n",str_replace("<div>", "" , $html[2])),'dias_atraso'=>$v->dias_atraso,'mora'=>$mora
             , 'nro_deposito_mora'=>str_replace("</div>","\n",str_replace("<div>", "" , $html[3])),'fecha_deposito_mora'=>str_replace("</div>","\n",str_replace("<div>", "" , $html[4])),'monto_deposito_mora'=>str_replace("</div>","\n",str_replace("<div>", "" , $html[5])),'factura_total'=>$v->factura_total,'deposito_total'=>$v->deposito_total,'mora_total'=>$v->mora_total);
-
-        // $customers[] = array(
-        //     'id' => $v->id,
-        //     'fecha_programado' => $v->fecha_programado,
-        //     'monto_programado' => $v->monto_programado,
-        //     'monto_reprogramado_div' => $diff_text.' '.number_format($v->monto_reprogramado,2,'.',','),
-        //     'monto_reprogramado' => $v->monto_reprogramado,
-        //     'dias_atraso' =>$dias_atraso,
-        //     'mora' =>$mora,
-        //     'diferencia' =>$v->diferencia,
-        //     'factura_total' =>$v->factura_total,
-        //     'deposito_total' =>$v->deposito_total,
-        //     'mora_total' =>$v->mora_total,
-        //     'nro_deposito' =>$html[0],
-        //     'fecha_deposito' =>$html[1],
-        //     'monto_deposito' =>$html[2],
-        //     'nro_deposito_mora' =>$html[3],
-        //     'fecha_deposito_mora' =>$html[4],
-        //     'monto_deposito_mora' =>$html[5],
-        //     'nro_factura' =>$html[6],
-        //     'fecha_factura' =>$html[7],
-        //     'monto_factura' =>$html[8],
-        //     'fecha_actual' =>$hoy,
-        //     'fecha_10' =>$fecha_10,
-        //     'fecha_tolerancia' =>$fecha_tolerancia,
-        //     );
-
-        
+    
     }
 
+$data1 = array(); 
+    foreach ($garantia as $g) {
+        $data1[] = array('rank'=> 'C','tipo'=>$this->tipo[$g->tipo], 'nro_deposito'=>$g->nro_deposito,'fecha_deposito'=>date("d-m-Y",strtotime($g->fecha_deposito)), 'monto_deposito'=>$g->monto_deposito);
+    }
 
 $template = 'file/template/temp_reporte_planpagos.xlsx';
 $TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8); // Also merge some [onload] automatic fields (depends of the type of document).
@@ -726,6 +703,7 @@ $TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8); // Also merge some [onload]
 
 // Merge data in the first sheet
 $TBS->MergeBlock('a,b', $data);
+$TBS->MergeBlock('c,d', $data1);
 
 // -----------------
 // Output the result
@@ -1005,13 +983,13 @@ public function htmldepositosAction()
 public function listgarantiaAction($contratoproducto_id)
 {
     $resul = Garantias::find(array("baja_logica=1 and contratoproducto_id='$contratoproducto_id' and tipo in (1,2)",'order'=>'tipo, fecha_deposito'));
-    $tipo =array('1'=>'Garantia','2'=>'Derecho de Llave');
+    // $tipo =array('1'=>'Garantia','2'=>'Derecho de Llave');
     foreach ($resul as $v) {
         $customers[] = array(
             'id' => $v->id,
             'tipo' => $v->tipo,
-            'tipo_text' => $tipo[$v->tipo],
-            'fecha_deposito' => $v->fecha_deposito,
+            'tipo_text' =>$this->tipo[$v->tipo],
+            'fecha_deposito' => $v->fecha_deposito.' 00:00:00',
             'nro_deposito' => $v->nro_deposito,
             'monto_deposito' => $v->monto_deposito,
         );
@@ -1024,13 +1002,13 @@ public function listgarantiaAction($contratoproducto_id)
 public function listdevoluciongarantiaAction($contratoproducto_id)
 {
     $resul = Garantias::find(array("baja_logica=1 and contratoproducto_id='$contratoproducto_id' and tipo in (3,4)",'order'=>'tipo, fecha_deposito'));
-    $tipo =array('3'=>'Devolución Garantia','4'=>'Devolución Derecho de Llave');
+    // $tipo =array('3'=>'Devolución Garantia','4'=>'Devolución Derecho de Llave');
     foreach ($resul as $v) {
         $customers[] = array(
             'id' => $v->id,
             'tipo' => $v->tipo,
-            'tipo_text' => $tipo[$v->tipo],
-            'fecha_deposito' => $v->fecha_deposito,
+            'tipo_text' => $this->tipo[$v->tipo],
+            'fecha_deposito' => $v->fecha_deposito.' 00:00:00',
             'nro_deposito' => $v->nro_deposito,
             'monto_deposito' => $v->monto_deposito,
         );
@@ -1078,5 +1056,18 @@ $this->view->disable();
 echo $html;
 }
 
+ public function deletegarantiaAction()
+    {
+        $resul = Garantias::findFirstById($_POST['id']);
+        $resul->baja_logica = 0;
+        if ($resul->save()) {
+            $msm = 'Exito: Se elimino correctamente';
+        }else{
+            $msm = 'Error: No se elimino el registro';
+        }
+
+        $this->view->disable();
+        echo json_encode($msm);
+    }
 
 }

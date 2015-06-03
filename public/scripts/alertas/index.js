@@ -8,6 +8,11 @@ cargar();
 			datafields: [
 			{ name: 'id',type: 'number'},
 			{ name: 'razon_social',type: 'string'},
+			{ name: 'correo',type: 'string'},
+			{ name: 'representante_legal',type: 'string'},
+			{ name: 'correo_representante_legal',type: 'string'},
+			{ name: 'nombre_ref',type: 'string'},
+			{ name: 'correo_ref',type: 'string'},
 			{ name: 'nit',type: 'string'},
 			{ name: 'grupo',type: 'string'},
 			{ name: 'linea',type: 'string'},
@@ -72,6 +77,41 @@ cargar();
 
  		//$("#jqxgrid").jqxGrid('expandgroup',4);
 }
+
+$("#enviar_correo").click(function() {
+ 	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+ 	if (rowindex > -1)
+ 	{
+ 		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
+ 		$("#titulo").text("Envio de Correo");
+ 		$("#text_destinatario").text(dataRecord.razon_social+' - '+dataRecord.correo);
+ 		$("#destinatario_correo").val(dataRecord.correo);
+ 		$("#destinatario").val(dataRecord.razon_social);
+ 		var text_concopia='';
+ 		var concopia='';
+ 		var concopia_correo='';
+ 		// alert(dataRecord.representante_legal);
+ 		if (dataRecord.correo_representante_legal!='') {
+ 			text_concopia+=dataRecord.representante_legal+' - '+dataRecord.correo_representante_legal+';';
+ 			concopia+=dataRecord.representante_legal+';';
+ 			concopia_correo+=dataRecord.correo_representante_legal+';';
+ 		}
+ 		if (dataRecord.correo_ref!='') {
+ 			text_concopia+=dataRecord.nombre_ref+' - '+dataRecord.correo_ref+';';
+ 			concopia+=dataRecord.nombre_ref+';';
+ 			concopia_correo+=dataRecord.correo_ref+';';
+ 		}
+ 		$("#text_concopia").text(text_concopia);
+ 		$("#concopia_correo").val(concopia_correo);
+ 		$("#concopia").val(concopia);
+ 		$("#asunto").val('Notificación Pago de Alquiler');
+ 		$('#myModal').modal('show');
+ 	}
+ 	else
+ 	{
+ 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para editar.");
+ 	}
+ });
 
 
 cargar2();	
@@ -145,7 +185,136 @@ cargar2();
  		//$("#jqxgrid").jqxGrid('expandgroup',4);
 }
 
+tinymce.init({
+    selector: "textarea"
+ });
 
 
+/*
+prueba para borrar
+ */
+
+//  function cargarGrilla(){
+//  	/*$("#jqxgrid").jqxGrid('updatebounddata');*/
+//  	var theme = 'classic';
+//  	var dataAdapter = new $.jqx.dataAdapter(source,
+//  	{
+//  		formatData: function (data) {
+//  			return {};
+//  		}
+//  	}
+//  	);
+
+//  	var source =
+//  	{
+//  		datatype: "json",
+//  		datafields: [
+//  		{ name: 'numHojaruta',type: 'string',sortable: false, editable: true},
+//  		{ name: 'codref',type: 'string',sortable: false, editable: true},
+//  		{ name: 'titulo',type: 'string',sortable: false, editable: true},
+//  		{ name: 'tipoArchivo',type: 'string',sortable: false, editable: true},
+//  		{ name: 'fecha',type: 'string'},
+//  		{ name: 'notas',type: 'string',sortable: false, editable: true},
+//  		{ name: 'oficina',type: 'string',index: 'oficina',sortable: false, editable: true},
+//  		{ name: 'gestion', index: 'gestion', sortable: false, editable: true },
+//  		{ name: 'idac',type:'numeric'},
+//  		{ name: 'iddi',type:'numeric'},
+//  		{ name: 'idreg',type:'numeric'}
+//  		],
+//  		url:'/archivo/ajax/listGrillaExpediente/',
+//  		async: false,
+//  		root: 'Rows',
+//  		beforeprocessing: function(data)
+//  		{
+//  			source.totalrecords = data[0].TotalRows;
+//  		}
+//  	};
+//  	var dataAdapter = new $.jqx.dataAdapter(source);
+//  	$("#jqxgrid").jqxGrid(
+//  	{
+//  		width: '100%',
+//  		source: dataAdapter,
+//  		sortable: true,
+//  		rowsheight:30,
+//  		pageable: true,
+//  		selectionmode: 'multiplerowsextended',
+//  		pagerMode: 'advanced',
+//  		columnsresize: true,
+//  		autoheight: true,
+//  		filterable: true,
+//  		autorowheight: true,
+//  		virtualmode: true,
+//  		altrows: true,
+//  		rendergridrows: function()
+//  		{
+//  			return dataAdapter.records;
+//  		},
+//  		pagermode: 'simple',
+//  		columns: [
+//  		{ text: '#', sortable: false, filterable: false, editable: false,groupable: false, draggable: false, resizable: false,datafield: '', columntype: 'number', width: '2%'},
+//  	{ text: 'NUM', datafield: 'number',cellsalign: 'center',align: 'center',width: '4%',hidden:true},
+//  	{ text: 'HOJA RUTA', datafield: 'numHojaruta',filtercondition: 'starts_with',align:'center',width: '6%'},
+//  	{ text: 'COD. REFERENCIA', datafield: 'codref',filtercondition: 'starts_with',align:'center',width: '10%'},
+//  	{ text: 'TITULO', datafield: 'link',align:'left', width: '19%'},
+//  { text: 'TIPO', datafield: 'tipoArchivo',align:'center',cellsalign: 'center', width: '6%' },
+//  { text: 'FECHA REG.', datafield: 'fecha',filtercondition: 'starts_with', filtertype: 'date',align:'center',cellsalign: 'center',width: '6%', cellsformat: 'dd-mm-yyyy', dateformat: 'dd-mm-yyyy' },
+//  { text: 'NOTAS', datafield: 'notas',align:'center', width: '29.2%' },
+//  { text: 'OFICINA', datafield: 'oficina',align:'center', width: '11.5%' },
+//  { text: 'GESTION', datafield: 'gestion',cellsalign: 'center', align: 'center', width: '4%'},
+//  { text: 'ACCIONES', datafield: 'idac', width: '119px;',align:'center' ,cellsalign:'center', sortable:false,showfilterrow:false, filterable:false,columntype: 'number',
+//  cellsrenderer: function (rowline) {
+//  	ctrlrow = rowline
+//  	var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', ctrlrow);
+// 	var idac = dataRecord.idac;
+//  		return "<a onclick='verdetalleArchivo("+idac+");' title='UBICACION EXPEDIENTE' class='btn btn-info iconshowrexpediete'> </a> "
+//  		+"<a onclick='modificarExpediente("+idac+");' title='MODIFICAR EXPEDIENTE' class='btn btn-info iconoedit' data-type='zoomin'></a> "
+//  		+"<a onclick='eliminarExpediente("+idac+");' title='ELIMINAR EXPEDIENTE' class='btn btn-info iconoeli deletexpediente'></a>";
+//  	}
+//  }
+//  ]
+// });
+
+// }
+// style css
+// .iconshowrexpediete{
+
+// 	width: 14px;
+
+// 	height: 18px;
+
+// 	background:url(/mediaa/icono/centrala.png) center right no-repeat;
+
+// 	center right no-repeat
+
+// }
+
+// .iconoedit{
+
+// 	width: 14px;
+
+// 	height: 18px;
+
+// 	background:url(/mediaa/icono/Update1.png) center right no-repeat;
+
+// 	center right no-repeat
+
+// }
+
+// .iconoeli{
+
+// 	width: 14px;
+
+// 	height: 18px;
+
+// 	text-align: ;
+
+// 	background:url(/mediaa/icono/delete1.png) center right no-repeat;
+
+// 	center right no-repeat
+
+// }
+/*
+fin prueba
+ */
 
 })

@@ -24,78 +24,8 @@
 								</tr>
 							</tbody>
 						</table>
-							<?php 
-							$AddEdit_derechollave = 'add_derechollave';
-							$garantia_id = '';
-							$fecha_deposito = '';
-							$nro_deposito = '';
-							$monto_deposito = '';
-							if ($derechollave!=false) { 
-								$garantia_id = $derechollave->id;
-								$fecha_deposito = date("d-m-Y",strtotime($derechollave->fecha_deposito));
-								$nro_deposito = $derechollave->nro_deposito;
-								$monto_deposito = $derechollave->monto_deposito;
-								$AddEdit_derechollave = 'edit_derechollave';
-							}
-
-							?>
-							<table class="table table-vcenter table-striped" style="font-size:12px">
-								<tbody>
-									<tr class="active" id="html_derechollave">
-									<?php if ($user->nivel==2) { ?>
-										<td><a href="javascript:void(0)" id='<?php echo $AddEdit_derechollave ?>' garantia_id='<?php echo $garantia_id ?>' fecha_deposito='<?php echo $fecha_deposito ?>' nro_deposito='<?php echo $nro_deposito ?>' monto_deposito=<?php echo $monto_deposito ?>><strong>DERECHO DE LLAVE </strong></a></td>
-									<?php } else { ?>
-										<td><a href="javascript:void(0)"><strong>DERECHO DE LLAVE </strong></a></td>
-									<?php } ?>
-										<td><strong>Fecha Deposito: </strong> <?php echo $fecha_deposito ?></td>
-										<td><strong>Nro Deposito: </strong> <?php echo $nro_deposito ?></td>
-										<td><strong>Monto Depositado Bs.: </strong> <?php echo number_format($monto_deposito,2,'.',',') ?></td>
-										<td colspan="3"></td>
-									</tr>
-									<?php 
-									$AddEdit_garantia = 'add_garantia';
-									$garantia_id = '';
-									$fecha_deposito = '';
-									$nro_deposito = '';
-									$monto_deposito = '';
-
-									$fecha_devolucion = '';
-									$nro_devolucion = '';
-									$monto_devolucion = '';
-
-									if ($garantia!=false) { 
-										$garantia_id = $garantia->id;
-										$fecha_deposito = date("d-m-Y",strtotime($garantia->fecha_deposito));
-										$nro_deposito = $garantia->nro_deposito;
-										$monto_deposito = $garantia->monto_deposito;
-
-										if ($garantia->fecha_devolucion!=null) {
-											$fecha_devolucion = date("d-m-Y",strtotime($garantia->fecha_devolucion));
-										}else{
-											$fecha_devolucion = '';
-										}
-
-										$nro_devolucion = $garantia->nro_devolucion;
-										$monto_devolucion = $garantia->monto_devolucion;
-										$AddEdit_garantia = 'edit_garantia';
-									}
-									?>
-									<tr class="active" id="html_garantia">
-									<?php if ($user->nivel==2) { ?>
-										<td><a href="javascript:void(0)" id='<?php echo $AddEdit_garantia ?>' garantia_id='<?php echo $garantia_id ?>' fecha_deposito='<?php echo $fecha_deposito ?>' nro_deposito='<?php echo $nro_deposito ?>' monto_deposito=<?php echo $monto_deposito ?> fecha_devolucion='<?php echo $fecha_devolucion ?>' nro_devolucion='<?php echo $nro_devolucion ?>' monto_devolucion=<?php echo $monto_devolucion ?>><strong>GARANTIA </strong></a></td>
-									<?php } else {?>
-									<td><a href="javascript:void(0)"><strong>GARANTIA </strong></a></td>
-									<?php } ?>
-										<td><strong>Fecha Deposito: </strong> <?php echo $fecha_deposito ?></td>
-										<td><strong>Nro Deposito: </strong> <?php echo $nro_deposito ?></td>
-										<td><strong>Monto Depositado: </strong> <?php echo number_format($monto_deposito,2,'.',',') ?></td>
-										<td><strong>Fecha Devolución: </strong> <?php echo $fecha_devolucion ?></td>
-										<td><strong>Nro Devolución: </strong> <?php echo $nro_devolucion ?></td>
-										<td><strong>Monto Devolución: </strong> <?php echo number_format($monto_devolucion,2,'.',',') ?></td>
-									</tr>
-
-								</tbody>
-							</table>
+					
+							
 						</div>
 
 					</div>
@@ -131,7 +61,7 @@
 							<div class="pull-left">
 								<button class="btn btn-sm btn-primary" type="button" id="reg_deposito"><i class="fa fa-plus fa-fw"></i>Deposito</button>
 								<button class="btn btn-sm btn-warning" type="button" id="edit"><i class="fa fa-pencil fa-fw"></i> Editar</button>
-								<button class="btn btn-sm btn-danger" type="button" id="reg_deposito_mora"><i class="fa fa-trash-o fa-fw"></i> Deposito Mora</button>
+								<button class="btn btn-sm btn-danger" type="button" id="reg_deposito_mora"><i class="fa fa-plus fa-fw"></i> Deposito Mora</button>
 							</div>
 							<div class="pull-right">
 								<a href="/planpagos/reporte/<?php echo $contratoproducto->id ?>" class="btn btn-sm btn-primary"><i class="fa fa-download"></i> Reporte</a>
@@ -222,7 +152,7 @@
 			<form class="form-horizontal" id="testForm_derechollave" data-toggle="validator" action="" method="post" />
 			<input type="hidden" name="contratoproducto_id" id="contratoproducto_id" value="<?php echo $contratoproducto_id ?>">
 			<input type="hidden" name="garantia_id" id="garantia_id" value="">
-			<input type="text" name="tipo" id="tipo" value="">
+			<input type="hidden" name="tipo" id="tipo" value="">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 				<h4 class="modal-title" id="titulo_derechollave">Editar</h4>
