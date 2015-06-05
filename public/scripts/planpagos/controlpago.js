@@ -160,11 +160,13 @@ function garantia(){
 			{ name: 'fecha_deposito',type: 'date'},
 			{ name: 'nro_deposito',type: 'string'},
 			{ name: 'monto_deposito',type: 'number'},
+			{ name: 'accion',type: 'string'},
 			],
 			url: '/planpagos/listgarantia/'+$("#contratoproducto_id").val(),
 			cache: false,
 		};
 		var dataAdapter = new $.jqx.dataAdapter(source);
+			
 		$("#jqxgrid_garantia").jqxGrid({
             width: '100%',
             source: dataAdapter,
@@ -180,79 +182,10 @@ function garantia(){
             { text: 'Nro Deposito', datafield: 'nro_deposito', filtertype: 'input',width: '20%' },
             { text: 'Fecha Deposito', datafield: 'fecha_deposito', filtertype: 'range', width: '20%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
             { text: 'Monto Depositado', datafield: 'monto_deposito', filtertype: 'input',width: '30%', cellsformat: 'c2',cellsalign: 'right',align:'center'},
-            { text: '', datafield: 'id', width: '10%;',align:'center' ,cellsalign:'center', sortable:false,showfilterrow:false, filterable:false,columntype: 'number',
-            cellsrenderer: function (rowline) {
-            	ctrlrow = rowline;
-            	var offset = $("#jqxgrid_garantia").offset();
-            	var dataRecord = $("#jqxgrid_garantia").jqxGrid('getrowdata', ctrlrow);
-            	var ids = dataRecord.id;
-            	return '<a class="btn btn-xs btn-warning editar" title="Editar"><i class="fa fa-pencil"></i></a>'+
-            			'<a class="btn btn-xs btn-danger eliminar" title="Eliminar"><i class="fa fa-times"></i></a>'
-            	;
-            	}
-        	}
-			// { text: '', datafield: 'edit', columntype: 'button',width: '10%', cellsrenderer: function () {
-   //                   return 'Editar';
-   //                }, buttonclick: function (row) {
-   //                   editrow = row;
-   //                   var offset = $("#jqxgrid_garantia").offset();
-   //                   var dataRecord = $("#jqxgrid_garantia").jqxGrid('getrowdata', editrow);
-   //                   // var dataRecord = $("#jqxgrid_garantia").jqxGrid('getrowdata', rowindex);
-			//  		$("#garantia_id").val(dataRecord.id);
-			//  		$("#tipo").val(dataRecord.tipo);
-			//  		var fe = $.jqx.dataFormat.formatdate(dataRecord.fecha_deposito, 'dd-MM-yyyy');
-			//  		$("#fecha_deposito_derechollave").val(fe);
-			//  		$("#nro_deposito_derechollave").val(dataRecord.nro_deposito);
-			//  		$("#monto_deposito_derechollave").val(dataRecord.monto_deposito);
-			//  		$('#myModal_derechollave').modal('show');
-   //               }
-   //          },
-			// { text: '', datafield: 'delete', columntype: 'button',width: '10%', cellsrenderer: function () {
-   //                   return 'Eliminar';
-   //                }, buttonclick: function (row) {
-   //                   editrow = row;
-   //                   var offset = $("#jqxgrid_garantia").offset();
-   //                   var dataRecord = $("#jqxgrid_garantia").jqxGrid('getrowdata', editrow);
-   //                   bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de eliminar el deposito?.", function(result) {
-			// 			if (result==true) {
-			// 				var v=$.ajax({
-			// 					url:'/planpagos/deletegarantia/',
-			// 					type:'POST',
-			// 					datatype: 'json',
-			// 					data:{id:dataRecord.id},
-			// 					success: function(data) { 
-			// 						garantia();
-			// 					},
-			// 					error: function() { alert('Se ha producido un error Inesperado'); }
-			// 				});
-			// 			}
-			// 		});
-   //               }
-   //          },
+            { text: '', datafield: 'accion', filtertype: 'input',width: '10%',cellsalign: 'center',align:'center'},
 			]
 		});
 }
-
-$(".editar").click(function() {
-	alert("hoals");
-	var rowindex = $('#jqxgrid_garantia').jqxGrid('getselectedrowindex');
- 	if (rowindex > -1)
- 	{
- 		var dataRecord = $("#jqxgrid_garantia").jqxGrid('getrowdata', rowindex);
- 		$("#garantia_id").val(dataRecord.id);
- 		$("#tipo").val(dataRecord.tipo);
- 		var fe = $.jqx.dataFormat.formatdate(dataRecord.fecha_deposito, 'dd-MM-yyyy');
- 		$("#fecha_deposito_derechollave").val(fe);
- 		$("#nro_deposito_derechollave").val(dataRecord.nro_deposito);
- 		$("#monto_deposito_derechollave").val(dataRecord.monto_deposito);
- 		$('#myModal_derechollave').modal('show');
- 		
- 	}
- 	else
- 	{
- 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para editar.");
- 	}
- });
 
 
 $("#dep_garantia, #dep_derechollave, #dev_garantia").click(function() {
@@ -294,6 +227,7 @@ function devolucion(){
 			{ name: 'fecha_deposito',type: 'date'},
 			{ name: 'nro_deposito',type: 'string'},
 			{ name: 'monto_deposito',type: 'number'},
+			{ name: 'accion',type: 'string'},
 			],
 			url: '/planpagos/listdevoluciongarantia/'+$("#contratoproducto_id").val(),
 			cache: false,
@@ -315,45 +249,46 @@ function devolucion(){
 			{ text: 'Devolución', datafield: 'tipo_text', filtertype: 'input',width: '20%' },
 			{ text: 'Nro Deposito', datafield: 'nro_deposito', filtertype: 'input',width: '20%' },
 			{ text: 'Fecha Deposito', datafield: 'fecha_deposito', filtertype: 'range', width: '20%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
-			{ text: 'Monto Depositado', datafield: 'monto_deposito', filtertype: 'input',width: '20%', cellsformat: 'c2',cellsalign: 'right',align:'center'},
-			{ text: '', datafield: 'edit', columntype: 'button',width: '10%', cellsrenderer: function () {
-                     return 'Editar';
-                  }, buttonclick: function (row) {
-                     editrow = row;
-                     var offset = $("#jqxgrid_devolucion").offset();
-                     var dataRecord = $("#jqxgrid_devolucion").jqxGrid('getrowdata', editrow);
-                     // var dataRecord = $("#jqxgrid_garantia").jqxGrid('getrowdata', rowindex);
-			 		$("#garantia_id").val(dataRecord.id);
-			 		$("#tipo").val(dataRecord.tipo);
-			 		var fe = $.jqx.dataFormat.formatdate(dataRecord.fecha_deposito, 'dd-MM-yyyy');
-			 		$("#fecha_deposito_derechollave").val(fe);
-			 		$("#nro_deposito_derechollave").val(dataRecord.nro_deposito);
-			 		$("#monto_deposito_derechollave").val(dataRecord.monto_deposito);
-			 		$('#myModal_derechollave').modal('show');
-                 }
-            },
-			{ text: '', datafield: 'delete', columntype: 'button',width: '10%', cellsrenderer: function () {
-                     return 'Eliminar';
-                  }, buttonclick: function (row) {
-                     editrow = row;
-                     var offset = $("#jqxgrid_devolucion").offset();
-                     var dataRecord = $("#jqxgrid_devolucion").jqxGrid('getrowdata', editrow);
-                     bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de eliminar el deposito?.", function(result) {
-						if (result==true) {
-							var v=$.ajax({
-								url:'/planpagos/deletegarantia/',
-								type:'POST',
-								datatype: 'json',
-								data:{id:dataRecord.id},
-								success: function(data) { 
-									devolucion();
-								},
-								error: function() { alert('Se ha producido un error Inesperado'); }
-							});
-						}
-					});
-                 }
-            },
+			{ text: 'Monto Depositado', datafield: 'monto_deposito', filtertype: 'input',width: '30%', cellsformat: 'c2',cellsalign: 'right',align:'center'},
+			{ text: '', datafield: 'accion', filtertype: 'input',width: '10%',cellsalign: 'center',align:'center'},
+			// { text: '', datafield: 'edit', columntype: 'button',width: '10%', cellsrenderer: function () {
+   //                   return 'Editar';
+   //                }, buttonclick: function (row) {
+   //                   editrow = row;
+   //                   var offset = $("#jqxgrid_devolucion").offset();
+   //                   var dataRecord = $("#jqxgrid_devolucion").jqxGrid('getrowdata', editrow);
+   //                   // var dataRecord = $("#jqxgrid_garantia").jqxGrid('getrowdata', rowindex);
+			//  		$("#garantia_id").val(dataRecord.id);
+			//  		$("#tipo").val(dataRecord.tipo);
+			//  		var fe = $.jqx.dataFormat.formatdate(dataRecord.fecha_deposito, 'dd-MM-yyyy');
+			//  		$("#fecha_deposito_derechollave").val(fe);
+			//  		$("#nro_deposito_derechollave").val(dataRecord.nro_deposito);
+			//  		$("#monto_deposito_derechollave").val(dataRecord.monto_deposito);
+			//  		$('#myModal_derechollave').modal('show');
+   //               }
+   //          },
+			// { text: '', datafield: 'delete', columntype: 'button',width: '10%', cellsrenderer: function () {
+   //                   return 'Eliminar';
+   //                }, buttonclick: function (row) {
+   //                   editrow = row;
+   //                   var offset = $("#jqxgrid_devolucion").offset();
+   //                   var dataRecord = $("#jqxgrid_devolucion").jqxGrid('getrowdata', editrow);
+   //                   bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de eliminar el deposito?.", function(result) {
+			// 			if (result==true) {
+			// 				var v=$.ajax({
+			// 					url:'/planpagos/deletegarantia/',
+			// 					type:'POST',
+			// 					datatype: 'json',
+			// 					data:{id:dataRecord.id},
+			// 					success: function(data) { 
+			// 						devolucion();
+			// 					},
+			// 					error: function() { alert('Se ha producido un error Inesperado'); }
+			// 				});
+			// 			}
+			// 		});
+   //               }
+   //          },
 			]
 		});
 }
@@ -575,3 +510,75 @@ $("#fecha_deposito, #fecha_deposito_derechollave, #fecha_deposito_garantia, #fec
 });
 
 })
+
+var editar_garantia = function (row) {
+	var rowindex = $('#jqxgrid_garantia').jqxGrid('getselectedrowindex');
+	if (rowindex > -1) {
+		var dataRecord = $("#jqxgrid_garantia").jqxGrid('getrowdata', rowindex);
+		$("#garantia_id").val(dataRecord.id);
+		$("#tipo").val(dataRecord.tipo);
+		var fe = $.jqx.dataFormat.formatdate(dataRecord.fecha_deposito, 'dd-MM-yyyy');
+		$("#fecha_deposito_derechollave").val(fe);
+		$("#nro_deposito_derechollave").val(dataRecord.nro_deposito);
+		$("#monto_deposito_derechollave").val(dataRecord.monto_deposito);
+		$('#myModal_derechollave').modal('show');
+	}else{
+		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para editar.");
+	}
+};
+
+var eliminar_garantia = function (row) {
+	var offset = $("#jqxgrid_garantia").offset();
+	var rowindex = $('#jqxgrid_garantia').jqxGrid('getselectedrowindex');
+	var dataRecord = $("#jqxgrid_garantia").jqxGrid('getrowdata', rowindex);
+	bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de eliminar el deposito?.", function(result) {
+		if (result==true) {
+			var v=$.ajax({
+				url:'/planpagos/deletegarantia/',
+				type:'POST',
+				datatype: 'json',
+				data:{id:dataRecord.id},
+				success: function(data) { 
+					$("#jqxgrid_garantia").jqxGrid('updatebounddata');
+				},
+				error: function() { alert('Se ha producido un error Inesperado'); }
+			});
+		}	
+	});
+};
+
+var editar_devolucion = function (row) {
+	var rowindex = $('#jqxgrid_devolucion').jqxGrid('getselectedrowindex');
+	if (rowindex > -1) {
+		var dataRecord = $("#jqxgrid_devolucion").jqxGrid('getrowdata', rowindex);
+		$("#garantia_id").val(dataRecord.id);
+		$("#tipo").val(dataRecord.tipo);
+		var fe = $.jqx.dataFormat.formatdate(dataRecord.fecha_deposito, 'dd-MM-yyyy');
+		$("#fecha_deposito_derechollave").val(fe);
+		$("#nro_deposito_derechollave").val(dataRecord.nro_deposito);
+		$("#monto_deposito_derechollave").val(dataRecord.monto_deposito);
+		$('#myModal_derechollave').modal('show');
+	}else{
+		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para editar.");
+	}
+};
+
+var eliminar_devolucion = function (row) {
+	var offset = $("#jqxgrid_devolucion").offset();
+	var rowindex = $('#jqxgrid_devolucion').jqxGrid('getselectedrowindex');
+	var dataRecord = $("#jqxgrid_devolucion").jqxGrid('getrowdata', rowindex);
+	bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de eliminar el deposito?.", function(result) {
+		if (result==true) {
+			var v=$.ajax({
+				url:'/planpagos/deletegarantia/',
+				type:'POST',
+				datatype: 'json',
+				data:{id:dataRecord.id},
+				success: function(data) { 
+					$("#jqxgrid_devolucion").jqxGrid('updatebounddata');
+				},
+				error: function() { alert('Se ha producido un error Inesperado'); }
+			});
+		}	
+	});
+};

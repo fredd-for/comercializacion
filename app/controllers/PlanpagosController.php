@@ -992,6 +992,8 @@ public function listgarantiaAction($contratoproducto_id)
             'fecha_deposito' => $v->fecha_deposito.' 00:00:00',
             'nro_deposito' => $v->nro_deposito,
             'monto_deposito' => $v->monto_deposito,
+            'accion' => '<a class="btn btn-xs btn-warning" onclick="editar_garantia()" title="Editar"><i class="fa fa-pencil"></i></a>'.
+                '<a class="btn btn-xs btn-danger" onclick="eliminar_garantia()" title="Eliminar"><i class="fa fa-times"></i></a>',
         );
     }
     $this->view->disable();
@@ -1011,6 +1013,8 @@ public function listdevoluciongarantiaAction($contratoproducto_id)
             'fecha_deposito' => $v->fecha_deposito.' 00:00:00',
             'nro_deposito' => $v->nro_deposito,
             'monto_deposito' => $v->monto_deposito,
+            'accion' => '<a class="btn btn-xs btn-warning" onclick="editar_devolucion()" title="Editar"><i class="fa fa-pencil"></i></a>'.
+                '<a class="btn btn-xs btn-danger" onclick="eliminar_devolucion()" title="Eliminar"><i class="fa fa-times"></i></a>',
         );
     }
     $this->view->disable();
