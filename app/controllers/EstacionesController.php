@@ -427,4 +427,15 @@ exit();
 }
 
 
+public function pruebasigecAction()
+{
+    $model = new Seguimientos();
+    $resul = $model->prueba();
+    foreach ($resul as $v) {
+        echo $v->nombre_emisor."<br>";
+    }
+        
+}
+
+
 }

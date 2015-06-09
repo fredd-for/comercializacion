@@ -66,9 +66,9 @@ $di->set('db', function () use ($config) {
 });
 $di->set('sigec', function () {
     return new \Phalcon\Db\Adapter\Pdo\Mysql(array(
-        'host' => 'localhost',
-        'username' => 'root',
-        'password' => '',
+        'host' => '192.168.10.101',
+        'username' => 'gge',
+        'password' => 'sistemas#15',
         'dbname' => 'paperwork'
     ));
 });
