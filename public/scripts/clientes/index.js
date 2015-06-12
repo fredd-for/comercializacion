@@ -33,18 +33,16 @@ function cargar(){
 		// 	return 'verde';
 		// }
 		var cellclass = function (row, columnfield, value) {
-                
                 if (value == 'Activo') {
                     return 'green';
                 }else{
                 	return 'red';
                 }
-                
-            }
+        }
 
 		$("#jqxgrid").jqxGrid({
 			width: '100%',
-			height: '550',
+			height: '450',
 			source: dataAdapter,
 			sortable: true,
 			altRows: true,
@@ -155,7 +153,7 @@ $("#jqxgrid_contratos").jqxGrid(
 	pagerMode: 'advanced',
 	theme: 'custom',
 	showfilterrow: true,
-	showstatusbar: true,
+	// showstatusbar: true,
 	showfilterrow: true,
 	filterable: true,
 	autorowheight: true,

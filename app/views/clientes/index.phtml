@@ -30,6 +30,7 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="pull-left">
+								<button class="btn btn-sm btn-defaul" type="button" id="crear_contrato"><i class="fa fa-plus fa-fw"></i>Crear Solicitud</button>
 								<button class="btn btn-sm btn-defaul" type="button" id="crear_contrato"><i class="fa fa-plus fa-fw"></i>Crear Contrato</button>
 								<button class="btn btn-sm btn-defaul" type="button" id="check_list"><i class="fa fa-plus fa-fw"></i>Check List</button>
 								<button class="btn btn-sm btn-primary" type="button" id="add"><i class="fa fa-plus fa-fw"></i>Adicionar</button>
@@ -45,7 +46,7 @@
 					<?php } ?>
 					<div class="row">
 						<div class="col-md-12">
-							<div id="jqxgrid" style="height: 550px; width: 100%;" ></div>
+							<div id="jqxgrid" style="height: 450px; width: 100%;" ></div>
 						</div>
 					</div>
 				</div>
@@ -65,8 +66,14 @@
 							</div>
 						</div>
 					</div>
-					<br>
+					
+					
 					<div class="row">
+						<div class="col-md-6">
+							<div id="jqxgrid_solicitudes" style="height: 250px; width: 100%;" ></div>
+						</div>
+						<div class="col-md-6">
+						<div class="row">
 						<div class="col-md-12">
 							<div class="pull-left">
 								<button class="btn btn-sm btn-default" type="button" id="ver_productos"><i class="fa fa-pencil fa-fw"></i> Ver Productos</button>
@@ -75,15 +82,13 @@
 								<button class="btn btn-sm btn-danger" type="button" id="delete_contrato"><i class="fa fa-trash-o fa-fw"></i> Eliminar</button>
 								<?php } ?>
 							</div>
-							<div class="pull-left">
+							<!-- <div class="pull-left">
 								<h3 class="text-warning"> &nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-user"></i> Contros por Cliente: <span id="text_cliente"></span></h3>
-							</div>
+							</div> -->
 							
 						</div>
 					</div> 
-					<div class="row">
-						<div class="col-md-12">
-							<div id="jqxgrid_contratos" style="height: 350px; width: 100%;" ></div>
+							<div id="jqxgrid_contratos" style="height: 250px; width: 100%;" ></div>
 						</div>
 					</div>
 				</div>
@@ -91,6 +96,7 @@
 		</div>
 	</div>
 </div>
+
 
 
 <!-- Modal -->
