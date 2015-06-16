@@ -312,6 +312,7 @@ class ClientesController extends ControllerBase
                 ->addJs('/assets/js/plugins.js')
                 ->addJs('/assets/js/pages/formsValidation.js')
                 ->addJs('/js/fileinput/js/fileinput.min.js')
+                ->addJs('/js/fileinput/js/fileinput_locale_es.js')
         ;
 
         $model = new Contratos();

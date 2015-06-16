@@ -239,6 +239,7 @@ $("#testForm_contrato").submit(function() {
 $("#archivo").fileinput({
 		// showUpload: false,
 		//showCaption: false,
+		language: 'es',
 		allowedFileExtensions : ['jpg','jpeg', 'png','gif'],
 		maxFileSize: 1000,
 		browseClass: "btn btn-primary btn-sm",

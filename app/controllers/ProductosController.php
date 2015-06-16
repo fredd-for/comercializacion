@@ -239,6 +239,7 @@ class ProductosController extends ControllerBase
                 ->addJs('/assets/js/plugins.js')
                 ->addJs('/scripts/productos/galeria.js')
                 ->addJs('/js/fileinput/js/fileinput.min.js')
+                ->addJs('/js/fileinput/js/fileinput_locale_es.js')
             ;
 
         $resul = Productos::findFirstById($producto_id);

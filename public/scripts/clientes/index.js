@@ -454,5 +454,63 @@ $("#testForm_contrato").submit(function() {
 
 
 
+/*
+grilla de solicitudes
+ */
+var source =
+		{
+			datatype: "json",
+			datafields: [
+			{ name: 'id',type: 'number'},
+			{ name: 'nro_solicitud',type: 'string'},
+			{ name: 'fecha_envio_solicitud',type: 'date'},
+			{ name: 'fecha_recepcion_solicitud',type: 'date'},
+			{ name: 'productos_solicitados',type: 'string'},
+			{ name: 'respuesta',type: 'string'},
+			{ name: 'fecha_envio_resp',type: 'date'},
+			{ name: 'fecha_recepcion_resp',type: 'date'},
+			{ name: 'descripcion_resp',type: 'string'},
+			{ name: 'cliente_id',type: 'number'},
+			],
+			url: '/solicitudes/list',
+			cache: false
+		};
+		var dataAdapter = new $.jqx.dataAdapter(source);
+
+		$("#jqxgrid_solicitudes").jqxGrid({
+			width: '100%',
+			height: '300',
+			source: dataAdapter,
+			sortable: true,
+			altRows: true,
+			columnsresize: true,
+			pageable: true,
+			pagerMode: 'advanced',
+			theme: 'custom',
+			//scrollmode: 'deferred',
+			//showstatusbar: true,
+			showfilterrow: true,
+			filterable: true,
+			autorowheight: true,
+			keyboardnavigation: false,
+			columns: [
+			{
+				text: '#', sortable: false, filterable: false, editable: false,
+				groupable: false, draggable: false, resizable: false,
+				datafield: '', columntype: 'number', width: '3%',
+				cellsrenderer: function (row, column, value) {
+					return "<div style='margin:4px;'>" + (value + 1) + "</div>";
+				}
+			},
+			{ text: 'Nro Solicitud', datafield: 'nro_solicitud', filtertype: 'input',width: '27%' },
+			{ text: 'Fecha Recepción Solicitud', datafield: 'fecha_recepcion_solicitud', filtertype: 'input',width: '70%' },
+			{ text: 'Productos Solicitados', datafield: 'productos_solicitados', filtertype: 'input',width: '27%' },
+			{ text: 'Respuesta', datafield: 'respuesta', filtertype: 'input',width: '27%' },
+			]
+		});
+/*
+End grilla de solicitud
+ */
+
 
 })
