@@ -10,8 +10,6 @@ class AlertasController extends ControllerBase
         $this->assets
                 ->addCss('/jqwidgets/styles/jqx.base.css')
                 ->addCss('/jqwidgets/styles/jqx.custom.css')
-                //->addCss('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css')
-                //->addCss('/media/plugins/form-stepy/jquery.stepy.css')
                 ;
         $this->assets
                 ->addJs('/js/tinymce/tinymce.min.js')
