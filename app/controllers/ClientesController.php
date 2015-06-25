@@ -76,6 +76,13 @@ class ClientesController extends ControllerBase
         $resul = $model->lista();
         $this->view->disable();
         foreach ($resul as $v) {
+            if ($v->estado == 'Activo') {
+                $estado = '<span class="label label-success">'.$v->estado.'</span>';
+            }elseif ($v->estado =='Pasivo') {
+                $estado = '<span class="label label-danger">'.$v->estado.'</span>';
+            }else{
+                $estado = '<span class="label label-primary">'.$v->estado.'</span>';
+            }
             $customers[] = array(
                 'id' => $v->id,
                 'razon_social_href' => '<a href="/clientes/view/'.$v->id.'">'.$v->razon_social.'</a>',
@@ -93,7 +100,7 @@ class ClientesController extends ControllerBase
                 'ci_ref' => $v->ci_ref,
                 'celular_ref' => $v->celular_ref,
                 'correo_ref' => $v->correo_ref,
-                'estado' => $v->estado,
+                'estado' => $estado,
                 'foto' => $this->foto($v->carpeta,$v->nombre_archivo)
             );
         }
@@ -151,7 +158,7 @@ class ClientesController extends ControllerBase
                 'porcentaje_mora' => $v->porcentaje_mora*100,
                 'responsable' =>$v->responsable,
                 'responsable_id' => $v->responsable_id,
-                'estado' =>'<span class="label label-success">'.$v->estado.'</span>',
+                'estado' =>$estado,
             );
         }
         echo json_encode($customers);

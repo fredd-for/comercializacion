@@ -1,0 +1,168 @@
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel">
+			<div class="panel-heading">
+				<h4>Listado de Clientes</h4>
+				<div class="options">
+					<ul class="nav nav-tabs">
+						<li class="active"><a data-toggle="tab" href="#domshortcuttiles"><i class="fa fa-users"></i></a></li>
+						<li><a data-toggle="tab" href="#codeshortcuttiles"><i class="fa fa-code"></i></a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div class="tab-content">
+					<div class="row">
+						<div class="col-md-12">
+							<?php echo $this->flashSession->output(); ?>
+							<div id="divMsjeExito" class="msjs-alert" hidden="hidden">
+								<button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
+								<h5>
+									<i class="fa fa-check-circle"></i>
+									<!-- &Eacute;xito! -->
+									<a class="alert-link" href="javascript:void(0)" id="aMsjeExito"></a>
+								</h5>
+								
+							</div>
+						</div>
+					</div>
+					<?php if ($user->nivel==2) { ?>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="pull-left">
+								<button class="btn btn-sm btn-defaul" type="button" id="crear_solicitud"><i class="fa fa-plus fa-fw"></i>Crear Solicitud</button>
+							</div>
+							<div class="pull-right">
+								<a href="/clientes/reporte" class="btn btn-sm btn-primary"><i class="fa fa-download"></i> Reporte</a>
+							</div>
+						</div>
+					</div>
+					<?php } ?>
+					<div class="row">
+						<div class="col-md-12">
+							<div id="jqxgrid" style="height: 450px; width: 100%;" ></div>
+						</div>
+					</div>
+				</div>
+				<br>
+				<!-- segunda grilla -->
+				<div class="tab-content">
+					 <div class="row">
+						<div class="col-md-12">
+							<?php // echo $this->flashSession->output(); ?>
+							<div id="divMsjeExito2" class="msjs-alert" hidden="hidden">
+								<button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
+								<h5>
+									<i class="fa fa-check-circle"></i>
+									<a class="alert-link" href="javascript:void(0)" id="aMsjeExito2"></a>
+								</h5>
+								
+							</div>
+						</div>
+					</div>
+					
+					
+					<div class="row">
+						<div class="col-md-12">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="pull-left">
+										<button class="btn btn-sm btn-default" type="button" id="ver_productos"><i class="fa fa-pencil fa-fw"></i> Ver Productos</button>
+										<?php if ($user->nivel==2) { ?>
+										<button class="btn btn-sm btn-warning" type="button" id="edit_contrato"><i class="fa fa-pencil fa-fw"></i> Editar</button>
+										<button class="btn btn-sm btn-danger" type="button" id="delete_contrato"><i class="fa fa-trash-o fa-fw"></i> Eliminar</button>
+										<?php } ?>
+									</div>
+								</div>
+							</div> 
+							<div id="jqxgrid_solicitudes" style="height: 250px; width: 100%;" ></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal Crear Solicitud -->
+<div class="modal fade" id="myModal_solicitud" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form class="form-horizontal" id="testForm_contrato" data-toggle="validator" action="" method="post" />
+			<input type="hidden" name="cliente_id" id="cliente_id">
+			<input type="hidden" name="solicitud_id" id="solicitud">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title" id="titulo_solicitud">Crear Solicitud</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label class="col-md-4 control-label">Responsable Comercial</label>
+					<div class="col-md-8">
+						<?php echo $responsable ?>
+					</div>
+				</div>
+				<hr>
+				<div class="form-group">
+					<div class="col-md-12">
+						<h5 align="center">CLIENTE / EMPRESA</h5>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label">Razón Social</label>
+					<div class="col-md-8">
+						<input type="text" name="rs" id="rs" class="form-control" placeholder="" readonly>
+					</div>
+				</div>
+				<hr>
+				<div class="form-group">
+					<label class="col-md-4 control-label">Nro Solicitud</label>
+					<div class="col-md-8">
+						<input type="text" name="nro_solicitud" id="nro_solicitud" class="form-control" placeholder="" required>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label">Remitente</label>
+					<div class="col-md-8">
+						<input type="text" name="representante" id="representante" class="form-control" placeholder="" required>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label">Cargo Remitente</label>
+					<div class="col-md-8">
+						<input type="text" name="cargo_representante" id="cargo_representante" class="form-control" placeholder="" >
+					</div>
+				</div>
+				<div class="form-group" >
+					<label class="col-md-4 control-label">Fecha Envio Solicitud</label>
+					<div class="col-md-8">
+						<input type="text" name="fecha_envio_solicitud" id="fecha_envio_solicitud" class="form-control input-datepicker-close" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" required>
+					</div>
+				</div>
+				<div class="form-group" >
+					<label class="col-md-4 control-label">Fecha Recepción Solicitud</label>
+					<div class="col-md-8">
+						<input type="text" name="fecha_recepcion_solicitud" id="fecha_recepcion_solicitud" class="form-control input-datepicker-close" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" required>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label">Descripción Solicitud</label>
+					<div class="col-md-8">
+					<textarea name="descripcion_solicitud" id="descripcion_solicitud" class="form-control"></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				<button type="submit" class="btn btn-primary" id="Save">Guardar</button>
+			</div>
+		</form>
+	</div>
+</div>
+</div>
+<!-- end  modal -->
+<style type="text/css">
+	.datepicker{
+		z-index:1151 !important;
+	}
+</style>

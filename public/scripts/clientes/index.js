@@ -30,15 +30,12 @@ function cargar(){
 		};
 		var dataAdapter = new $.jqx.dataAdapter(source);
 		// var cellclass = function (row, columnfield, value) {
-		// 	return 'verde';
-		// }
-		var cellclass = function (row, columnfield, value) {
-                if (value == 'Activo') {
-                    return 'green';
-                }else{
-                	return 'red';
-                }
-        }
+  //               if (value == 'Activo') {
+  //                   return 'green';
+  //               }else{
+  //               	return 'red';
+  //               }
+  //       }
 
 		$("#jqxgrid").jqxGrid({
 			width: '100%',
@@ -80,7 +77,7 @@ function cargar(){
 			{ text: 'Celular', columngroup: 'cliente',datafield: 'celular', filtertype: 'input',width: '8%'},
 			{ text: 'Correo', columngroup: 'cliente',datafield: 'correo', filtertype: 'input',width: '8%'},
 			{ text: 'Dirección', columngroup: 'cliente',datafield: 'direccion', filtertype: 'input',width: '20%'},
-			{ text: 'Estado', columngroup: 'cliente',datafield: 'estado', filtertype: 'input',width: '8%', cellclassname: cellclass},
+			{ text: 'Estado', columngroup: 'cliente',datafield: 'estado', filtertype: 'input',width: '8%'},
 			{ text: 'Representante Legal', columngroup: 'representante',datafield: 'representante_legal', filtertype: 'input',width: '10%'},
 			{ text: 'Celular', columngroup: 'representante',datafield: 'celular_representante_legal',filtertype: 'input', width: '10%' },
 			{ text: 'Correo', columngroup: 'representante',datafield: 'correo_representante_legal',filtertype: 'input', width: '10%'},
