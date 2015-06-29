@@ -209,8 +209,9 @@ Crear nuevo contrato
     });
 
 
-$("#fecha_envio_solicitud, #fecha_recepcion_solicitud").datepicker({
-	autoclose:true,
-});
-
+// $("#fecha_envio_solicitud, #fecha_recepcion_solicitud").datepicker({
+// 	autoclose:true,
+// });
+$(".input-daterange").datepicker({weekStart:1});
+$(".input-datepicker-close").datepicker({weekStart:1}).on("changeDate",function(){$(this).datepicker("hide")});
 })

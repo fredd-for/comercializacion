@@ -118,7 +118,7 @@ class SolicitudesController extends ControllerBase
 				$resul->descripcion_solicitud = $this->request->getPost('descripcion_solicitud');
 				$resul->cliente_id = $this->request->getPost('cliente_id');
 				$resul->usuario_reg = $this->_user->id;
-				$resul->cliente_id = date("Y-m-d H:i:s");
+				$resul->fecha_reg = date("Y-m-d H:i:s");
 				$resul->baja_logica = 1;
 				if ($resul->save()) {
 					$msm = 'Exito: Se guardo correctamente';
