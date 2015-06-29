@@ -74,9 +74,9 @@ class ProductosController extends ControllerBase
             array(
                 "Hora" => "Hora",
                 "Dia"   => "Dia",
-                "Semanal" => "Semanal",
+                // "Semanal" => "Semanal",
                 "Mensual" => "Mensual",
-                "Anual" => "Anual",
+                // "Anual" => "Anual",
                 ),
             'useEmpty' => true,
             'emptyText' => '(Selecionar)',

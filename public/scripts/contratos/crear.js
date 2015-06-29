@@ -483,6 +483,8 @@ function lista_pp(contratoproducto_id){
 	$("#fecha_inicio, #fecha_fin, #fecha_programado").datepicker({
 						autoclose:true,
 	});
-	 
+
+	// $(".input-daterange").datepicker({weekStart:1});
+	// $(".input-datepicker-close").datepicker({weekStart:1}).on("changeDate",function(){$(this).datepicker("hide")})
 
 })

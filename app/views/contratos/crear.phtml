@@ -1,30 +1,3 @@
-<style>     
-	.green {
-		color: black\9;
-		background-color: #b6ff00\9;
-	}
-	.yellow {
-		color: black\9;
-		background-color: yellow\9;
-	}
-	.red {
-		color: black\9;
-		background-color: #e83636\9;
-	}
-
-	.green:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected), .jqx-widget .green:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected) {
-		color: black;
-		background-color: #b6ff00;
-	}
-	.yellow:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected), .jqx-widget .yellow:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected) {
-		color: black;
-		background-color: yellow;
-	}
-	.red:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected), .jqx-widget .red:not(.jqx-grid-cell-hover):not(.jqx-grid-cell-selected) {
-		color: black;
-		background-color: #e83636;
-	}
-</style>
 <div class="row">
 	<div class="col-sm-12">
 		<div class="panel">
@@ -115,90 +88,114 @@
 </div>
 
 
-					<!-- Modal añadir a contrato -->
-					<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<form class="form-horizontal" id="testForm" data-toggle="validator" action="" method="post" />
-								<input type="hidden" name="id" id="id">
-								<input type="hidden" name="contrato_id" id="contrato_id" value="<?php echo $contrato->id ?>">
-								<input type="hidden" name="producto_id" id="producto_id" value="">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-									<h4 class="modal-title" id="titulo">Editar</h4>
-								</div>
-								<div class="modal-body">
-									<div class="form-group">
-										<label class="col-md-3 control-label">Estación</label>
-										<div class="col-md-9">
-											<input type="text" name="estacion" id="estacion" class="form-control" placeholder="" readonly>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-md-3 control-label">Grupo</label>
-										<div class="col-md-9">
-											<input type="text" name="grupo" id="grupo" class="form-control" placeholder="" readonly="">
-										</div>
-									</div>
-									<div class="form-group" >
-										<label class="col-md-3 control-label">Producto</label>
-										<div class="col-md-9">
-											<input type="text" name="producto" id="producto" class="form-control" placeholder="" readonly="">
-										</div>
-									</div>
-									<div class="form-group" >
-										<label class="col-md-3 control-label">Cantidad</label>
-										<div class="col-md-9">
-											<input type="number" name="cantidad" id="cantidad" class="form-control" placeholder="">
-										</div>
-									</div>
-									<div class="form-group" >
-										<label class="col-md-3 control-label">Fecha Inicio</label>
-										<div class="col-md-5">
-											<input type="text" id="fecha_inicio" name="fecha_inicio" class="form-control" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" required/>
-										</div>
-										<div class="col-md-4">
-											<input type="text" name="hora_inicio" id="hora_inicio" class="form-control" placeholder="HH:mm" value="00:00" required>
-										</div>
-									</div>
-									<div class="form-group" >
-										<label class="col-md-3 control-label">Fecha Finalización</label>
-										<div class="col-md-5">
-											<input type="text" id="fecha_fin" name="fecha_fin" class="form-control" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" required/>
-										</div>
-										<div class="col-md-4">
-											<input type="text" name="hora_fin" id="hora_fin" class="form-control" placeholder="HH:mm" value="00:00" required>
-										</div>
-									</div>
-
-									<div class="form-group" >
-										<label class="col-md-3 control-label">Tipo Alquiler</label>
-										<div class="col-md-9">
-											<?php echo $tiempo ?>
-										</div>
-									</div>
-									<div class="form-group" >
-										<label class="col-md-3 control-label">Precio Bs. <span id='tiempo_text'></span></label>
-										<div class="col-md-9">
-											<input type="number" name="precio_unitario" id="precio_unitario" class="form-control" required title="campo obligatorio">
-										</div>
-									</div>
-									<div class="form-group" >
-										<label class="col-md-3 control-label">Total</label>
-										<div class="col-md-9">
-											<input type="text" id="total" name="total" class="form-control" readonly>
-										</div>
-									</div>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-									<button type="submit" class="btn btn-primary" id="Save">Guardar</button>
-								</div>
-							</form>
-						</div>
+<!-- Modal añadir a contrato -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form class="form-horizontal" id="testForm" data-toggle="validator" action="" method="post" />
+			<input type="hidden" name="id" id="id">
+			<input type="hidden" name="contrato_id" id="contrato_id" value="<?php echo $contrato->id ?>">
+			<input type="hidden" name="producto_id" id="producto_id" value="">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title" id="titulo">Editar</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label class="col-md-3 control-label">Estación</label>
+					<div class="col-md-9">
+						<input type="text" name="estacion" id="estacion" class="form-control" placeholder="" readonly>
 					</div>
 				</div>
-				<!-- end  modal -->
+				<div class="form-group">
+					<label class="col-md-3 control-label">Grupo</label>
+					<div class="col-md-9">
+						<input type="text" name="grupo" id="grupo" class="form-control" placeholder="" readonly="">
+					</div>
+				</div>
+				<div class="form-group" >
+					<label class="col-md-3 control-label">Producto</label>
+					<div class="col-md-9">
+						<input type="text" name="producto" id="producto" class="form-control" placeholder="" readonly="">
+					</div>
+				</div>
+				<div class="form-group" >
+					<label class="col-md-3 control-label">Cantidad</label>
+					<div class="col-md-9">
+						<input type="number" name="cantidad" id="cantidad" class="form-control" placeholder="">
+					</div>
+				</div>
+
+<!-- 				<div class="input-daterange" data-date-format="dd-mm-yyyy">
+					<div class="form-group">
+						<label class="col-md-3 control-label">Fecha Inicio</label>
+						<div class="col-md-5">
+							<input type="text" id="fecha_inicio" name="fecha_inicio" class="form-control input-datepicker-close text-center" placeholder="dd-mm-yyyy" />
+						</div>
+						<div class="col-md-4">
+							<input type="text" name="hora_inicio" id="hora_inicio" class="form-control" placeholder="HH:mm" value="00:00" required>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-3 control-label">Fecha Inicio</label>
+						<div class="col-md-5">
+							<input type="text" id="fecha_fin" name="fecha_fin" class="form-control input-datepicker-close text-center" placeholder="dd-mm-yyyy" />
+						</div>
+						<div class="col-md-4">
+							<input type="text" name="hora_fin" id="hora_fin" class="form-control" placeholder="HH:mm" value="00:00" required>
+						</div>
+					</div>
+				</div> -->
+
+				
+				
+				<div class="form-group" >
+					<label class="col-md-3 control-label">Fecha Inicio</label>
+					<div class="col-md-5">
+						<input type="text" id="fecha_inicio" name="fecha_inicio" class="form-control" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" required/>
+					</div>
+					<div class="col-md-4">
+						<input type="text" name="hora_inicio" id="hora_inicio" class="form-control" placeholder="HH:mm" value="00:00" required>
+					</div>
+				</div>
+				<div class="form-group" >
+					<label class="col-md-3 control-label">Fecha Finalización</label>
+					<div class="col-md-5">
+						<input type="text" id="fecha_fin" name="fecha_fin" class="form-control" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" required/>
+					</div>
+					<div class="col-md-4">
+						<input type="text" name="hora_fin" id="hora_fin" class="form-control" placeholder="HH:mm" value="00:00" required>
+					</div>
+				</div>
+
+				<div class="form-group" >
+					<label class="col-md-3 control-label">Tipo Alquiler</label>
+					<div class="col-md-9">
+						<?php echo $tiempo ?>
+					</div>
+				</div>
+				<div class="form-group" >
+					<label class="col-md-3 control-label">Precio Bs. <span id='tiempo_text'></span></label>
+					<div class="col-md-9">
+						<input type="number" name="precio_unitario" id="precio_unitario" class="form-control" required title="campo obligatorio">
+					</div>
+				</div>
+				<div class="form-group" >
+					<label class="col-md-3 control-label">Total</label>
+					<div class="col-md-9">
+						<input type="text" id="total" name="total" class="form-control" readonly>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				<button type="submit" class="btn btn-primary" id="Save">Guardar</button>
+			</div>
+		</form>
+	</div>
+</div>
+</div>
+<!-- end  modal -->
 
 
 <!-- Modal ver plan de pagos -->
@@ -206,18 +203,18 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<form class="form-horizontal" id="testForm" data-toggle="validator" action="" method="post" />
-				<div class="modal-header">
+			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 				<h4 class="modal-title" id="titulo_pp">Editar</h4>
+			</div>
+			<div class="modal-body">
+				<div id="contenido_pp">
 				</div>
-				<div class="modal-body">
-					<div id="contenido_pp">
-					</div>
-				</div>
-						
-			</form>
-		</div>
+			</div>
+
+		</form>
 	</div>
+</div>
 </div>
 <!-- end  modal -->
 
@@ -236,7 +233,7 @@
 						<div class="form-group">
 							<button class="btn btn-xs btn-primary" type="button" id="add_pp"> <i class="fa fa-plus-circle"> Adicionar</i> </button>
 							<div id="li_pp">
-								
+
 							</div>
 						</div>                          	
 					</div>
@@ -252,7 +249,7 @@
 <div class="modal fade" id="myModal_pp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-		<form class="form-horizontal" id="testForm_pp" data-toggle="validator" action="" method="post" />
+			<form class="form-horizontal" id="testForm_pp" data-toggle="validator" action="" method="post" />
 			<input type="hidden" name="planpago_id" id="planpago_id">
 			<input type="hidden" name="contratoproducto_id" id="contratoproducto_id">
 			<div class="modal-header">
@@ -283,13 +280,12 @@
 </div>
 <!-- end  modal -->
 
-				<style type="text/css">
-					.datepicker{
-						z-index:1151 !important;
-					}
-				</style>
+<style type="text/css">
+	.datepicker{
+		z-index:1151 !important;
+	}
+</style>
+ 
+<script>!window.jQuery && document.write(unescape('%3Cscript src="/assets/js/vendor/jquery-1.11.0.min.js"%3E%3C/script%3E'));</script>
+<script>$(function() { FormsValidation.init(); });</script>				
 
-				<script>!window.jQuery && document.write(unescape('%3Cscript src="/assets/js/vendor/jquery-1.11.0.min.js"%3E%3C/script%3E'));</script>
-				<script>$(function() { FormsValidation.init(); });</script>				
-
-				
