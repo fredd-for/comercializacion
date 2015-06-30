@@ -10,6 +10,7 @@ class ContratosController extends ControllerBase
 		$this->assets
                 ->addCss('/jqwidgets/styles/jqx.base.css')
                 ->addCss('/jqwidgets/styles/jqx.custom.css')
+                ->addCss('/assets/css/plugins.css')
                 //->addCss('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css')
                 //->addCss('/media/plugins/form-stepy/jquery.stepy.css')
                 ;
@@ -39,6 +40,9 @@ class ContratosController extends ControllerBase
                 ->addJs('/jqwidgets/jqxgrid.aggregates.js')
                 ->addJs('/media/plugins/bootbox/bootbox.min.js')
                 ->addJs('/jqwidgets/jqxtooltip.js')
+                ->addJs('/assets//js/plugins.js')
+                ->addJs('/assets/js/app.js')
+                ->addJs('/js/app.plugin.js')
                 // ->addJs('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js')
                 // ->addJs('/media/plugins/form-validation/jquery.validate.min.js')
                 // ->addJs('/assets/js/plugins.js')
@@ -84,31 +88,85 @@ class ContratosController extends ControllerBase
 
 	}
 
-    // public function listAction()
-    // {   $this->view->disable();
-    //     $modelas = new Contratos();
-    //     $resul = $modelas->lista();
-    //     $this->view->disable();
-    //     foreach ($resul as $v) {
-    //         // echo "<p>-->".$v->razon_social."</p>";
-    //         $customers[] = array(
-    //             'id' => $v->id,
-    //             'razon_social' => $v->razon_social,
-    //             'contrato' => $v->contrato,
-    //             'cliente_id' => $v->cliente_id,
-    //             'fecha_contrato' => $v->fecha_contrato,
-    //             'descripcion' => $v->descripcion,
-    //             'monto_total' => '2',
-    //             'monto_cancelado' => '2',
-    //             'monto_cobrar' => '2',
-    //             'fecha_pago' => '2',
-    //             'dias_atraso' => '2',
-    //             'mora' => '2'
-    //         );
-    //     }
-    //     echo json_encode($customers);
-        
-    // }
+     public function savecontratoAction()
+    {
+        if (isset($_POST['contrato_id'])) {
+            if ($_POST['contrato_id']>0) {
+                $resul = Contratos::findFirstById($this->request->getPost('contrato_id'));
+                $resul->contrato = $this->request->getPost('contrato');
+                $resul->fecha_contrato = date("Y-m-d",strtotime($this->request->getPost('fecha_contrato')));
+                $resul->descripcion = $this->request->getPost('descripcion');
+                $resul->dias_tolerancia = $this->request->getPost('dias_tolerancia');
+                $resul->porcentaje_mora = $this->request->getPost('porcentaje_mora')/100;
+                $resul->responsable_id = $this->request->getPost('responsable_id');
+                if ($resul->save()) {
+                    $msm ='Exito: Se guardo correctamente';
+                }else{
+                    $msm = 'Error: No se guardo el registro';
+                }
+            }
+            else{
+                $resul = new Contratos();
+                $resul->contrato = $this->request->getPost('contrato');
+                $resul->cliente_id = $this->request->getPost('cliente_id');
+                $resul->fecha_contrato = date("Y-m-d",strtotime($this->request->getPost('fecha_contrato')));
+                $resul->usuario_reg = $this->_user->id;
+                $resul->fecha_reg = date("Y-m-d H:i:s");
+                $resul->baja_logica = 1;
+                $resul->arrendador = $this->request->getPost('arrendador');
+                $resul->arrendador_rep_legal = $this->request->getPost('arrendador_rep_legal');
+                $resul->arrendador_cargo = $this->request->getPost('arrendador_cargo');
+                $resul->descripcion = $this->request->getPost('descripcion');
+                $resul->dias_tolerancia = $this->request->getPost('dias_tolerancia');
+                $resul->porcentaje_mora = $this->request->getPost('porcentaje_mora')/100;
+                $resul->responsable_id = $this->request->getPost('responsable_id');
+                if ($resul->save()) {
+                    $msm ='Exito: Se guardo correctamente';
+                }else{
+                    $msm = 'Error: No se guardo el registro';
+                }    
+                
+            }   
+        }
+    $this->view->disable();
+    echo $msm;
+    }
+    public function deletecontratoAction(){
+        $resul = Contratos::findFirstById($this->request->getPost('id'));
+        $resul->baja_logica = 0;
+        if ($resul->save()) {
+                    $msm ='Exito: Se elimino correctamente';
+                }else{
+                    $msm = 'Error: No se guardo el registro';
+                }
+        $this->view->disable();
+        echo $msm;
+    }
+    public function listAction()
+    {
+        //$resul = Contratos::find(array('baja_logica=1', 'order'=>'fecha_contrato desc'));
+        $model = new Contratos();
+        $resul = $model->listadocontratos();
+
+        $this->view->disable();
+        $customers = array();
+        foreach ($resul as $v) {
+            $customers[] = array(
+                'id' => $v->id,
+                'contrato' => $v->contrato,
+                'cliente_id' => $v->cliente_id,
+                'razon_social' => $v->razon_social,
+                'fecha_contrato' => $v->fecha_contrato,
+                'descripcion' => $v->descripcion,
+                'num_productos' => $v->num_productos,
+                'dias_tolerancia' => $v->dias_tolerancia,
+                'porcentaje_mora' => $v->porcentaje_mora*100,
+                'responsable' =>$v->responsable,
+                'responsable_id' => $v->responsable_id,
+            );
+        }
+        echo json_encode($customers);
+    }
 
 	public function crearAction($contrato_id='')
 	{

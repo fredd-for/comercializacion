@@ -1,42 +1,36 @@
 $(document).ready(function (){
-
 cargar();
 function cargar(){
 	var source =
 		{
 			datatype: "json",
 			datafields: [
-			{ name: 'id',type: 'number'},
-			{ name: 'razon_social_href',type: 'string'},
-			{ name: 'razon_social',type: 'string'},
-			{ name: 'nit',type: 'string'},
-			{ name: 'telefono',type: 'number'},
-			{ name: 'celular',type: 'number'},
-			{ name: 'correo',type: 'string'},
-			{ name: 'direccion',type: 'string'},
-			{ name: 'representante_legal',type:'string'},
-			{ name: 'ci_representante_legal',type:'string'},
-			{ name: 'celular_representante_legal',type:'number'},
-			{ name: 'correo_representante_legal',type:'string'},
-			{ name: 'nombre_ref',type:'string'},
-			{ name: 'ci_ref',type:'string'},
-			{ name: 'celular_ref',type:'celular'},
-			{ name: 'correo_ref',type:'string'},
-			{ name: 'estado',type:'string'},
-			{ name: 'foto'},
+			{ name: 'id', type: 'number' },
+			{ name: 'nro_solicitud', type: 'string' },
+			{ name: 'fecha_envio_solicitud', type: 'date' },
+			{ name: 'fecha_recepcion_solicitud', type: 'date' },
+			{ name: 'fecha_envio_recepcion', type: 'date' },
+			{ name: 'fecha_recepcion_solicitud', type: 'date' },
+			{ name: 'productos_solicitud', type: 'date' },
+			{ name: 'respuesta', type: 'string' },
+			{ name: 'fecha_envio_resp', type: 'date' },
+			{ name: 'fecha_recepcion_resp', type: 'date' },
+			{ name: 'descripcion_resp', type: 'string' },
+			{ name: 'fecha_recepcion_solicitud', type: 'date' },
+			{ name: 'descripcion_resp', type: 'string' },
+			{ name: 'cliente_id', type: 'number' },
+			{ name: 'razon_social', type: 'string' },
+			{ name: 'nit', type: 'string' },
+			{ name: 'responsable_id', type: 'number' },
+			{ name: 'responsable', type: 'string' },
+			{ name: 'representante', type: 'string' },
+			{ name: 'cargo_representante', type: 'string' },
+			{ name: 'descripcion_solicitud', type: 'string' },
 			],
-			url: '/clientes/list',
+			url: '/solicitudes/list',
 			cache: false
 		};
 		var dataAdapter = new $.jqx.dataAdapter(source);
-		// var cellclass = function (row, columnfield, value) {
-  //               if (value == 'Activo') {
-  //                   return 'green';
-  //               }else{
-  //               	return 'red';
-  //               }
-  //       }
-
 		$("#jqxgrid").jqxGrid({
 			width: '100%',
 			height: '450',
@@ -47,63 +41,58 @@ function cargar(){
 			pageable: true,
 			pagerMode: 'advanced',
 			theme: 'custom',
-			//scrollmode: 'deferred',
-			// showstatusbar: true,
 			showfilterrow: true,
 			filterable: true,
 			autorowheight: true,
-			keyboardnavigation: false,
-			scrollfeedback: function (row)
-			{
-				return '<table style="height: 80px;"><tr><td><img src="' + row.foto + '"  height="90"/></td></tr><tr><td>' + row.producto + '</td></tr></table>';
-			},
-
-			columns: [
-			{text: 'Image', datafield: 'foto', width: 100, cellsrenderer: function (row, column, value) {
-				return '<img style="margin-left: 5px;" height="70" width="100%" src="' + value + '" />';
-				}
-			},
-			{ text: 'Razón Social', columngroup: 'cliente',datafield: 'razon_social_href', filtertype: 'input',width: '15%' },
-			{ text: 'NIT', columngroup: 'cliente',datafield: 'nit', filtertype: 'input',width: '8%' },
-			{ text: 'Telefono', columngroup: 'cliente',datafield: 'telefono', filtertype: 'input',width: '8%'},
-			{ text: 'Celular', columngroup: 'cliente',datafield: 'celular', filtertype: 'input',width: '8%'},
-			{ text: 'Correo', columngroup: 'cliente',datafield: 'correo', filtertype: 'input',width: '8%'},
-			{ text: 'Dirección', columngroup: 'cliente',datafield: 'direccion', filtertype: 'input',width: '20%'},
-			{ text: 'Estado', columngroup: 'cliente',datafield: 'estado', filtertype: 'input',width: '8%'},
-			{ text: 'Representante Legal', columngroup: 'representante',datafield: 'representante_legal', filtertype: 'input',width: '10%'},
-			{ text: 'Celular', columngroup: 'representante',datafield: 'celular_representante_legal',filtertype: 'input', width: '10%' },
-			{ text: 'Correo', columngroup: 'representante',datafield: 'correo_representante_legal',filtertype: 'input', width: '10%'},
-			{ text: 'Persona Contacto', columngroup: 'contacto',datafield: 'nombre_ref', filtertype: 'input',width: '10%'},
-			{ text: 'Celular', columngroup: 'contacto',datafield: 'celular_ref',filtertype: 'input', width: '10%' },
-			{ text: 'Correo', columngroup: 'contacto',datafield: 'correo_ref',filtertype: 'input', width: '10%' },
-			],
-			columngroups: [
-			{ text: 'CLIENTE / EMPRESA', align: 'center', name: 'cliente' },
-			{ text: 'REPRESENTANTE LEGAL', align: 'center', name: 'representante' },
-			{ text: 'PERSONA DE CONTACTO', align: 'center', name: 'contacto' }
-			]
-		});
+			groupable: true,
+	columns: [
+		{
+		text: '#', sortable: false, filterable: false, editable: false,
+		groupable: false, draggable: false, resizable: false,
+		datafield: '', columntype: 'number', width: '3%',
+		cellsrenderer: function (row, column, value) {
+			return "<div style='margin:4px;'>" + (value + 1) + "</div>";
+		}
+	},
+	{ text: 'Responsable', datafield: 'responsable', filtertype: 'input',width: '17%' },
+	{ text: 'Razón Social', datafield: 'razon_social', filtertype: 'input',width: '17%' },
+	{ text: 'Nro Solicitud', datafield: 'nro_solicitud', filtertype: 'input',width: '10%' },
+	{ text: 'Representante', datafield: 'representante',filtertype: 'input', width: '15%' },
+	{ text: 'Cargo Representante', datafield: 'cargo_representante',filtertype: 'input', width: '15%' },
+	{ text: 'Desc. Solicitud', datafield: 'descripcion_solicitud',filtertype: 'input', width: '20%' },
+	{ text: 'Fecha Envio', datafield: 'fecha_envio_solicitud', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
+	{ text: 'Fecha Recepeción', datafield: 'fecha_recepcion_solicitud', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
+		],
+		// groups: ['razon_social']
+	});
 
 
 /*	Segunda Grilla*/
 var dataFields = [
-{ name: 'id', type: 'number' },
-{ name: 'nro_solicitud', type: 'string' },
-{ name: 'fecha_envio_solicitud', type: 'date' },
-{ name: 'fecha_recepcion_solicitud', type: 'date' },
-{ name: 'productos_solicitados', type: 'string' },
-{ name: 'respuesta', type: 'string' },
-{ name: 'fecha_envio_resp', type: 'date' },
-{ name: 'fecha_recepcion_resp', type: 'date' },
-{ name: 'descripcion_resp', type: 'string' },
-{ name: 'cliente_id', type: 'number' },
+{ name: 'id',type: 'number'},
+			{ name: 'contrato_id',type: 'number'},
+			{ name: 'razon_social',type: 'string'},
+			{ name: 'nit',type: 'string'},
+			{ name: 'grupo',type: 'string'},
+			{ name: 'linea',type: 'string'},
+			{ name: 'estacion',type: 'string'},
+			{ name: 'producto',type: 'string'},
+			{ name: 'contrato_id',type: 'number'},
+			{ name: 'contrato',type: 'string'},
+			{ name: 'fecha_contrato',type:'date'},
+			{ name: 'fecha_inicio',type:'date'},
+			{ name: 'fecha_fin',type:'date'},
+			{ name: 'total',type: 'number'},
+			{ name: 'deposito',type:'number'},
+			{ name: 'cobrar',type:'number'},
+			{ name: 'mora',type: 'number'},
 ];
 
 var sourceSeg =
 {
 	datafields: dataFields,
 	datatype: "json",
-	url: '/solicitudes/list',
+	url: '/planpagos/list/',
 	async: false
 };
 
@@ -111,13 +100,13 @@ var dataAdapter = new $.jqx.dataAdapter(sourceSeg);
 dataAdapter.dataBind();
 
 $("#jqxgrid").on('rowselect', function (event) {
-	$("#text_cliente").text(event.args.row.razon_social);
+	// $("#text_cliente").text(event.args.row.razon_social);
 	var id = event.args.row.id;
 	var records = new Array();
 	var length = dataAdapter.records.length;
 	for (var i = 0; i < length; i++) {
 		var record = dataAdapter.records[i];
-		if (record.cliente_id == id) {
+		if (record.contrato_id == id) {
 			records[records.length] = record;
 		}
 	}
@@ -127,91 +116,198 @@ $("#jqxgrid").on('rowselect', function (event) {
 		localdata: records
 	}
 	var adapter = new $.jqx.dataAdapter(dataSource);
-    $("#jqxgrid_solicitudes").jqxGrid({ source: adapter });
+    $("#jqxgrid_productos").jqxGrid({ source: adapter });
 });
 
-$("#jqxgrid_solicitudes").jqxGrid({
-	width: '100%',
-	height: '300',
-	source: dataAdapter,
-	sortable: true,
-	altRows: true,
-	columnsresize: true,
-	pageable: true,
-	pagerMode: 'advanced',
-	theme: 'custom',
-	showfilterrow: true,
-	// showstatusbar: true,
-	showfilterrow: true,
-	filterable: true,
-	autorowheight: true,
-	columns: [
-	{
-		text: '#', sortable: false, filterable: false, editable: false,
-		groupable: false, draggable: false, resizable: false,
-		datafield: '', columntype: 'number', width: '3%',
-		cellsrenderer: function (row, column, value) {
-			return "<div style='margin:4px;'>" + (value + 1) + "</div>";
-		}
-	},
-	{ text: 'Nro Solicitud', datafield: 'nro_solicitud', filtertype: 'input',width: '10%' },
-	{ text: 'Fecha Recepción Solicitud', datafield: 'fecha_recepcion_solicitud', filtertype: 'input',width: '10%' },
-	{ text: 'Productos Solicitados', datafield: 'productos_solicitados', filtertype: 'input',width: '40%' },
-	{ text: 'Respuesta', datafield: 'respuesta', filtertype: 'input',width: '10%' }
-	]
-});
+	var tooltiprenderer = function (element) {
+                $(element).jqxTooltip({position: 'mouse', content: $(element).text() });
+        };
+		$("#jqxgrid_productos").jqxGrid({
+
+			width: '100%',
+			height: '200',
+            source: dataAdapter,                
+            sortable: true,
+            altRows: true,
+            columnsresize: true,
+            theme: 'custom',
+            // showstatusbar: true,
+            showfilterrow: true,
+            filterable: true,
+            autorowheight: true,
+            pageable: true,
+            pagerMode: 'advanced',
+            // groupable: true,
+			columns: [
+			{
+				text: '#', sortable: false, filterable: false, editable: false,
+				groupable: false, draggable: false, resizable: false,
+				datafield: '', columntype: 'number', width: '3%',
+				cellsrenderer: function (row, column, value) {
+					return "<div style='margin:4px;'>" + (value + 1) + "</div>";
+				}
+			},
+			{ text: 'Grupo', datafield: 'grupo', filtertype: 'checkedlist',width: '10%', rendered: tooltiprenderer },
+			{ text: 'Linea', datafield: 'linea', filtertype: 'checkedlist',width: '10%' },
+			{ text: 'Estación', datafield: 'estacion', filtertype: 'checkedlist',width: '10%' },
+			// { text: 'Cliente / Razón Social', datafield: 'razon_social', filtertype: 'input',width: '10%' },
+			// { text: 'Contrato', datafield: 'contrato', filtertype: 'input',width: '5%' },
+			// { text: 'Fecha Contrato ', datafield: 'fecha_contrato', filtertype: 'range', width: '7%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
+			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '15%' },
+			{ text: 'Fecha Inicio', datafield: 'fecha_inicio', filtertype: 'range', width: '8%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
+			{ text: 'Fecha Final', datafield: 'fecha_fin', filtertype: 'range', width: '8%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
+			{ text: 'Total Bs.', datafield: 'total', filtertype: 'number', width: '9%',cellsformat: "c2", cellsalign: 'right'},
+	        { text: 'Deposito Bs.', datafield: 'deposito', filtertype: 'number', width: '9%',cellsformat: "c2", cellsalign: 'right'},
+			{ text: 'Por Cobrar Bs.', datafield: 'cobrar', filtertype: 'number',width: '9%',cellsformat: "c2", cellsalign: 'right' },
+ 			{ text: 'Mora Bs.', datafield: 'mora', filtertype: 'number', width: '9%',cellsformat: "c2", cellsalign: 'right'},
+			],
+			// groups: ['razon_social','contrato']
+		});
 
 }
-		
+
+/* ************************************************************* */	
+
+
 /*
 Crear nuevo contrato
  */
- $("#crear_solicitud").click(function(){
- 	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
- 	if (rowindex > -1)
- 	{
- 		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
- 		$("#id").val(dataRecord.id);
- 		$("#solicitud_id").val(0);
- 		$("#titulo_solicitud").text("Crear Nueva Solicitud");
- 		$("#rs").val(dataRecord.razon_social);
- 		$("#rl").val(dataRecord.representante_legal);
- 		$("#cliente_id").val(dataRecord.id);
+ $("#crear_contrato").click(function(){
+ 		$("#titulo_contrato").text("Crear Nuevo Contrato");
+ 		$("#id").val('');
+ 		$('#myModal_contrato').modal('show');
+ });
 
- 		$('#myModal_solicitud').modal('show');
- 	}
- 	else
- 	{
- 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para crear una solicitud.");
+ $("#cliente_id").change(function(){
+ 	// alert($(this).val());
+ 	if($(this).val()>0){
+ 		var v=$.ajax({
+ 			url:'/clientes/getcliente/',
+ 			type:'POST',
+ 			datatype: 'json',
+ 			data:{id:$(this).val()},
+ 			success: function(data) { 
+ 				var obj = jQuery.parseJSON(data);
+ 				$("#nit").val(obj.nit);
+ 				$("#rl").val(obj.representante_legal);
+                     },
+            error: function() { alert('Se ha producido un error Inesperado'); 
+                  }
+
+              });
  	}
  });
 
  /*
- guardar solicitud
+ Editar Contrato Creado
   */
-  $("#testForm_solicitud").submit(function() {
-  	var v=$.ajax({
-  		url:'/solicitudes/save/',
-  		type:'POST',
-  		datatype: 'json',
-  		data:{solicitud_id:$("#solicitud_id").val(),cliente_id:$("#cliente_id").val(),nro_solicitud:$("#nro_solicitud").val(),fecha_envio_solicitud:$("#fecha_envio_solicitud").val(),fecha_recepcion_solicitud:$("#fecha_recepcion_solicitud").val(),responsable_id:$("#responsable_id").val(),representante:$("#representante").val(),cargo_representante:$("#cargo_representante").val(),descripcion_solicitud:$("#descripcion_solicitud").val()},
-  		success: function(data) { 
-  				cargar();
-  				$("#divMsjeExito").show();
-  				$("#divMsjeExito").addClass('alert alert-info alert-dismissable');
-  				$("#aMsjeExito").html('Guardado Correctamente'); 
+$("#edit_contrato").click(function(){
+	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+ 	if (rowindex > -1)
+ 	{
+ 		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
 
+ 		$("#contrato_id").val(dataRecord.id);
+ 		$("#titulo_contrato").text("Editar Contrato");
+ 		$("#rs").val(dataRecord.razon_social);
+ 		$("#rl").val(dataRecord.representante_legal);
+ 		$("#contrato").val(dataRecord.contrato);
+ 		$("#descripcion").val(dataRecord.descripcion);
+ 		var fc = $.jqx.dataFormat.formatdate(dataRecord.fecha_contrato, 'dd-MM-yyyy');
+ 		$("#fecha_contrato").val(fc);
+ 		$("#cliente_id").val(dataRecord.cliente_id);
+ 		$('#cliente_id').trigger("chosen:updated");
+ 		$("#nit").val(dataRecord.nit);
+ 		$("#responsable_id").val(dataRecord.responsable_id);
+ 		$('#myModal_contrato').modal('show');
+ 	}
+ 	else
+ 	{
+ 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para editar contrato.");
+ 	}
+});
+
+
+/*
+Ver Productod del Contrato
+ */
+$("#ver_productos").click(function(){
+	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+ 	if (rowindex > -1)
+ 	{
+ 		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
+ 		var url = "/contratos/crear/"+dataRecord.id;    
+		$(location).attr('href',url);	
+ 	}
+ 	else
+ 	{
+ 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro.");
+ 	}
+});
+
+/*
+Eliminar Contrato
+ */
+$("#delete_contrato").click(function(){
+	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+ 	if (rowindex > -1)
+ 	{
+ 		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
+ 		if (dataRecord.num_productos==0) {
+ 			bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de eliminar el registro.", function(result) {
+                if (result == true) {
+                    var v = $.ajax({
+                        url: '/contratos/deletecontrato/',
+                        type: 'POST',
+                        datatype: 'json',
+                        data: {id: dataRecord.id},
+                        success: function(data) {
+                            cargar(); //alert('Guardado Correctamente'); 
+                            $("#divMsjeExito2").show();
+                    		$("#divMsjeExito2").addClass('alert alert-warning alert-dismissable');
+                    		$("#aMsjeExito2").html(data); 
+                        }, //mostramos el error
+                        error: function() {
+                            alert('Se ha producido un error Inesperado');
+                        }
+                    });
+                }
+            });
+ 		}else{
+			bootbox.alert("<strong>¡Mensaje!</strong> No puede eliminar el contrato por que tiene productos agregados."); 			
+ 		}
+ 	}
+ 	else
+ 	{
+ 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para eliminar.");
+ 	}
+});
+
+/*
+guardar 
+ */
+$("#testForm_contrato").submit(function() {
+	var v=$.ajax({
+            	url:'/contratos/savecontrato/',
+            	type:'POST',
+            	datatype: 'json',
+            	data:{contrato_id:$("#contrato_id").val(),cliente_id:$("#cliente_id").val(),contrato:$("#contrato").val(),fecha_contrato:$("#fecha_contrato").val(),arrendador:$("#arrendador").val(),arrendador_rep_legal:$("#arrendador_rep_legal").val(),arrendador_cargo:$("#arrendador_cargo").val(),descripcion:$("#descripcion").val(),dias_tolerancia:$("#dias_tolerancia").val(),porcentaje_mora:$("#porcentaje_mora").val(),responsable_id:$("#responsable_id").val()},
+				success: function(data) { 
+						cargar();
+						$("#divMsjeExito").show();
+                    	$("#divMsjeExito").addClass('alert alert-info alert-dismissable');
+                    	$("#aMsjeExito").html(data); 
+					
 				}, //mostramos el error
-				error: function() { alert('Se ha producido un error Inesperado'); }
+			error: function() { alert('Se ha producido un error Inesperado'); }
 			});
-  			$('#myModal_solicitud').modal('hide');
-            return false;
-    });
+            $('#myModal_contrato').modal('hide');
+            return false; // ajax used, block the normal submit
+	});
+
+$("#fecha_contrato").datepicker({
+						autoclose:true,
+	});
 
 
-// $("#fecha_envio_solicitud, #fecha_recepcion_solicitud").datepicker({
-// 	autoclose:true,
-// });
-$(".input-daterange").datepicker({weekStart:1});
-$(".input-datepicker-close").datepicker({weekStart:1}).on("changeDate",function(){$(this).datepicker("hide")});
 })

@@ -45,11 +45,11 @@ class Contratos extends \Phalcon\Mvc\Model
 	public function listadocontratos()
 	{
 		$sql = "SELECT c.*, CONCAT(COALESCE(u.paterno,' '),' ',COALESCE(u.materno,' '),' ',COALESCE(u.nombre,' ')) as responsable,
-		(SELECT COUNT(cp.id)
-			FROM contratosproductos cp 
-			WHERE cp.baja_logica = 1 AND cp.contrato_id = c.id) as num_productos
+		(SELECT COUNT(cp.id) FROM contratosproductos cp WHERE cp.baja_logica = 1 AND cp.contrato_id = c.id) as num_productos,
+	cl.razon_social
 FROM contratos c
 INNER JOIN usuarios u ON c.responsable_id = u.id
+INNER JOIN clientes cl ON c.cliente_id = cl.id
 WHERE c.baja_logica = 1
 ORDER BY c.fecha_contrato DESC ";
 $this->_db = new Contratos();

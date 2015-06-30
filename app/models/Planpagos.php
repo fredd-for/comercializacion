@@ -12,7 +12,7 @@ class Planpagos extends \Phalcon\Mvc\Model
 		if ($cliente_id!='') {
 			$where = ' AND cl.id = '.$cliente_id;
 		}
-		$sql = "SELECT cl.razon_social,c.cliente_id,c.contrato,c.fecha_contrato,c.descripcion,c.porcentaje_mora,p.producto,p.codigo,g.grupo,e.estacion,l.linea,cp.*,
+		$sql = "SELECT cl.razon_social,cl.nit,c.cliente_id,c.contrato,c.fecha_contrato,c.descripcion,c.porcentaje_mora,p.producto,p.codigo,g.grupo,e.estacion,l.linea,cp.*,
 		(SELECT SUM(ppd.monto_deposito)
 			FROM planpagos pp,planpagodepositos ppd
 			WHERE pp.contratoproducto_id = cp.id AND pp.baja_logica =1 AND pp.id = ppd.planpago_id AND ppd.baja_logica=1 AND ppd.tipo_deposito =1

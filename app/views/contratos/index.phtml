@@ -33,6 +33,12 @@
 							<div id="jqxgrid" style="height: 550px; width: 100%;" ></div>
 						</div>
 					</div>
+					<br>
+					<div class="row">
+						<div class="col-md-12">
+							<div id="jqxgrid_productos" style="height: 200px; width: 100%;" ></div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -45,7 +51,7 @@
 		<div class="modal-content">
 			<form class="form-horizontal" id="testForm_contrato" data-toggle="validator" action="" method="post" />
 			<!-- <input type="hidden" name="cliente_id" id="cliente_id"> -->
-			<input type="hidden" name="id" id="id">
+			<input type="hidden" name="contrato_id" id="contrato_id">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 				<h4 class="modal-title" id="titulo_contrato">Editar</h4>
@@ -84,6 +90,12 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="col-md-4 control-label">NIT.</label>
+					<div class="col-md-8">
+						<input type="text" name="nit" id="nit" class="form-control" placeholder="" readonly>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="col-md-4 control-label">Representante Legal</label>
 					<div class="col-md-8">
 						<input type="text" name="rl" id="rl" class="form-control" placeholder="" readonly>
@@ -109,7 +121,7 @@
 					</div>
 				</div>
 				<div class="form-group" >
-					<label class="col-md-4 control-label">Toleracia (dias)</label>
+					<label class="col-md-4 control-label">Tolerancia (dias)</label>
 					<div class="col-md-2">
 						<input type="text" name="dias_tolerancia" id="dias_tolerancia" class="form-control" placeholder="" required value="5">
 					</div>

@@ -9,6 +9,7 @@ class SolicitudesController extends ControllerBase
 		$this->assets
                 ->addCss('/jqwidgets/styles/jqx.base.css')
                 ->addCss('/jqwidgets/styles/jqx.custom.css')
+                ->addCss('/assets/css/plugins.css')
                 // ->addCss('/js/fileinput/css/fileinput.min.css')
                 ;
         $this->assets
@@ -35,15 +36,11 @@ class SolicitudesController extends ControllerBase
                 ->addJs('/jqwidgets/globalization/globalize.js')
                 ->addJs('/jqwidgets/jqxgrid.aggregates.js')
                 ->addJs('/media/plugins/bootbox/bootbox.min.js')
-                // ->addJs('/media/plugins/form-validation/jquery.validate.min.js')
-                // ->addJs('/media/plugins/form-stepy/jquery.stepy.js')
-        		// ->addJs('/media/demo/demo-formwizard.js')
+                ->addJs('/jqwidgets/jqxtooltip.js')
+                ->addJs('/assets//js/plugins.js')
+                ->addJs('/assets/js/app.js')
+                ->addJs('/js/app.plugin.js')
                 ->addJs('/scripts/solicitudes/index.js')
-                // ->addJs('/assets/js/plugins.js')
-                // ->addJs('/js/datepicker/bootstrap-datepicker.js')
-                // ->addJs('/assets/js/pages/formsValidation.js')
-                // ->addJs('/js/fileinput/js/fileinput.min.js')
-                // ->addJs('/scripts/productos/galeria.js')
         ;
 
         $model = new Usuarios();
@@ -61,16 +58,35 @@ class SolicitudesController extends ControllerBase
         		)
         	);
         $this->view->setVar('responsable',$responsable);
+
+        $resul = Clientes::find(array('baja_logica=1','order' => 'razon_social ASC'));
+        $clientes = $this->tag->select(
+            array(
+                'cliente_id',
+                $resul,
+                'using' => array('id', 'razon_social'),
+                'useEmpty' => true,
+                'emptyText' => '(Selecionar)',
+                'emptyValue' => '',
+                'class' => 'form-control select-chosen',
+                'required' => 'required'
+                )
+            );
+        $this->view->setVar('clientes',$clientes);
+
 	}
 
 	public function listAction()
 	{
 		$this->view->disable();
-		$resul = Solicitudes::find(array('baja_logica=1','order'=>'id ASC'));
+		$model = new Solicitudes();
+		$resul = $model->lista();
 		foreach ($resul as $v) {
 			$customers[] = array(
 				'id' => $v->id,
 				'nro_solicitud' => $v->nro_solicitud,
+				'fecha_envio_solicitud' => $v->fecha_envio_solicitud,
+				'fecha_recepcion_solicitud' => $v->fecha_recepcion_solicitud,
 				'fecha_envio_recepcion' => $v->fecha_envio_recepcion,
 				'fecha_recepcion_solicitud' => $v->fecha_recepcion_solicitud,
 				'productos_solicitud' => $v->productos_solicitud,
@@ -81,6 +97,13 @@ class SolicitudesController extends ControllerBase
 				'fecha_recepcion_solicitud' => $v->fecha_recepcion_solicitud,
 				'descripcion_resp' => $v->descripcion_resp,
 				'cliente_id' => $v->cliente_id,
+				'razon_social' => $v->razon_social,
+				'nit' => $v->nit,
+				'responsable_id' => $v->responsable_id,
+				'responsable' => $v->responsable,
+				'representante' => $v->representante,
+				'cargo_representante' => $v->cargo_representante,
+				'descripcion_solicitud' => $v->descripcion_solicitud,
 				);
 		}
 		echo json_encode($customers);
