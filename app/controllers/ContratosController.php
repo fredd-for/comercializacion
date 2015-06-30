@@ -46,6 +46,42 @@ class ContratosController extends ControllerBase
                 
                 ->addJs('/scripts/contratos/index.js')
         ;
+
+        $empresa= Empresas::findFirst(array('baja_logica=1'));
+        $this->view->setVar('empresa',$empresa);
+
+        //$model = usuarios::find(array('habilitado=1 and nivel=3',"order"=>"paterno ASC"));
+        $model = new Usuarios();
+        $resul = $model->responsablecomercial();
+        $responsable = $this->tag->select(
+            array(
+                'responsable_id',
+                $resul,
+                'using' => array('id', 'nombres'),
+                'useEmpty' => true,
+                'emptyText' => '(Selecionar)',
+                'emptyValue' => '',
+                'class' => 'form-control',
+                'required' => 'required'
+                )
+            );
+        $this->view->setVar('responsable',$responsable);
+
+        $resul = Clientes::find(array('baja_logica=1','order' => 'razon_social ASC'));
+        $clientes = $this->tag->select(
+            array(
+                'cliente_id',
+                $resul,
+                'using' => array('id', 'razon_social'),
+                'useEmpty' => true,
+                'emptyText' => '(Selecionar)',
+                'emptyValue' => '',
+                'class' => 'form-control select-chosen',
+                'required' => 'required'
+                )
+            );
+        $this->view->setVar('clientes',$clientes);
+
 	}
 
     // public function listAction()

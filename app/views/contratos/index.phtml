@@ -14,6 +14,15 @@
 				<div class="tab-content">
 					<div class="row">
 						<div class="col-md-12">
+						<div class="pull-left">
+								<button class="btn btn-sm btn-default" type="button" id="ver_productos"><i class="fa fa-pencil fa-fw"></i> Ver Productos</button>
+								<?php if ($user->nivel==2) { ?>
+								<button class="btn btn-sm btn-primary" type="button" id="crear_contrato"><i class="fa fa-plus fa-fw"></i>Crear Contrato</button>	
+								<button class="btn btn-sm btn-warning" type="button" id="edit_contrato"><i class="fa fa-pencil fa-fw"></i> Editar</button>
+								<button class="btn btn-sm btn-danger" type="button" id="delete_contrato"><i class="fa fa-trash-o fa-fw"></i> Eliminar</button>
+								<?php } ?>
+							</div>
+							
 							<div class="pull-right">
 								<a href="/contratos/reporte" class="btn btn-sm btn-primary"><i class="fa fa-download"></i> Reporte</a>
 							</div>
@@ -30,3 +39,92 @@
 	</div>
 </div>
 
+<!-- Modal Crear Contrato -->
+<div class="modal fade" id="myModal_contrato" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form class="form-horizontal" id="testForm_contrato" data-toggle="validator" action="" method="post" />
+			<!-- <input type="hidden" name="cliente_id" id="cliente_id"> -->
+			<input type="hidden" name="id" id="id">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title" id="titulo_contrato">Editar</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<div class="col-md-12">
+						<h5 align="center"><?php echo $empresa->empresa ?></h5>
+						<input type="hidden" name="arrendador" id="arrendador" value="<?php echo $empresa->empresa ?>" >
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label">Representante Legal</label>
+					<div class="col-md-8">
+						<?php echo $empresa->representante_legal.' <br> <span>'.$empresa->cargo.'</span>';  ?>
+						<input type="hidden" name="arrendador_rep_legal" id="arrendador_rep_legal" value="<?php echo $empresa->representante_legal ?>" class="form-control" placeholder="" required readonly>
+						<input type="hidden" name="arrendador_cargo" id="arrendador_cargo" value="<?php echo $empresa->cargo ?>" class="form-control" placeholder="" required readonly>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label">Responsable Comercial</label>
+					<div class="col-md-8">
+						<?php echo $responsable ?>
+					</div>
+				</div>
+				<hr>
+				<div class="form-group">
+					<div class="col-md-12">
+						<h5 align="center">CLIENTE / EMPRESA</h5>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label">Razón Social</label>
+					<div class="col-md-8">
+						<?php echo $clientes; ?>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label">Representante Legal</label>
+					<div class="col-md-8">
+						<input type="text" name="rl" id="rl" class="form-control" placeholder="" readonly>
+					</div>
+				</div>
+				<hr>
+				<div class="form-group">
+					<label class="col-md-4 control-label">Nro Contrato</label>
+					<div class="col-md-8">
+						<input type="text" name="contrato" id="contrato" class="form-control" placeholder="000/2015" required>
+					</div>
+				</div>
+				<div class="form-group" >
+					<label class="col-md-4 control-label">Descripción</label>
+					<div class="col-md-8">
+						<textarea name="descripcion" id="descripcion" class="form-control"></textarea>
+					</div>
+				</div>
+				<div class="form-group" >
+					<label class="col-md-4 control-label">Fecha Contrato</label>
+					<div class="col-md-8">
+						<input type="text" id="fecha_contrato" name="fecha_contrato" class="form-control" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" required/>
+					</div>
+				</div>
+				<div class="form-group" >
+					<label class="col-md-4 control-label">Toleracia (dias)</label>
+					<div class="col-md-2">
+						<input type="text" name="dias_tolerancia" id="dias_tolerancia" class="form-control" placeholder="" required value="5">
+					</div>
+					<label class="col-md-4 control-label">Interes por Mora (%)</label>
+					<div class="col-md-2">
+						<input type="text" name="porcentaje_mora" id="porcentaje_mora" class="form-control" placeholder="" required value="3">
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				<button type="submit" class="btn btn-primary" id="Save">Guardar</button>
+			</div>
+		</form>
+	</div>
+</div>
+</div>
+<!-- end  modal -->
