@@ -1,4 +1,3 @@
-=======
 -- MySQL dump 10.13  Distrib 5.5.43, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: bd_comercial
@@ -835,5 +834,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-07-01  9:13:41
->>>>>>> 0b3df85ef2be89b3a0beba74859e5f14ac59ec56
+-- Dump completed on 2015-07-01  9:21:15
