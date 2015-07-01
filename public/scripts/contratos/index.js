@@ -68,7 +68,6 @@ var dataFields = [
 			{ name: 'linea',type: 'string'},
 			{ name: 'estacion',type: 'string'},
 			{ name: 'producto',type: 'string'},
-			{ name: 'contrato_id',type: 'number'},
 			{ name: 'contrato',type: 'string'},
 			{ name: 'fecha_contrato',type:'date'},
 			{ name: 'fecha_inicio',type:'date'},
@@ -254,9 +253,9 @@ $("#delete_contrato").click(function(){
                         data: {id: dataRecord.id},
                         success: function(data) {
                             cargar(); //alert('Guardado Correctamente'); 
-                            $("#divMsjeExito2").show();
-                    		$("#divMsjeExito2").addClass('alert alert-warning alert-dismissable');
-                    		$("#aMsjeExito2").html(data); 
+                            $("#divMsjeExito").show();
+                    		$("#divMsjeExito").addClass('alert alert-warning alert-dismissable');
+                    		$("#aMsjeExito").html(data); 
                         }, //mostramos el error
                         error: function() {
                             alert('Se ha producido un error Inesperado');

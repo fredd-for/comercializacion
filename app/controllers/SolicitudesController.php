@@ -85,16 +85,12 @@ class SolicitudesController extends ControllerBase
 			$customers[] = array(
 				'id' => $v->id,
 				'nro_solicitud' => $v->nro_solicitud,
-				'fecha_envio_solicitud' => $v->fecha_envio_solicitud,
-				'fecha_recepcion_solicitud' => $v->fecha_recepcion_solicitud,
-				'fecha_envio_recepcion' => $v->fecha_envio_recepcion,
-				'fecha_recepcion_solicitud' => $v->fecha_recepcion_solicitud,
+				'fecha_envio_solicitud' => $v->fecha_envio_solicitud.' 00:00:00',
+				'fecha_recepcion_solicitud' => $v->fecha_recepcion_solicitud.' 00:00:00',
 				'productos_solicitud' => $v->productos_solicitud,
 				'respuesta' => $v->respuesta,
 				'fecha_envio_resp' => $v->fecha_envio_resp,
 				'fecha_recepcion_resp' => $v->fecha_recepcion_resp,
-				'descripcion_resp' => $v->descripcion_resp,
-				'fecha_recepcion_solicitud' => $v->fecha_recepcion_solicitud,
 				'descripcion_resp' => $v->descripcion_resp,
 				'cliente_id' => $v->cliente_id,
 				'razon_social' => $v->razon_social,
@@ -104,6 +100,7 @@ class SolicitudesController extends ControllerBase
 				'representante' => $v->representante,
 				'cargo_representante' => $v->cargo_representante,
 				'descripcion_solicitud' => $v->descripcion_solicitud,
+				'num_productos' => $v->num_productos,
 				);
 		}
 		echo json_encode($customers);
@@ -115,8 +112,8 @@ class SolicitudesController extends ControllerBase
 		if ($this->request->isPost()) {
 			$fecha_envio_solicitud = date("Y-m-d",strtotime($this->request->getPost('fecha_envio_solicitud')));
 			$fecha_recepcion_solicitud = date("Y-m-d",strtotime($this->request->getPost('fecha_recepcion_solicitud')));
-			if ($_POST['solicitud_id']>0) {
-				$resul = Solicitudes::findFirstById($_POST['solicitud_id']);
+			if ($_POST['id']>0) {
+				$resul = Solicitudes::findFirstById($_POST['id']);
 				$resul->nro_solicitud = $this->request->getPost('nro_solicitud');
 				$resul->fecha_envio_solicitud = $fecha_envio_solicitud;
 				$resul->fecha_recepcion_solicitud = $fecha_recepcion_solicitud;
@@ -124,6 +121,7 @@ class SolicitudesController extends ControllerBase
 				$resul->representante = $this->request->getPost('representante');
 				$resul->cargo_representante = $this->request->getPost('cargo_representante');
 				$resul->descripcion_solicitud = $this->request->getPost('descripcion_solicitud');
+				$resul->cliente_id = $this->request->getPost('cliente_id');
 				if ($resul->save()) {
 					$msm = 'Exito: Se guardo correctamente';
 				}else{
@@ -153,4 +151,16 @@ class SolicitudesController extends ControllerBase
 		$this->view->disable();
 		echo $msm;
 	}
+
+	public function deleteAction(){
+        $resul = Solicitudes::findFirstById($this->request->getPost('id'));
+        $resul->baja_logica = 0;
+        if ($resul->save()) {
+                    $msm ='Exito: Se elimino correctamente';
+                }else{
+                    $msm = 'Error: No se guardo el registro';
+                }
+        $this->view->disable();
+        echo $msm;
+    }
 }
