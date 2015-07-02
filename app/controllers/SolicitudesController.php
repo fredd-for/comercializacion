@@ -101,6 +101,7 @@ class SolicitudesController extends ControllerBase
 				'cargo_representante' => $v->cargo_representante,
 				'descripcion_solicitud' => $v->descripcion_solicitud,
 				'num_productos' => $v->num_productos,
+				'estado' => $v->valor_1,
 				);
 		}
 		echo json_encode($customers);
@@ -141,6 +142,7 @@ class SolicitudesController extends ControllerBase
 				$resul->usuario_reg = $this->_user->id;
 				$resul->fecha_reg = date("Y-m-d H:i:s");
 				$resul->baja_logica = 1;
+				$resul->estado = 1;
 				if ($resul->save()) {
 					$msm = 'Exito: Se guardo correctamente';
 				}else{
