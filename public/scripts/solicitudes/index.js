@@ -24,6 +24,7 @@ $(document).ready(function (){
 			{ name: 'descripcion_solicitud', type: 'string' },
 			{ name: 'num_productos', type: 'number' },
 			{ name: 'estado', type: 'string' },
+			{ name: 'accion', type: 'string' },
 			],
 			url: '/solicitudes/list',
 			cache: false
@@ -55,11 +56,12 @@ $(document).ready(function (){
 			{ text: 'Responsable', datafield: 'responsable', filtertype: 'input',width: '17%' },
 			{ text: 'Razón Social', datafield: 'razon_social', filtertype: 'input',width: '17%' },
 			{ text: 'Nro Solicitud', datafield: 'nro_solicitud', filtertype: 'input',width: '8%' },
-			{ text: 'Representante', datafield: 'representante',filtertype: 'input', width: '15%' },
+			{ text: 'Representante', datafield: 'representante',filtertype: 'input', width: '10%' },
 			{ text: 'Cargo Representante', datafield: 'cargo_representante',filtertype: 'input', width: '15%' },
 			{ text: 'Fecha Envio', datafield: 'fecha_envio_solicitud', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
 			{ text: 'Fecha Recepeción', datafield: 'fecha_recepcion_solicitud', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
 			{ text: 'Estado', datafield: 'estado',filtertype: 'input', width: '5%' },
+			{ text: '', datafield: 'accion', filtertype: 'input',width: '5%',cellsalign: 'center',align:'center'},
 			],
 		// groups: ['razon_social']
 	});
@@ -265,17 +267,52 @@ $("#testForm").submit(function() {
 			$("#divMsjeExito").show();
 			$("#divMsjeExito").addClass('alert alert-info alert-dismissable');
 			$("#aMsjeExito").html(data); 
-
-				}, //mostramos el error
-				error: function() { alert('Se ha producido un error Inesperado'); }
-			});
+		},
+		error: function() { alert('Se ha producido un error Inesperado'); }
+	});
 	$('#myModal').modal('hide');
-            return false; // ajax used, block the normal submit
-        });
+	return false;
+});
 
-$("#fecha_envio_solicitud,#fecha_recepcion_solicitud").datepicker({
-	autoclose:true,
+/*
+Guardar Respuesta
+ */
+$("#testForm_respuesta").submit(function() {
+	var v=$.ajax({
+		url:'/solicitudes/saverespuesta/',
+		type:'POST',
+		datatype: 'json',
+		data:{id:$("#id").val(),fecha_envio_resp:$("#fecha_envio_resp").val(),fecha_recepcion_resp:$("#fecha_recepcion_resp").val(),descripcion_resp:$("#descripcion_resp").val(),estado:$("#estado").val(),respuesta:$( "#estado option:selected" ).text()},
+		success: function(data) { 
+			cargar();
+			$("#divMsjeExito").show();
+			$("#divMsjeExito").addClass('alert alert-info alert-dismissable');
+			$("#aMsjeExito").html(data); 
+		},
+		error: function() { alert('Se ha producido un error Inesperado'); }
+	});
+	$('#myModal_respuesta').modal('hide');
+	return false;
 });
 
 
+// $("#fecha_envio_solicitud,#fecha_recepcion_solicitud, #fecha_envio_resp,#fecha_recepcion_resp").datepicker({
+// 	autoclose:true,
+// });
+$(".input-daterange").datepicker({weekStart:1});
+$(".input-datepicker-close").datepicker({weekStart:1}).on("changeDate",function(){$(this).datepicker("hide")})
+
 })
+
+var respuesta = function (row) {
+	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+	if (rowindex > -1) {
+		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
+		$("#id").val(dataRecord.id);
+		$("#razon_social_text").text(dataRecord.razon_social);
+		$("#nro_solicitud_text").text(dataRecord.nro_solicitud);
+		$('#myModal_respuesta').modal('show');
+	}else{
+		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para editar.");
+	}
+};

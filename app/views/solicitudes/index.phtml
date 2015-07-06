@@ -4,17 +4,17 @@
 			<div class="panel-heading">
 				<h4>Lista de Solicitudes</h4>
 				<div class="options">
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#domshortcuttiles"><i class="fa fa-users"></i></a></li>
-                        <li><a data-toggle="tab" href="#codeshortcuttiles"><i class="fa fa-code"></i></a></li>
-                    </ul>
-                </div>
+					<ul class="nav nav-tabs">
+						<li class="active"><a data-toggle="tab" href="#domshortcuttiles"><i class="fa fa-users"></i></a></li>
+						<li><a data-toggle="tab" href="#codeshortcuttiles"><i class="fa fa-code"></i></a></li>
+					</ul>
+				</div>
 			</div>
 			<div class="panel-body">
 				<div class="tab-content">
 					<div class="row">
 						<div class="col-md-12">
-						<div class="pull-left">
+							<div class="pull-left">
 								<button class="btn btn-sm btn-default" type="button" id="ver_productos"><i class="fa fa-pencil fa-fw"></i>  Productos</button>
 								<?php if ($user->nivel==2) { ?>
 								<button class="btn btn-sm btn-primary" type="button" id="add"><i class="fa fa-plus fa-fw"></i>Crear Solicitud</button>	
@@ -93,18 +93,23 @@
 						<input type="text" name="cargo_representante" id="cargo_representante" class="form-control" placeholder="" required>
 					</div>
 				</div>
-				<div class="form-group" >
-					<label class="col-md-4 control-label">Fecha Envio</label>
-					<div class="col-md-8">
-						<input type="text" id="fecha_envio_solicitud" name="fecha_envio_solicitud" class="form-control" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" required/>
+				
+				<div class="input-daterange" data-date-format="dd-mm-yyyy">
+					<div class="form-group" >
+						<label class="col-md-4 control-label">Fecha Envio</label>
+						<div class="col-md-8">
+							<input type="text" id="fecha_envio_solicitud" name="fecha_envio_solicitud" class="form-control input-datepicker-close" placeholder="dd-mm-yyyy" required/>
+						</div>
+					</div>
+					<div class="form-group" >
+						<label class="col-md-4 control-label">Fecha Recepción</label>
+						<div class="col-md-8">
+							<input type="text" id="fecha_recepcion_solicitud" name="fecha_recepcion_solicitud" class="form-control input-datepicker-close" placeholder="dd-mm-yyyy" required/>
+						</div>
 					</div>
 				</div>
-				<div class="form-group" >
-					<label class="col-md-4 control-label">Fecha Recepción</label>
-					<div class="col-md-8">
-						<input type="text" id="fecha_recepcion_solicitud" name="fecha_recepcion_solicitud" class="form-control" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" required/>
-					</div>
-				</div>
+
+				
 				<div class="form-group" >
 					<label class="col-md-4 control-label">Descripción Solicitud</label>
 					<div class="col-md-8">
@@ -121,3 +126,70 @@
 </div>
 </div>
 <!-- end  modal -->
+
+<!-- Modal Crear Contrato -->
+<div class="modal fade" id="myModal_respuesta" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form class="form-horizontal" id="testForm_respuesta" data-toggle="validator" action="" method="post" />
+			<!-- <input type="hidden" name="id" id="id"> -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title" id="titulo_respuesta">Respuesta a la Solicitud</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label class="col-md-4 control-label">Cliente / Razon Social</label>
+					<div class="col-md-8">
+						<p class="form-control-static" id="razon_social_text"></p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label">Nro Solicitud</label>
+					<div class="col-md-8">
+						<p class="form-control-static" id="nro_solicitud_text"></p>
+					</div>
+				</div>
+				<hr>
+				<div class="form-group">
+					<label class="col-md-4 control-label">Respuesta</label>
+					<div class="col-md-8">
+						<?php echo $estado ?>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label">Descripción Respuesta</label>
+					<div class="col-md-8">
+						<textarea class="form-control" name="descripcio_resp" id="descripcio_resp"></textarea>
+					</div>
+				</div>
+				<div class="input-daterange" data-date-format="dd-mm-yyyy">
+					<div class="form-group" >
+						<label class="col-md-4 control-label">Fecha Envio Respuesta</label>
+						<div class="col-md-8">
+							<input type="text" id="fecha_envio_resp" name="fecha_envio_resp" class="form-control input-datepicker-close" placeholder="dd-mm-yyyy" required/>
+						</div>
+					</div>
+					<div class="form-group" >
+						<label class="col-md-4 control-label">Fecha Recepción Respuesta</label>
+						<div class="col-md-8">
+							<input type="text" id="fecha_recepcion_resp" name="fecha_recepcion_resp" class="form-control input-datepicker-close" placeholder="dd-mm-yyyy"/>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				<button type="submit" class="btn btn-primary" id="Save">Guardar</button>
+			</div>
+		</form>
+	</div>
+</div>
+</div>
+<!-- end  modal -->
+<style type="text/css">
+	.datepicker{
+		z-index:1151 !important;
+	}
+</style>

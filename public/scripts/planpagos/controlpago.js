@@ -251,44 +251,6 @@ function devolucion(){
 			{ text: 'Fecha Deposito', datafield: 'fecha_deposito', filtertype: 'range', width: '20%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
 			{ text: 'Monto Depositado', datafield: 'monto_deposito', filtertype: 'input',width: '30%', cellsformat: 'c2',cellsalign: 'right',align:'center'},
 			{ text: '', datafield: 'accion', filtertype: 'input',width: '10%',cellsalign: 'center',align:'center'},
-			// { text: '', datafield: 'edit', columntype: 'button',width: '10%', cellsrenderer: function () {
-   //                   return 'Editar';
-   //                }, buttonclick: function (row) {
-   //                   editrow = row;
-   //                   var offset = $("#jqxgrid_devolucion").offset();
-   //                   var dataRecord = $("#jqxgrid_devolucion").jqxGrid('getrowdata', editrow);
-   //                   // var dataRecord = $("#jqxgrid_garantia").jqxGrid('getrowdata', rowindex);
-			//  		$("#garantia_id").val(dataRecord.id);
-			//  		$("#tipo").val(dataRecord.tipo);
-			//  		var fe = $.jqx.dataFormat.formatdate(dataRecord.fecha_deposito, 'dd-MM-yyyy');
-			//  		$("#fecha_deposito_derechollave").val(fe);
-			//  		$("#nro_deposito_derechollave").val(dataRecord.nro_deposito);
-			//  		$("#monto_deposito_derechollave").val(dataRecord.monto_deposito);
-			//  		$('#myModal_derechollave').modal('show');
-   //               }
-   //          },
-			// { text: '', datafield: 'delete', columntype: 'button',width: '10%', cellsrenderer: function () {
-   //                   return 'Eliminar';
-   //                }, buttonclick: function (row) {
-   //                   editrow = row;
-   //                   var offset = $("#jqxgrid_devolucion").offset();
-   //                   var dataRecord = $("#jqxgrid_devolucion").jqxGrid('getrowdata', editrow);
-   //                   bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de eliminar el deposito?.", function(result) {
-			// 			if (result==true) {
-			// 				var v=$.ajax({
-			// 					url:'/planpagos/deletegarantia/',
-			// 					type:'POST',
-			// 					datatype: 'json',
-			// 					data:{id:dataRecord.id},
-			// 					success: function(data) { 
-			// 						devolucion();
-			// 					},
-			// 					error: function() { alert('Se ha producido un error Inesperado'); }
-			// 				});
-			// 			}
-			// 		});
-   //               }
-   //          },
 			]
 		});
 }

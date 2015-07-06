@@ -197,13 +197,28 @@ $("#add_solicitud").click(function() {
  	if (rowindex > -1)
  	{
  		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
+ 		// alert(dataRecord.id);
+ 		var v = $.ajax({
+ 			url: '/solicitudesproductos/clientesolicitud/',
+ 			type: 'POST',
+ 			datatype: 'json',
+ 			data: {producto_id: dataRecord.id},
+ 			success: function(data) {
+ 						$("#table_solicitudes").html(data); 
+                        }, //mostramos el error
+                        error: function() {
+                        	alert('Se ha producido un error Inesperado');
+                        }
+        });
  		// if (dataRecord.cantidad>0) {
  			$("#producto_id").val(dataRecord.id);
  			$("#titulo").text("Añadir Producto a la Solicitud");
-
+ 			// $("#imagen_producto").text(dataRecord.foto);
+ 			$("#imagen").text("");
+ 			$("#imagen").append("<img id='theImg' height='100' src='"+dataRecord.foto+"'/>");
  			$("#estacion").val(dataRecord.estacion);
  			$("#grupo").val(dataRecord.grupo);
- 			$("#producto").val(dataRecord.producto);
+ 			$("#producto").val(dataRecord.codigo+" "+dataRecord.producto);
  			$("#cantidad").val(1);
  			$("#tiempo").val(dataRecord.tiempo);
  			$("#precio_unitario").val(dataRecord.precio_unitario);

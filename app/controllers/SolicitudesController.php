@@ -37,9 +37,9 @@ class SolicitudesController extends ControllerBase
                 ->addJs('/jqwidgets/jqxgrid.aggregates.js')
                 ->addJs('/media/plugins/bootbox/bootbox.min.js')
                 ->addJs('/jqwidgets/jqxtooltip.js')
-                ->addJs('/assets//js/plugins.js')
-                ->addJs('/assets/js/app.js')
-                ->addJs('/js/app.plugin.js')
+                // ->addJs('/assets//js/plugins.js')
+                // ->addJs('/assets/js/app.js')
+                // ->addJs('/js/app.plugin.js')
                 ->addJs('/scripts/solicitudes/index.js')
         ;
 
@@ -74,6 +74,21 @@ class SolicitudesController extends ControllerBase
             );
         $this->view->setVar('clientes',$clientes);
 
+        $resul = Parametros::find(array('parametro="solicitudes_estados" AND baja_logica=1 AND nivel>1','order' => 'nivel ASC'));
+        $estado = $this->tag->select(
+            array(
+                'estado',
+                $resul,
+                'using' => array('nivel', 'valor_1'),
+                'useEmpty' => true,
+                'emptyText' => '(Selecionar)',
+                'emptyValue' => '',
+                'class' => 'form-control',
+                'required' => 'required'
+                )
+            );
+        $this->view->setVar('estado',$estado);
+
 	}
 
 	public function listAction()
@@ -82,6 +97,17 @@ class SolicitudesController extends ControllerBase
 		$model = new Solicitudes();
 		$resul = $model->lista();
 		foreach ($resul as $v) {
+			$accion = '';
+			$estado = '';
+			if ($v->estado==1) {
+				$accion='<a class="btn btn-xs btn-warning" onclick="respuesta()" title="Respuesta a la Solicitud"><i class="fa fa-share-square-o"></i></a>';
+				$estado = '<span class="label label-warning">'.$v->valor_1.'</span>';
+			}elseif ($v->estado==2) {
+				$accion='<a class="btn btn-xs btn-success" onclick="respuesta()" title="Realizar Informe"><i class="fa fa-file-text"></i></a>';
+				$estado = '<span class="label label-success">'.$v->valor_1.'</span>';
+			}else{
+				$estado = '<span class="label label-danger">'.$v->valor_1.'</span>';
+			}
 			$customers[] = array(
 				'id' => $v->id,
 				'nro_solicitud' => $v->nro_solicitud,
@@ -101,7 +127,8 @@ class SolicitudesController extends ControllerBase
 				'cargo_representante' => $v->cargo_representante,
 				'descripcion_solicitud' => $v->descripcion_solicitud,
 				'num_productos' => $v->num_productos,
-				'estado' => $v->valor_1,
+				'estado' => $estado,
+				'accion' => $accion,
 				);
 		}
 		echo json_encode($customers);
@@ -153,6 +180,33 @@ class SolicitudesController extends ControllerBase
 		$this->view->disable();
 		echo $msm;
 	}
+
+
+	public function saverespuestaAction()
+	{
+		if ($this->request->isPost()) {
+			$fecha_envio_resp = date("Y-m-d",strtotime($this->request->getPost('fecha_envio_resp')));
+			$fecha_recepcion_resp = date("Y-m-d",strtotime($this->request->getPost('fecha_recepcion_resp')));
+			$resul = Solicitudes::findFirstById($_POST['id']);
+			$resul->respuesta = $this->request->getPost('respuesta');
+			$resul->fecha_envio_resp = $fecha_envio_resp;
+			$resul->fecha_recepcion_resp = $fecha_recepcion_resp;
+			$resul->descripcion_resp = $this->request->getPost('descripcion_resp');
+			$resul->estado = $this->request->getPost('estado');
+			if ($resul->save()) {
+				if ($this->request->getPost('estado')=='3') {
+					$model = new Solicitudesproductos();
+					$resul = $model->updateCantSolicitud($_POST['id']);
+				}
+				$msm = 'Exito: Se guardo correctamente';
+			}else{
+				$msm = 'Error: No se guardo el registro';
+			}
+		}
+		$this->view->disable();
+		echo $msm;
+	}
+
 
 	public function deleteAction(){
         $resul = Solicitudes::findFirstById($this->request->getPost('id'));

@@ -14211,7 +14211,7 @@ fieldset[disabled] .datepicker table tr td span.active.disabled:hover.active {
     height: 16px;
 }
 .input-daterange input {
-    text-align: center;
+    text-align: left;
 }
 .input-daterange input:first-child {
     border-radius: 3px 0 0 3px;
@@ -14225,7 +14225,7 @@ fieldset[disabled] .datepicker table tr td span.active.disabled:hover.active {
     padding: 4px 5px;
     font-weight: normal;
     line-height: 1.428571429;
-    text-align: center;
+    text-align: left;
     text-shadow: 0 1px 0 #fff;
     vertical-align: middle;
     background-color: #edeef0;

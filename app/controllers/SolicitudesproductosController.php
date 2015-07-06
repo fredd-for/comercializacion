@@ -152,4 +152,35 @@ class SolicitudesproductosController extends ControllerBase
         echo $msm;
     }
 
+    public function clientesolicitudAction()
+    {
+        $producto_id = $this->request->getPost('producto_id');
+        $model = new Solicitudesproductos();
+        $resul = $model->clientessolicitudes($producto_id);
+        $html = '';
+        if (count($resul)>0) {
+            $html = '<table class="table table-vcenter table-striped">
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Cant. Solicitada</th>
+                    <th>Fecha Solicitud</th>
+                </tr>
+            </thead>
+            <tbody>';
+                foreach ($resul as $v) {
+                    $html.='<tr>
+                    <td>'.$v->razon_social.'</td>
+                    <td>'.$v->cantidad.'</td>
+                    <td>'.date("d-m-Y",strtotime($v->fecha_recepcion_solicitud)).'</td>
+                </tr>';
+            }
+            $html.='</tbody>
+        </table>
+        <hr>';            
+    }
+        $this->view->disable();
+        echo $html;
+    }
+
 }
