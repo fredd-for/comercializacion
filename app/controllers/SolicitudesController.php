@@ -10,9 +10,10 @@ class SolicitudesController extends ControllerBase
                 ->addCss('/jqwidgets/styles/jqx.base.css')
                 ->addCss('/jqwidgets/styles/jqx.custom.css')
                 ->addCss('/assets/css/plugins.css')
-                // ->addCss('/js/fileinput/css/fileinput.min.css')
+                // ->addCss('/js/autocomplete/fcbk.css')
                 ;
         $this->assets
+                // ->addJs('/js/autocomplete/jquery.fcbkcomplete.min.js')
                 ->addJs('/jqwidgets/jqxcore.js')
                 ->addJs('/jqwidgets/jqxmenu.js')
                 ->addJs('/jqwidgets/jqxdropdownlist.js')
@@ -37,7 +38,7 @@ class SolicitudesController extends ControllerBase
                 ->addJs('/jqwidgets/jqxgrid.aggregates.js')
                 ->addJs('/media/plugins/bootbox/bootbox.min.js')
                 ->addJs('/jqwidgets/jqxtooltip.js')
-                // ->addJs('/assets//js/plugins.js')
+                
                 // ->addJs('/assets/js/app.js')
                 // ->addJs('/js/app.plugin.js')
                 ->addJs('/scripts/solicitudes/index.js')
@@ -103,7 +104,7 @@ class SolicitudesController extends ControllerBase
 				$accion='<a class="btn btn-xs btn-warning" onclick="respuesta()" title="Respuesta a la Solicitud"><i class="fa fa-share-square-o"></i></a>';
 				$estado = '<span class="label label-warning">'.$v->valor_1.'</span>';
 			}elseif ($v->estado==2) {
-				$accion='<a class="btn btn-xs btn-success" onclick="respuesta()" title="Realizar Informe"><i class="fa fa-file-text"></i></a>';
+				$accion='<a class="btn btn-xs btn-success" onclick="informe()" title="Realizar Informe"><i class="fa fa-file-text"></i></a>';
 				$estado = '<span class="label label-success">'.$v->valor_1.'</span>';
 			}else{
 				$estado = '<span class="label label-danger">'.$v->valor_1.'</span>';
@@ -219,4 +220,36 @@ class SolicitudesController extends ControllerBase
         $this->view->disable();
         echo $msm;
     }
+
+    public function documentosAction()
+    {
+    	$model = new Seguimientos();
+    	$resul = $model->documentos($_POST['autocomplete']);
+    	$doc = array();
+    	$html = '<div class="list-group">';
+    	foreach ($resul as $v) {
+    		$html.='<a href="#" onclick="info(\''.$v->id.'\',\''.$v->nur.'\')" class="list-group-item">';
+    		$html.='<h5 class="list-group-item-heading">ID:'.$v->id;
+    		$html.=' NUR: '.$v->nur.'</h5>';
+    		$html.='</a>';
+    	}
+    	$html .= '</div>';
+    	$this->view->disable();
+    	echo $html;
+    }
+
+
+    //  public function documentosAction() {
+    //     $auth = Auth::instance();
+    //     if ($auth->logged_in()) {
+    //         $documentos = ORM::factory('documentos')
+    //                 ->where('id_user', '=', $auth->get_user())
+    //                 ->find_all();
+    //         $doc = array();
+    //         foreach ($documentos as $d) {
+    //             $doc[] = array('key' => $d->codigo, 'value' => $d->codigo);
+    //         }
+    //         echo json_encode($doc);
+    //     }
+    // }
 }

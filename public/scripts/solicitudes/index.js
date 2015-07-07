@@ -295,6 +295,50 @@ $("#testForm_respuesta").submit(function() {
 	return false;
 });
 
+// /*
+// adjuntar hoja de ruta sigec
+//  */
+// $("#adjunto").fcbkcomplete({
+//     json_url: "/solicitudes/documentos",
+//                     addontab: true,                   
+//                     maxitems: 1,
+//                     height: 5,
+//                     cache: true
+//    });
+    
+/*
+auto complete
+ */    
+    $.fn.delayPasteKeyUp = function(fn, ms)
+    {
+        var timer = 0;
+        $(this).on("keyup paste", function()
+        {
+            clearTimeout(timer);
+            timer = setTimeout(fn, ms);
+        });
+    };
+ 
+    $("input[name=autocomplete]").delayPasteKeyUp(function()
+    {
+        $.ajax({
+        	type: "POST",
+            // url: "http://localhost/autocompletado/app/instancias/autocomplete.php",
+            url: "/solicitudes/documentos",
+            data: "autocomplete="+$("input[name=autocomplete]").val(),
+            success: function(data)
+            {
+            	$("#busqueda").html(data);
+            }
+        });
+    }, 500);
+
+	// $(document).on("click", "a", function()
+	// {
+	// 	$("a").removeClass("active");
+	// 	$(this).addClass("active");
+	// })    
+
 
 // $("#fecha_envio_solicitud,#fecha_recepcion_solicitud, #fecha_envio_resp,#fecha_recepcion_resp").datepicker({
 // 	autoclose:true,
@@ -303,6 +347,26 @@ $(".input-daterange").datepicker({weekStart:1});
 $(".input-datepicker-close").datepicker({weekStart:1}).on("changeDate",function(){$(this).datepicker("hide")})
 
 })
+
+
+var info = function (id, nur) {
+	$("#autocomplete").val(nur);
+	$('.list-group').hide();
+	// alert("ID: " + id + " Nombre: " + nur);	
+};
+
+var informe = function (row) {
+	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+	if (rowindex > -1) {
+		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
+		$("#id").val(dataRecord.id);
+		// $("#razon_social_text").text(dataRecord.razon_social);
+		// $("#nro_solicitud_text").text(dataRecord.nro_solicitud);
+		$('#myModal_informe').modal('show');
+	}else{
+		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para editar.");
+	}
+};
 
 var respuesta = function (row) {
 	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
