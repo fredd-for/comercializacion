@@ -10,6 +10,7 @@ class InformesController extends ControllerBase
 		$this->assets
         ->addCss('/jqwidgets/styles/jqx.base.css')
         ->addCss('/jqwidgets/styles/jqx.custom.css')
+        ->addCss('/assets/css/plugins.css')
         ;
         $this->assets
         ->addJs('/jqwidgets/jqxcore.js')
@@ -36,9 +37,9 @@ class InformesController extends ControllerBase
         ->addJs('/jqwidgets/jqxgrid.aggregates.js')
         ->addJs('/media/plugins/bootbox/bootbox.min.js')
         ->addJs('/jqwidgets/jqxtooltip.js')
-                // ->addJs('/assets//js/plugins.js')
-                // ->addJs('/assets/js/app.js')
-                // ->addJs('/js/app.plugin.js')
+        
+        ->addJs('/assets/js/app.js')
+        ->addJs('/assets/js/plugins.js')
         ->addJs('/scripts/informes/index.js')
         ;
 

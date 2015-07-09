@@ -295,17 +295,26 @@ $("#testForm_respuesta").submit(function() {
 	return false;
 });
 
-// /*
-// adjuntar hoja de ruta sigec
-//  */
-// $("#adjunto").fcbkcomplete({
-//     json_url: "/solicitudes/documentos",
-//                     addontab: true,                   
-//                     maxitems: 1,
-//                     height: 5,
-//                     cache: true
-//    });
-    
+/*
+guardar informe
+ */
+$("#testForm_informe").submit(function() {
+	var v=$.ajax({
+            	url:'/informes/save/',
+            	type:'POST',
+            	datatype: 'json',
+            	data:{id:0,solicitud_id:$("#solicitud_id").val(),nur:$("#nur").val()},
+				success: function(data) { cargar(); 
+					$("#divMsjeExito").show();
+                    $("#divMsjeExito").addClass('alert alert-info alert-dismissable');
+                    $("#aMsjeExito").html(data); 
+				}, //mostramos el error
+			error: function() { alert('Se ha producido un error Inesperado'); }
+			});
+            $('#myModal').modal('hide');
+            return false; // ajax used, block the normal submit
+});
+
 /*
 auto complete
  */    
@@ -319,13 +328,13 @@ auto complete
         });
     };
  
-    $("input[name=autocomplete]").delayPasteKeyUp(function()
+    $("input[name=nur]").delayPasteKeyUp(function()
     {
         $.ajax({
         	type: "POST",
             // url: "http://localhost/autocompletado/app/instancias/autocomplete.php",
             url: "/solicitudes/documentos",
-            data: "autocomplete="+$("input[name=autocomplete]").val(),
+            data: "autocomplete="+$("input[name=nur]").val(),
             success: function(data)
             {
             	$("#busqueda").html(data);
@@ -359,7 +368,7 @@ var informe = function (row) {
 	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
 	if (rowindex > -1) {
 		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
-		$("#id").val(dataRecord.id);
+		$("#solicitud_id").val(dataRecord.id);
 		// $("#razon_social_text").text(dataRecord.razon_social);
 		// $("#nro_solicitud_text").text(dataRecord.nro_solicitud);
 		$('#myModal_informe').modal('show');

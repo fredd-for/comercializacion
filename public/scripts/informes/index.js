@@ -121,7 +121,7 @@ $("#testForm").submit(function() {
             	url:'/informes/save/',
             	type:'POST',
             	datatype: 'json',
-            	data:{id:$("#id").val(),nur:$("#nur").val()},
+            	data:{id:$("#id").val(),solicitud_id:$("#solicitud_id").val(),nur:$("#nur").val()},
 				success: function(data) { cargar(); 
 					$("#divMsjeExito").show();
                     $("#divMsjeExito").addClass('alert alert-info alert-dismissable');

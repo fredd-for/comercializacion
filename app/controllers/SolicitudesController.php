@@ -37,10 +37,10 @@ class SolicitudesController extends ControllerBase
                 ->addJs('/jqwidgets/globalization/globalize.js')
                 ->addJs('/jqwidgets/jqxgrid.aggregates.js')
                 ->addJs('/media/plugins/bootbox/bootbox.min.js')
-                // ->addJs('/jqwidgets/jqxtooltip.js')
+                ->addJs('/jqwidgets/jqxtooltip.js')
                 
-                // ->addJs('/assets/js/app.js')
-                // ->addJs('/js/app.plugin.js')
+                ->addJs('/assets/js/app.js')
+                ->addJs('/assets/js/plugins.js')
                 ->addJs('/scripts/solicitudes/index.js')
         ;
 
