@@ -57,21 +57,21 @@ class InformesController extends ControllerBase
 //                 )
 //             );
 
-        $model = new Solicitudes();
-        $resul = $model->solicitudesaprobadas();
-        $solicitud = $this->tag->select(
-            array(
-                'solicitud_id',
-                $resul,
-                'using' => array('id', 'solicitud'),
-                'useEmpty' => true,
-                'emptyText' => '(Selecionar)',
-                'emptyValue' => '',
-                'class' => 'form-control select-chosen',
-                'required' => 'required'
-                )
-            );
-        $this->view->setVar('solicitud',$solicitud);
+        // $model = new Solicitudes();
+        // $resul = $model->solicitudesaprobadas();
+        // $solicitud = $this->tag->select(
+        //     array(
+        //         'solicitud_id',
+        //         $resul,
+        //         'using' => array('id', 'solicitud'),
+        //         'useEmpty' => true,
+        //         'emptyText' => '(Selecionar)',
+        //         'emptyValue' => '',
+        //         'class' => 'form-control select-chosen',
+        //         'required' => 'required'
+        //         )
+        //     );
+        // $this->view->setVar('solicitud',$solicitud);
 
     }
 
@@ -83,13 +83,22 @@ class InformesController extends ControllerBase
         foreach ($resul as $v) {
             $customers[] = array(
                 'id' => $v->id,
+                'razon_social' => $v->razon_social,
+                'nro_solicitud' => $v->nro_solicitud,
                 'solicitud_id' => $v->solicitud_id,
-                'cite' => $v->cite,
                 'nur' => $v->nur,
-                );
+                'accion' => '<a href="/informes/seguimiento/?nur='.$v->nur.'" class="btn btn-xs btn-success" title="Seguimiento hoja de ruta"><i class="fa fa-arrow-circle-up"></i></a>',                );
         }
         $this->view->disable();
         echo json_encode($customers);
+    }
+
+    public function seguimientoAction()
+    {
+        // $this->assets
+        //         ->addCss('/assets/css/main.css')
+        //         ;
+        echo $_GET['nur'];
     }
 
     public function saveAction()
@@ -135,6 +144,27 @@ class InformesController extends ControllerBase
         }
         $this->view->disable();
         echo $msm;
+    }
+
+    public function selectsolicitudesAction()
+    {
+        $model = new Solicitudes();
+        $resul = $model->solicitudesaprobadas();
+        $solicitud = $this->tag->select(
+            array(
+                'solicitud_id',
+                $resul,
+                'using' => array('id', 'solicitud'),
+                'useEmpty' => true,
+                'emptyText' => '(Selecionar)',
+                'emptyValue' => '',
+                'class' => 'form-control select-chosen',
+                'required' => 'required'
+                )
+            );
+         $this->view->disable();
+        echo $solicitud;
+        
     }
 
 }

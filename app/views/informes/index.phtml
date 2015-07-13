@@ -60,15 +60,21 @@
 			<div class="modal-body">
 				<div class="form-group">
 					<label class="col-md-4 control-label">Solicitudes Aprobadas</label>
-					<div class="col-md-8">
-						<?php echo $solicitud ?>
+					<div class="col-md-8" id="selectsolicitudes">
+						
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-md-4 control-label">Hoja de Ruta</label>
-					<div class="col-md-8">
-						<input type="text" name="nur" id="nur" class="form-control" placeholder="" required>
+					<?php // if ($this->setConnectionService('sigec')) { ?>
+					<div class="col-md-4 " id="buscador">
+						<input type="search" name="nur" id="nur" class="form-control" placeholder="Search" />
 					</div>
+					<div class="col-md-4 " id="busqueda">
+
+					</div>	
+					<?php // } ?>
+					
 				</div>
 			</div>
 			<div class="modal-footer">

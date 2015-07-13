@@ -53,15 +53,15 @@ $(document).ready(function (){
 					return "<div style='margin:4px;'>" + (value + 1) + "</div>";
 				}
 			},
-			{ text: 'Responsable', datafield: 'responsable', filtertype: 'input',width: '17%' },
-			{ text: 'Razón Social', datafield: 'razon_social', filtertype: 'input',width: '17%' },
+			{ text: 'Responsable', datafield: 'responsable', filtertype: 'input',width: '14%' },
+			{ text: 'Razón Social', datafield: 'razon_social', filtertype: 'input',width: '15%' },
 			{ text: 'Nro Solicitud', datafield: 'nro_solicitud', filtertype: 'input',width: '8%' },
 			{ text: 'Representante', datafield: 'representante',filtertype: 'input', width: '10%' },
 			{ text: 'Cargo Representante', datafield: 'cargo_representante',filtertype: 'input', width: '15%' },
 			{ text: 'Fecha Envio', datafield: 'fecha_envio_solicitud', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
 			{ text: 'Fecha Recepeción', datafield: 'fecha_recepcion_solicitud', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
 			{ text: 'Estado', datafield: 'estado',filtertype: 'input', width: '5%' },
-			{ text: '', datafield: 'accion', filtertype: 'input',width: '5%',cellsalign: 'center',align:'center'},
+			{ text: '', datafield: 'accion', filtertype: 'input',width: '10%',cellsalign: 'center',align:'center'},
 			],
 		// groups: ['razon_social']
 	});
@@ -311,7 +311,7 @@ $("#testForm_informe").submit(function() {
 				}, //mostramos el error
 			error: function() { alert('Se ha producido un error Inesperado'); }
 			});
-            $('#myModal').modal('hide');
+            $('#myModal_informe').modal('hide');
             return false; // ajax used, block the normal submit
 });
 
@@ -359,7 +359,7 @@ $(".input-datepicker-close").datepicker({weekStart:1}).on("changeDate",function(
 
 
 var info = function (id, nur) {
-	$("#autocomplete").val(nur);
+	$("#nur").val(nur);
 	$('.list-group').hide();
 	// alert("ID: " + id + " Nombre: " + nur);	
 };

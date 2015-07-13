@@ -105,6 +105,9 @@ class SolicitudesController extends ControllerBase
 				$estado = '<span class="label label-warning">'.$v->valor_1.'</span>';
 			}elseif ($v->estado==2) {
 				$accion='<a class="btn btn-xs btn-success" onclick="informe()" title="Realizar Informe"><i class="fa fa-file-text"></i></a>';
+					if ($v->nur!='') {
+						$accion='<a href="" class="btn btn-xs btn-success" title="Informe Realizado">'.$v->nur.'</a>';
+					}				
 				$estado = '<span class="label label-success">'.$v->valor_1.'</span>';
 			}else{
 				$estado = '<span class="label label-danger">'.$v->valor_1.'</span>';
@@ -130,6 +133,7 @@ class SolicitudesController extends ControllerBase
 				'num_productos' => $v->num_productos,
 				'estado' => $estado,
 				'accion' => $accion,
+				'nur' => $v->nur,
 				);
 		}
 		echo json_encode($customers);
