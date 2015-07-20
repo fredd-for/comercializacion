@@ -95,10 +95,17 @@ class InformesController extends ControllerBase
 
     public function seguimientoAction()
     {
-        // $this->assets
-        //         ->addCss('/assets/css/main.css')
-        //         ;
-        echo $_GET['nur'];
+        $nur = $_GET['nur'];
+        //$nur = 'I/2013-06508';
+        $model = new Seguimientos();
+        $documento = $model->documento($nur);
+        $seguimiento = $model->seguimiento($nur);
+        
+        $this->view->setVar('seguimiento',$seguimiento);
+        $this->view->setVar('documento',$documento[0]);
+
+
+
     }
 
     public function saveAction()

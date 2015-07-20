@@ -96,7 +96,7 @@ var dataAdapter = new $.jqx.dataAdapter(sourceSeg);
 dataAdapter.dataBind();
 
 $("#jqxgrid").on('rowselect', function (event) {
-	// $("#text_cliente").text(event.args.row.razon_social);
+	$("#productos_solicitados").text(event.args.row.razon_social);
 	var id = event.args.row.id;
 	var records = new Array();
 	var length = dataAdapter.records.length;
