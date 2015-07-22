@@ -180,6 +180,7 @@ Crear nuevo contrato
  				var obj = jQuery.parseJSON(data);
  				$("#nit").val(obj.nit);
  				$("#rl").val(obj.representante_legal);
+ 				$("#solicitud_id").html(obj.opciones);
                      },
             error: function() { alert('Se ha producido un error Inesperado'); 
                   }
@@ -281,7 +282,7 @@ $("#testForm_contrato").submit(function() {
             	url:'/contratos/savecontrato/',
             	type:'POST',
             	datatype: 'json',
-            	data:{contrato_id:$("#contrato_id").val(),cliente_id:$("#cliente_id").val(),contrato:$("#contrato").val(),fecha_contrato:$("#fecha_contrato").val(),arrendador:$("#arrendador").val(),arrendador_rep_legal:$("#arrendador_rep_legal").val(),arrendador_cargo:$("#arrendador_cargo").val(),descripcion:$("#descripcion").val(),dias_tolerancia:$("#dias_tolerancia").val(),porcentaje_mora:$("#porcentaje_mora").val(),responsable_id:$("#responsable_id").val()},
+            	data:{contrato_id:$("#contrato_id").val(),solicitud_id:$("#solicitud_id").val(),cliente_id:$("#cliente_id").val(),contrato:$("#contrato").val(),fecha_contrato:$("#fecha_contrato").val(),arrendador:$("#arrendador").val(),arrendador_rep_legal:$("#arrendador_rep_legal").val(),arrendador_cargo:$("#arrendador_cargo").val(),descripcion:$("#descripcion").val(),dias_tolerancia:$("#dias_tolerancia").val(),porcentaje_mora:$("#porcentaje_mora").val(),responsable_id:$("#responsable_id").val()},
 				success: function(data) { 
 						cargar();
 						$("#divMsjeExito").show();

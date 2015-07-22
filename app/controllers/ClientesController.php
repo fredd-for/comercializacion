@@ -437,6 +437,14 @@ public function listcontratosclientesAction($cliente_id)
         $cliente['nit'] = $resul->nit;
         $cliente['representante_legal'] = $resul->representante_legal;
 
+        // $resul = Solicitudes::find(array('baja_logica=1 AND cliente_id = '.$id.' AND estado=2','order' => 'id ASC'));
+        $model  = new Solicitudes();
+        $resul = $model->solicitudespendientes($id);
+        $options = '<option value="">(Seleccionar)</option>';
+        foreach ($resul as $v) {
+            $options.='<option value="'.$v->id.'" >'.$v->nro_solicitud.'</option>';
+        }
+        $cliente['opciones'] = $options;
         $this->view->disable();  
         echo json_encode($cliente);
 

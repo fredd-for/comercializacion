@@ -108,6 +108,7 @@ class ContratosController extends ControllerBase
             else{
                 $resul = new Contratos();
                 $resul->contrato = $this->request->getPost('contrato');
+                $resul->solicitud_id = $this->request->getPost('solicitud_id');
                 $resul->cliente_id = $this->request->getPost('cliente_id');
                 $resul->fecha_contrato = date("Y-m-d",strtotime($this->request->getPost('fecha_contrato')));
                 $resul->usuario_reg = $this->_user->id;

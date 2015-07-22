@@ -36,10 +36,10 @@ class Seguimientos extends \Phalcon\Mvc\Model
         $this->setConnectionService('sigec');
         $sql = "SELECT s.*,e.estado as estados,
         IF(s.fecha_recepcion IS NULL,(datediff(CURDATE(),s.fecha_emision)),(DATEDIFF(s.fecha_recepcion,s.fecha_emision))) as dias_recepcion,
-        (CASE s.estado WHEN 2 THEN DATEDIFF(CURDATE(),s.fecha_recepcion) WHEN 4 THEN DATEDIFF((SELECT fecha_emision FROM seguimiento WHERE s.id = id_seguimiento),s.fecha_recepcion) ELSE '0' END) as dias_pendiente
+        (CASE s.estado WHEN 2 THEN DATEDIFF(CURDATE(),s.fecha_recepcion) WHEN 4 THEN DATEDIFF((SELECT fecha_emision FROM seguimiento WHERE id_seguimiento=s.id ORDER BY fecha_emision LIMIT 1),s.fecha_recepcion) ELSE '0' END) as dias_pendiente
         FROM seguimiento s
         INNER JOIN estados e ON s.estado = e.id 
-        WHERE s.nur = '$nur'";
+        WHERE s.nur = '$nur' ORDER BY s.id";
         $users = new Seguimientos();
         return new Resultset(null, $users, $users->getReadConnection()->query($sql));          
     }

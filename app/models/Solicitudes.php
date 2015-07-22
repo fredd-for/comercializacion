@@ -34,10 +34,20 @@ class Solicitudes extends \Phalcon\Mvc\Model
 	public function solicitudesaprobadas()
 	{
 		$sql = "SELECT s.id,CONCAT(s.nro_solicitud,' <=> ', cl.razon_social) AS solicitud,i.nur
-FROM solicitudes s 
-INNER JOIN clientes cl ON s.cliente_id = cl.id 
-LEFT JOIN informes i ON s.id = i.solicitud_id AND i.baja_logica =1
-WHERE s.baja_logica = 1 and s.estado=2 AND i.nur IS NULL";
+		FROM solicitudes s 
+		INNER JOIN clientes cl ON s.cliente_id = cl.id 
+		LEFT JOIN informes i ON s.id = i.solicitud_id AND i.baja_logica =1
+		WHERE s.baja_logica = 1 and s.estado=2 AND i.nur IS NULL";
+		$this->_db = new Solicitudes();
+		return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));
+	}
+
+	public function solicitudespendientes($cliente_id)
+	{
+		$sql = "SELECT c.id,s.* 
+		FROM solicitudes s
+		LEFT JOIN contratos c ON s.id = c.solicitud_id
+		WHERE s.baja_logica = 1 AND estado = 2 AND s.cliente_id = '$cliente_id' AND c.id IS NULL";
 		$this->_db = new Solicitudes();
 		return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));
 	}
