@@ -14,7 +14,7 @@ class Usuarios extends \Phalcon\Mvc\Model {
     public function responsablecomercial() {
         $sql = "SELECT id,CONCAT(COALESCE(paterno,' '),' ',COALESCE(materno,' '),' ',COALESCE(nombre,' ')) as nombres
         FROM usuarios 
-        WHERE habilitado = 1 AND nivel = 3";
+        WHERE habilitado = 1 AND nivel IN (2,3)";
         $this->_db = new Usuarios();
         return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));
     }
