@@ -183,7 +183,7 @@ public function listcontrolpagoAction($contratoproducto_id)
         /* fin calculo de mora*/
         $customers[] = array(
             'id' => $v->id,
-            'fecha_programado' => $v->fecha_programado,
+            'fecha_programado' => $v->fecha_programado.' 00:00:00',
             'monto_programado' => $v->monto_programado,
             'monto_reprogramado_div' => $diff_text.' '.number_format($v->monto_reprogramado,2,'.',','),
             'monto_reprogramado' => $v->monto_reprogramado,

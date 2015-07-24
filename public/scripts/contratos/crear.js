@@ -187,6 +187,8 @@ cargar2();
 			{ text: 'Sub Total', datafield: 'total', cellsalign: 'right', cellsformat: 'c2', aggregates: ['sum', 'avg'] },
 			]
 		});
+
+
 }
 
 /*
@@ -325,31 +327,7 @@ $("#tiempo").change(function(){
 	calculoCosto();
 });
 
-function calculoCosto(){
-	var fecha_inicio = $("#fecha_inicio").val();
-	var fecha_fin = $("#fecha_fin").val();
-	var hora_inicio = $("#hora_inicio").val();
-	var hora_fin = $("#hora_fin").val();
-	var cantidad = $("#cantidad").val();
-	var tiempo = $("#tiempo").val();
-	//alert (tiempo);
-	var precio_unitario = $("#precio_unitario").val();
 
-	if (fecha_inicio!='' && fecha_fin!='' && hora_inicio!='' && hora_fin!='' && cantidad>0 && tiempo!='' && precio_unitario!='') {
-		var v=$.ajax({
-		url:'/contratos/calculocosto/',
-		type:'POST',
-		datatype: 'json',
-		data:{fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,hora_inicio:hora_inicio,hora_fin:hora_fin,cantidad:cantidad,tiempo:tiempo,precio_unitario:precio_unitario},
-		success: function(data) { 
-			//alert(data);
-			$("#total").val(data);	
-		}, //mostramos el error
-		error: function() { alert('Se ha producido un error Inesperado'); }
-		});	
-	};
-	
-}
 
 /*
 Eliminar Contratos productos
@@ -482,8 +460,35 @@ function lista_pp(contratoproducto_id){
 
 	$("#fecha_inicio, #fecha_fin, #fecha_programado").datepicker({
 						autoclose:true,
-	});
+	}).on("changeDate",function(){calculoCosto();});
 
+
+function calculoCosto(){
+	//alert('calcular');
+	var fecha_inicio = $("#fecha_inicio").val();
+	var fecha_fin = $("#fecha_fin").val();
+	var hora_inicio = $("#hora_inicio").val();
+	var hora_fin = $("#hora_fin").val();
+	var cantidad = $("#cantidad").val();
+	var tiempo = $("#tiempo").val();
+	//alert (tiempo);
+	var precio_unitario = $("#precio_unitario").val();
+
+	if (fecha_inicio!='' && fecha_fin!='' && hora_inicio!='' && hora_fin!='' && cantidad>0 && tiempo!='' && precio_unitario!='') {
+		var v=$.ajax({
+		url:'/contratos/calculocosto/',
+		type:'POST',
+		datatype: 'json',
+		data:{fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,hora_inicio:hora_inicio,hora_fin:hora_fin,cantidad:cantidad,tiempo:tiempo,precio_unitario:precio_unitario},
+		success: function(data) { 
+			//alert(data);
+			$("#total").val(data);	
+		}, //mostramos el error
+		error: function() { alert('Se ha producido un error Inesperado'); }
+		});	
+	};
+	
+}
 	// $(".input-daterange").datepicker({weekStart:1});
 	// $(".input-datepicker-close").datepicker({weekStart:1}).on("changeDate",function(){$(this).datepicker("hide")})
 

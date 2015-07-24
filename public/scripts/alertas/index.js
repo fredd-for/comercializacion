@@ -21,7 +21,9 @@ cargar();
 			{ name: 'contrato',type: 'string'},
 			{ name: 'fecha_programado',type:'date'},
 			{ name: 'monto_reprogramado',type: 'number'},
-			{ name: 'diferencia_dias',type:'number'}
+			{ name: 'monto_depositado',type: 'number'},
+			{ name: 'diferencia_dias',type:'number'},
+			{ name: 'accion',type:'string'}
 			],
 			url: '/alertas/list/',
 			cache: false
@@ -63,14 +65,16 @@ cargar();
 				}
 			},
 			//{ text: 'Grupo', datafield: 'grupo', filtertype: 'checkedlist',width: '8%', rendered: tooltiprenderer },
-			{ text: 'Linea', datafield: 'linea', filtertype: 'checkedlist',width: '10%',cellclassname: cellclass },
-			{ text: 'Estación', datafield: 'estacion', filtertype: 'checkedlist',width: '15%',cellclassname: cellclass },
-			{ text: 'Cliente / Razón Social', datafield: 'razon_social', filtertype: 'input',width: '19%',cellclassname: cellclass },
+			{ text: 'Linea', datafield: 'linea', filtertype: 'checkedlist',width: '8%',cellclassname: cellclass },
+			{ text: 'Estación', datafield: 'estacion', filtertype: 'checkedlist',width: '12%',cellclassname: cellclass },
+			{ text: 'Cliente / Razón Social', datafield: 'razon_social', filtertype: 'input',width: '15%',cellclassname: cellclass },
 			{ text: 'Contrato', datafield: 'contrato', filtertype: 'input',width: '10%',cellclassname: cellclass },
-			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '15%',cellclassname: cellclass },
+			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '12%',cellclassname: cellclass },
 			{ text: 'Fecha Programado', datafield: 'fecha_programado', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center',cellclassname: cellclass},
 			{ text: 'Monto Programado Bs.', datafield: 'monto_reprogramado', filtertype: 'number', width: '10%',cellsformat: "c2", cellsalign: 'right',cellclassname: cellclass},
-	        { text: 'Dias Atraso', datafield: 'diferencia_dias', filtertype: 'number', width: '7%',cellsalign: 'center',cellclassname: cellclass},
+			{ text: 'Monto Depositado Bs.', datafield: 'monto_depositado', filtertype: 'number', width: '10%',cellsformat: "c2", cellsalign: 'right',cellclassname: cellclass},
+	        { text: 'Dias Atraso', datafield: 'diferencia_dias', filtertype: 'number', width: '5%',cellsalign: 'center',cellclassname: cellclass},
+	        { text: '', datafield: 'accion', filtertype: 'input', width: '5%',cellsalign: 'center'},
 			],
 			//groups: ['razon_social','contrato']
 		});

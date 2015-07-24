@@ -106,7 +106,7 @@ class SolicitudesController extends ControllerBase
 			}elseif ($v->estado==2) {
 				$accion='<a class="btn btn-xs btn-success" onclick="informe()" title="Realizar Informe"><i class="fa fa-file-text"></i></a>';
 					if ($v->nur!='') {
-						$accion='<a href="" class="btn btn-xs btn-success" title="Informe Realizado">'.$v->nur.'</a>';
+						$accion='<a href="/informes/seguimiento/?nur='.$v->nur.'" class="btn btn-xs btn-success" title="Informe Realizado">'.$v->nur.'</a>';
 					}				
 				$estado = '<span class="label label-success">'.$v->valor_1.'</span>';
 			}else{
@@ -233,8 +233,8 @@ class SolicitudesController extends ControllerBase
     	$html = '<div class="list-group">';
     	foreach ($resul as $v) {
     		$html.='<a href="#" onclick="info(\''.$v->id.'\',\''.$v->nur.'\')" class="list-group-item">';
-    		$html.='<h5 class="list-group-item-heading">ID:'.$v->id;
-    		$html.=' NUR: '.$v->nur.'</h5>';
+    		$html.='<b> NUR:</b> '.$v->nur;
+    		$html.=' --- <b>CITE:</b>'.utf8_encode($v->cite_original);
     		$html.='</a>';
     	}
     	$html .= '</div>';

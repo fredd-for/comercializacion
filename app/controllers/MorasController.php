@@ -2,7 +2,7 @@
 /**
 * 
 */
-class AlertasController extends ControllerBase
+class MorasController extends ControllerBase
 {
     
     public function indexAction()
@@ -42,17 +42,22 @@ class AlertasController extends ControllerBase
                 // ->addJs('/assets/js/plugins.js')
                 // ->addJs('/assets/js/pages/formsValidation.js')
                 
-                ->addJs('/scripts/alertas/index.js')
+                ->addJs('/scripts/moras/index.js')
         ;
     }
 
     public function listAction()
     {   $this->view->disable();
         $model = new Planpagos();
-        $resul = $model->listapagospendientes();
+        $resul = $model->listamoraspendientes();
         $customers = array();
         foreach ($resul as $v) {
-            //echo 'ver =>'.$v->id;
+            $mora = $v->mora_total;
+            $dias_atraso = $v->diferencia_dias;
+            if ($v->mora>0) {
+                $mora = $v->mora;
+                $dias_atraso = $v->dias_atraso;
+            }
             $customers[] = array(
                 'id' => $v->id,
                 'razon_social' => $v->razon_social,
@@ -71,6 +76,9 @@ class AlertasController extends ControllerBase
                 'monto_reprogramado' => $v->monto_reprogramado,
                 'monto_depositado' => $v->monto_depositado,
                 'diferencia_dias' => $v->diferencia_dias,
+                'deposito_mora_total' => $v->deposito_mora_total,
+                'mora' => $mora,
+                'dias_atraso' => $dias_atraso,
                 'accion'=>'<a href="/planpagos/controlpago/'.$v->contratoproducto_id.'" class="btn btn-xs btn-primary" title="Ver Plan Pago"><i class="fa fa-share-square-o"></i></a>'
             );
         }
@@ -78,28 +86,4 @@ class AlertasController extends ControllerBase
         
     }
 
-    public function listcontratosAction()
-    {   $this->view->disable();
-        $model = new Facturas();
-        $resul = $model->listacontratos();
-        $customers = array();
-        foreach ($resul as $v) {
-            //echo 'ver =>'.$v->id;
-            $customers[] = array(
-                'id' => $v->id,
-                'razon_social' => $v->razon_social,
-                'nit' => $v->nit,
-                'grupo' => $v->grupo,
-                'linea' => $v->linea,
-                'estacion' => $v->estacion,
-                'contrato' => $v->contrato,
-                'producto' => $v->producto,
-                'fecha_fin' => $v->fecha_fin,
-                'diferencia_dias' => $v->diferencia_dias,
-            );
-        }
-        echo json_encode($customers);
-        
-    }
-    
 }

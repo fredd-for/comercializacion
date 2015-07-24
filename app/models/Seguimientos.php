@@ -14,7 +14,7 @@ class Seguimientos extends \Phalcon\Mvc\Model
     public function documentos($valor)
     {
     	$this->setConnectionService('sigec');
-        $sql = "SELECT * FROM documentos WHERE nur like '%$valor%' ORDER BY id DESC LIMIT 100";
+        $sql = "SELECT * FROM documentos WHERE nur like '%$valor%' ORDER BY nur DESC LIMIT 100";
         $users = new Seguimientos();
         return new Resultset(null, $users, $users->getReadConnection()->query($sql));    
     }
