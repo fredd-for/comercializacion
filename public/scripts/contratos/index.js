@@ -16,7 +16,10 @@ function cargar(){
 			{ name: 'dias_tolerancia', type: 'number' },
 			{ name: 'porcentaje_mora', type: 'number' },
 			{ name: 'responsable', type: 'string' },
-			{ name: 'responsable_id', type: 'number' }
+			{ name: 'responsable_id', type: 'number' },
+			{ name: 'estado', type: 'number' },
+			{ name: 'estado_text', type: 'string' }
+
 			],
 			url: '/contratos/list',
 			cache: false
@@ -50,8 +53,9 @@ function cargar(){
 	{ text: 'Nro Contrato', datafield: 'contrato', filtertype: 'input',width: '10%' },
 	{ text: 'Descripción', datafield: 'descripcion',filtertype: 'input', width: '20%' },
 	{ text: 'Fecha Contrato', datafield: 'fecha_contrato', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
-	{ text: 'Dias Tolerancia', datafield: 'dias_tolerancia', filtertype: 'input',width: '10%' },
-	{ text: '% Mora', datafield: 'porcentaje_mora', filtertype: 'input',width: '10%' },
+	{ text: 'Dias Tolerancia', datafield: 'dias_tolerancia', filtertype: 'input',width: '8%' },
+	{ text: '% Mora', datafield: 'porcentaje_mora', filtertype: 'input',width: '8%' },
+	{ text: 'Estado', datafield: 'estado_text', filtertype: 'input',width: '9%' },
 	{ text: 'Nro Productos', datafield: 'num_productos', filtertype: 'input',width: '5%' }			
 		],
 		// groups: ['razon_social']
@@ -76,6 +80,7 @@ var dataFields = [
 			{ name: 'deposito',type:'number'},
 			{ name: 'cobrar',type:'number'},
 			{ name: 'mora',type: 'number'},
+			{ name: 'estado',type: 'string'},
 ];
 
 var sourceSeg =
@@ -137,19 +142,20 @@ $("#jqxgrid").on('rowselect', function (event) {
 					return "<div style='margin:4px;'>" + (value + 1) + "</div>";
 				}
 			},
-			{ text: 'Grupo', datafield: 'grupo', filtertype: 'checkedlist',width: '10%', rendered: tooltiprenderer },
+			{ text: 'Grupo', datafield: 'grupo', filtertype: 'checkedlist',width: '7%', rendered: tooltiprenderer },
 			{ text: 'Linea', datafield: 'linea', filtertype: 'checkedlist',width: '10%' },
 			{ text: 'Estación', datafield: 'estacion', filtertype: 'checkedlist',width: '10%' },
 			// { text: 'Cliente / Razón Social', datafield: 'razon_social', filtertype: 'input',width: '10%' },
 			// { text: 'Contrato', datafield: 'contrato', filtertype: 'input',width: '5%' },
 			// { text: 'Fecha Contrato ', datafield: 'fecha_contrato', filtertype: 'range', width: '7%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
-			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '15%' },
+			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '10%' },
 			{ text: 'Fecha Inicio', datafield: 'fecha_inicio', filtertype: 'range', width: '8%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
 			{ text: 'Fecha Final', datafield: 'fecha_fin', filtertype: 'range', width: '8%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
 			{ text: 'Total Bs.', datafield: 'total', filtertype: 'number', width: '9%',cellsformat: "c2", cellsalign: 'right'},
 	        { text: 'Deposito Bs.', datafield: 'deposito', filtertype: 'number', width: '9%',cellsformat: "c2", cellsalign: 'right'},
 			{ text: 'Por Cobrar Bs.', datafield: 'cobrar', filtertype: 'number',width: '9%',cellsformat: "c2", cellsalign: 'right' },
  			{ text: 'Mora Bs.', datafield: 'mora', filtertype: 'number', width: '9%',cellsformat: "c2", cellsalign: 'right'},
+ 			{ text: 'Estado', datafield: 'estado', filtertype: 'input',width: '8%' },
 			],
 			// groups: ['razon_social','contrato']
 		});
@@ -197,20 +203,24 @@ $("#edit_contrato").click(function(){
  	if (rowindex > -1)
  	{
  		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
-
- 		$("#contrato_id").val(dataRecord.id);
- 		$("#titulo_contrato").text("Editar Contrato");
- 		$("#rs").val(dataRecord.razon_social);
- 		$("#rl").val(dataRecord.representante_legal);
- 		$("#contrato").val(dataRecord.contrato);
- 		$("#descripcion").val(dataRecord.descripcion);
- 		var fc = $.jqx.dataFormat.formatdate(dataRecord.fecha_contrato, 'dd-MM-yyyy');
- 		$("#fecha_contrato").val(fc);
- 		$("#cliente_id").val(dataRecord.cliente_id);
- 		$('#cliente_id').trigger("chosen:updated");
- 		$("#nit").val(dataRecord.nit);
- 		$("#responsable_id").val(dataRecord.responsable_id);
- 		$('#myModal_contrato').modal('show');
+ 		if (dataRecord.estado==1) {
+ 			$("#contrato_id").val(dataRecord.id);
+ 			$("#titulo_contrato").text("Editar Contrato");
+ 			$("#rs").val(dataRecord.razon_social);
+ 			$("#rl").val(dataRecord.representante_legal);
+ 			$("#contrato").val(dataRecord.contrato);
+ 			$("#descripcion").val(dataRecord.descripcion);
+ 			var fc = $.jqx.dataFormat.formatdate(dataRecord.fecha_contrato, 'dd-MM-yyyy');
+ 			$("#fecha_contrato").val(fc);
+ 			$("#cliente_id").val(dataRecord.cliente_id);
+ 			$('#cliente_id').trigger("chosen:updated");
+ 			$("#nit").val(dataRecord.nit);
+ 			$("#responsable_id").val(dataRecord.responsable_id);
+ 			$('#myModal_contrato').modal('show');
+ 		}else{
+ 			bootbox.alert("<strong>¡Mensaje!</strong> No puede editar contrato por que ha finalizado.");		
+ 		}
+ 		
  	}
  	else
  	{
@@ -244,7 +254,7 @@ $("#delete_contrato").click(function(){
  	if (rowindex > -1)
  	{
  		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
- 		if (dataRecord.num_productos==0) {
+ 		if (dataRecord.num_productos==0 && dataRecord.estado==1) {
  			bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de eliminar el registro.", function(result) {
                 if (result == true) {
                     var v = $.ajax({
@@ -265,7 +275,7 @@ $("#delete_contrato").click(function(){
                 }
             });
  		}else{
-			bootbox.alert("<strong>¡Mensaje!</strong> No puede eliminar el contrato por que tiene productos agregados."); 			
+			bootbox.alert("<strong>¡Mensaje!</strong> No puede eliminar el contrato por que tiene productos agregados o ha finalizado el contrato."); 			
  		}
  	}
  	else
@@ -297,8 +307,23 @@ $("#testForm_contrato").submit(function() {
 	});
 
 $("#fecha_contrato").datepicker({
-						autoclose:true,
-	});
+	autoclose:true,
+});
 
+/*
+Finalizar contrato
+ */
+$("#finalizar_contrato").click(function(){
+	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+ 	if (rowindex > -1)
+ 	{
+ 		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
+ 		document.location.href = "/contratos/finalizar/"+dataRecord.id;
+ 	}
+ 	else
+ 	{
+ 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para eliminar.");
+ 	}
+});
 
 })

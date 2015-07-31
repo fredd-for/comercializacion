@@ -2,11 +2,19 @@
 	<div class="col-sm-12">
 		<div class="panel">
 			<div class="panel-heading">
-				<h4>Contrato Nro <?php echo $contratoproducto->contrato ?> &nbsp; <?php echo $contratoproducto->razon_social ?></h4>
-				<div class="options">
-					<ul class="nav nav-tabs">
-						<li class="active"><a data-toggle="tab" href="#domshortcuttiles"><i class="fa fa-file-text-o"></i></a></li>
-					</ul>
+				<div class="row">
+					<div class="col-md-8">
+						<h3><?php echo $contratoproducto->razon_social ?>&nbsp; <b>Contrato Nro:</b> <?php echo $contratoproducto->contrato ?>  </h3>		
+					</div>	
+					<div class="col-md-4">
+					<?php if ($contratoproducto->estado == 1) { ?>
+							<span class="label label-primary pull-right"><?php echo $contratoproducto->valor_1 ?></span>
+						<?php } elseif ($contratoproducto->estado ==2) { ?>
+							<span class="label label-success pull-right"><?php echo $contratoproducto->valor_1 ?></span>
+						<?php } else{ ?>
+							<span class="label label-danger pull-right"><?php echo $contratoproducto->valor_1 ?></span>
+						<?php }?>
+					</div>
 				</div>
 			</div>
 			<div class="panel panel-primary">
@@ -32,6 +40,7 @@
 					<!-- grid garantia y derecho de llave -->
 					<div class="row">
 						<div class="col-sm-6">
+							<?php if ($contratoproducto->estado==1) { ?>
 							<div class="row">
 								<div class="col-md-12">
 									<div class="pull-left">
@@ -39,15 +48,14 @@
 										<button class="btn btn-sm btn-default" type="button" id="dep_derechollave" tipo='2'><i class="fa fa-plus fa-fw"></i>Deposito Derecho Llave</button>
 									</div>
 								</div>
-							</div>
-							<div id="jqxgrid_garantia" style="width: 100%;" >
-								<script type="text/javascript">
-									
-								</script>
-							</div>
+							</div>	
+							<?php } ?>
+							
+							<div id="jqxgrid_garantia" style="width: 100%;" ></div>
 
 						</div>
 						<div class="col-sm-6">
+						<?php if ($contratoproducto->estado==1) { ?>
 							<div class="row">
 								<div class="col-md-12">
 									<div class="pull-left">
@@ -55,6 +63,7 @@
 									</div>
 								</div>
 							</div>
+						<?php } ?>
 							<div id="jqxgrid_devolucion" style="width: 100%;" ></div>
 						</div>
 					</div>
@@ -63,11 +72,13 @@
 
 					<div class="row">
 						<div class="col-md-12">
+							<?php if ($contratoproducto->estado==1) { ?>
 							<div class="pull-left">
 								<button class="btn btn-sm btn-primary" type="button" id="reg_deposito"><i class="fa fa-plus fa-fw"></i>Deposito</button>
 								<button class="btn btn-sm btn-warning" type="button" id="edit"><i class="fa fa-pencil fa-fw"></i> Editar</button>
 								<button class="btn btn-sm btn-danger" type="button" id="reg_deposito_mora"><i class="fa fa-plus fa-fw"></i> Deposito Mora</button>
 							</div>
+							<?php } ?>
 							<div class="pull-right">
 								<a href="/planpagos/reporte/<?php echo $contratoproducto->id ?>" class="btn btn-sm btn-primary"><i class="fa fa-download"></i> Reporte</a>
 							</div>

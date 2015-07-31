@@ -152,6 +152,14 @@ class ContratosController extends ControllerBase
         $this->view->disable();
         $customers = array();
         foreach ($resul as $v) {
+            if ($v->estado==1) {
+                $estado = "<span class='label label-primary'>".$v->valor_1."</span>";
+            }elseif ($v->estado ==2) {
+                $estado = "<span class='label label-success'>".$v->valor_1."</span>";
+            }else{
+                $estado = "<span class='label label-danger'>".$v->valor_1."</span>";
+            }
+
             $customers[] = array(
                 'id' => $v->id,
                 'contrato' => $v->contrato,
@@ -164,6 +172,9 @@ class ContratosController extends ControllerBase
                 'porcentaje_mora' => $v->porcentaje_mora*100,
                 'responsable' =>$v->responsable,
                 'responsable_id' => $v->responsable_id,
+                'estado_text' => $estado,
+                'estado' => $v->estado,
+
             );
         }
         echo json_encode($customers);
@@ -323,9 +334,9 @@ class ContratosController extends ControllerBase
                 
                 $resul->baja_logica = 1;
                 if ($resul->save()) {
-                    $resul2 = Productos::findFirstById($this->request->getPost('producto_id'));
-                    $resul2->cantidad = $resul2->cantidad-$this->request->getPost('cantidad');
-                    $resul2->save();
+                    // $resul2 = Productos::findFirstById($this->request->getPost('producto_id'));
+                    // $resul2->cantidad = $resul2->cantidad-$this->request->getPost('cantidad');
+                    // $resul2->save();
                     //Crear Plan de Pagos
                     if ($this->request->getPost('tiempo') == 'Mensual') {
                         $msm = $this->mensual_planpagos($fecha_inicio,$fecha_fin,$precio_unitario,$cantidad,$contrato_id, $producto_id, $resul->id);
@@ -354,9 +365,9 @@ class ContratosController extends ControllerBase
         $resul = Contratosproductos::findFirstById($this->request->getPost('id'));
         $resul->baja_logica = 0;
         if ($resul->save()) {
-            $resul2 = Productos::findFirstById($resul->producto_id); 
-            $resul2->cantidad = $resul2->cantidad + $resul->cantidad;
-            $resul2->save();
+            // $resul2 = Productos::findFirstById($resul->producto_id); 
+            // $resul2->cantidad = $resul2->cantidad + $resul->cantidad;
+            // $resul2->save();
             $msm ='Exito: Se retiro el producto correctamente';
         }else{
             $msm = 'Error: No se retiro el producto';
@@ -488,7 +499,112 @@ public function saveppAction()
         echo json_encode($msm);
     }
 
+    public function finalizarAction($contrato_id)
+    {
+        $model = new Contratos();
+        $resul = $model->listContrato($contrato_id);
+        $this->view->setVar('contrato',$resul[0]);
 
+        $resul = $model->listcp($contrato_id);
+        $this->view->setVar('productos',$resul);
+
+        $resul = Contratosproductos::find(array("baja_logica=1 AND estado=1 AND contrato_id='$contrato_id'"));
+        $this->view->setVar('nroproductosactivos',count($resul));        
+
+         $estado = $this->tag->select(
+            array(
+                'estado',
+                Parametros::find(array("baja_logica=1 and parametro ='contratos_estados' and nivel>1","order"=>"nivel")),
+                'using' => array('nivel', 'valor_1'),
+                'useEmpty' => true,
+                'emptyText' => '(Selecionar)',
+                'emptyValue' => '',
+                'class' => 'form-control',
+                'required' => 'required'
+                )
+            );
+        $this->view->setVar('estado',$estado);
+
+
+        $this->assets
+                ->addCss('/jqwidgets/styles/jqx.base.css')
+                ->addCss('/jqwidgets/styles/jqx.custom.css')
+                ;
+        $this->assets
+                
+                ->addJs('/jqwidgets/jqxcore.js')
+                ->addJs('/jqwidgets/jqxmenu.js')
+                ->addJs('/jqwidgets/jqxdropdownlist.js')
+                ->addJs('/jqwidgets/jqxlistbox.js')
+                ->addJs('/jqwidgets/jqxcheckbox.js')
+                ->addJs('/jqwidgets/jqxscrollbar.js')
+                ->addJs('/jqwidgets/jqxgrid.js')
+                ->addJs('/jqwidgets/jqxdata.js')
+                ->addJs('/jqwidgets/jqxgrid.sort.js')
+                ->addJs('/jqwidgets/jqxgrid.pager.js')
+                ->addJs('/jqwidgets/jqxgrid.filter.js')
+                ->addJs('/jqwidgets/jqxgrid.selection.js')
+                ->addJs('/jqwidgets/jqxgrid.grouping.js')
+                ->addJs('/jqwidgets/jqxgrid.columnsreorder.js')
+                ->addJs('/jqwidgets/jqxgrid.columnsresize.js')
+                ->addJs('/jqwidgets/jqxdatetimeinput.js')
+                ->addJs('/jqwidgets/jqxcalendar.js')
+                ->addJs('/jqwidgets/jqxbuttons.js')
+                ->addJs('/jqwidgets/jqxdata.export.js')
+                ->addJs('/jqwidgets/jqxgrid.export.js')
+                ->addJs('/jqwidgets/globalization/globalize.js')
+                ->addJs('/jqwidgets/jqxgrid.aggregates.js')
+                ->addJs('/media/plugins/bootbox/bootbox.min.js')
+                ->addJs('/jqwidgets/jqxtooltip.js')
+                ->addJs('/scripts/contratos/finalizar.js')
+        ;
+    }
+
+    public function savefinalizarAction()
+    {
+        
+        if ($this->request->isPost()) {
+            if($_POST['contratoproducto_id']>0){
+                $resul = Contratosproductos::findFirstById($_POST['contratoproducto_id']);
+                $resul->estado = $_POST['estado'];
+                $resul->fecha_finalizacion = date("Y-m-d H:i:s");
+                $resul->obs_finalizacion = $_POST['observacion'];
+                $resul->usuario_finalizacion = $this->_user->id;
+                if ($resul->save()) {
+                    $this->flashSession->success("Exito: Producto finalizado correctamente...");
+                }else{
+                    $this->flashSession->error("Error: no se guardo el registro...");  
+                }
+                
+            }else{
+                $resul = Contratos::findFirstById($_POST['contrato_id']);
+                $resul->estado = $_POST['estado'];
+                $resul->fecha_finalizacion = date("Y-m-d H:i:s");
+                $resul->obs_finalizacion = $_POST['observacion'];
+                $resul->usuario_finalizacion = $this->_user->id;
+                if ($resul->save()) {
+                    $resul_cp=Contratosproductos::find(array("baja_logica=1 and estado =1 and contrato_id='$resul->id'"));
+                    foreach ($resul_cp as $cp) {
+                        $cp=Contratosproductos::findFirstById($cp->id);
+                        $cp->estado = $_POST['estado'];
+                        $cp->fecha_finalizacion = date("Y-m-d H:i:s");
+                        $cp->obs_finalizacion = $_POST['observacion'];
+                        $cp->usuario_finalizacion = $this->_user->id;
+                        $cp->save();
+                    }
+                    // $contrato_id = $resul->id;
+                    // $model = new Contratos();
+                    // $cp = $model->finalizarProductos($resul->id,$resul->estado,$resul->obs_finalizacion,$resul->usuario_finalizacion);
+                    $this->flashSession->success("Exito: Contrato finalizado correctamente...");
+                }else{
+                    $this->flashSession->error("Error: no se guardo el registro...");
+                }
+            }
+        }
+        // $this->view->disable();
+        $this->response->redirect('/contratos/finalizar/'.$_POST['contrato_id']);
+        // echo json_encode($msj);
+    }
 
     public function listplanpagosAction()
     {

@@ -46,6 +46,14 @@ public function listAction()
       $resul = $model->lista();
       $this->view->disable();
       foreach ($resul as $v) {
+        if ($v->estado==1) {
+                $estado = "<span class='label label-primary'>".$v->valor_1."</span>";
+            }elseif ($v->estado ==2) {
+                $estado = "<span class='label label-success'>".$v->valor_1."</span>";
+            }else{
+                $estado = "<span class='label label-danger'>".$v->valor_1."</span>";
+            }
+
         $customers[] = array(
             'id' => $v->id,
             'grupo' => $v->grupo,
@@ -62,7 +70,8 @@ public function listAction()
             'total' => $v->total,
             'deposito' => $v->deposito,
             'cobrar' => $v->total-$v->deposito,
-            'mora' => $v->mora
+            'mora' => $v->mora,
+            'estado' => $estado
             );
     }
     echo json_encode($customers);

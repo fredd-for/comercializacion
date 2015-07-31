@@ -12,12 +12,11 @@ class Planpagos extends \Phalcon\Mvc\Model
 		if ($cliente_id!='') {
 			$where = ' AND cl.id = '.$cliente_id;
 		}
-		$sql = "SELECT cl.razon_social,cl.nit,c.cliente_id,c.contrato,c.fecha_contrato,c.descripcion,c.porcentaje_mora,p.producto,p.codigo,g.grupo,e.estacion,l.linea,cp.*,
+		$sql = "SELECT cl.razon_social,cl.nit,c.cliente_id,c.contrato,c.fecha_contrato,c.descripcion,c.porcentaje_mora,p.producto,p.codigo,g.grupo,e.estacion,l.linea,cp.*,pa.valor_1,
 		(SELECT SUM(ppd.monto_deposito)
 			FROM planpagos pp,planpagodepositos ppd
 			WHERE pp.contratoproducto_id = cp.id AND pp.baja_logica =1 AND pp.id = ppd.planpago_id AND ppd.baja_logica=1 AND ppd.tipo_deposito =1
 			) as deposito,
-
 (SELECT SUM(IF(pp.monto_reprogramado<=(SELECT SUM(monto_deposito) FROM planpagodepositos WHERE planpago_id =pp.id AND tipo_deposito=1 AND baja_logica = 1),pp.mora,
 	(IF((DATEDIFF(CURDATE(),ADDDATE(pp.fecha_programado, INTERVAL c.dias_tolerancia DAY)))>0,cp.total/cp.nro_dias*c.porcentaje_mora*(DATEDIFF(CURDATE(),ADDDATE(pp.fecha_programado, INTERVAL c.dias_tolerancia DAY))),0))
 	)
@@ -32,6 +31,7 @@ INNER JOIN productos p ON p.id = cp.producto_id
 INNER JOIN grupos g ON p.grupo_id = g.id
 INNER JOIN estaciones e ON p.estacion_id = e.id
 INNER JOIN lineas l ON e.linea_id = l.id
+INNER JOIN parametros pa ON cp.estado = pa.nivel AND pa.parametro='contratos_estados'
 WHERE c.baja_logica =1 AND cp.baja_logica = 1 ".$where;
 $this->_db = new Planpagos();
 return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));
@@ -68,7 +68,7 @@ return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($s
 	public function getcontrato($contratoproducto_id)
 	{
 		$sql = "SELECT cl.razon_social,c.cliente_id,c.contrato,c.fecha_contrato,c.descripcion,p.producto,p.codigo,g.grupo,e.estacion,l.linea,
-		cp.*
+		cp.*,pa.valor_1
 		FROM contratos c
 		INNER JOIN clientes cl ON c.cliente_id = cl.id
 		INNER JOIN contratosproductos cp ON c.id = cp.contrato_id
@@ -76,6 +76,7 @@ return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($s
 		INNER JOIN grupos g ON p.grupo_id = g.id
 		INNER JOIN estaciones e ON p.estacion_id = e.id
 		INNER JOIN lineas l ON e.linea_id = l.id
+		INNER JOIN parametros pa ON cp.estado = pa.nivel AND pa.parametro = 'contratos_estados'
 		WHERE c.baja_logica =1 AND cp.baja_logica = 1 AND cp.id = '$contratoproducto_id'";
 		$this->_db = new Planpagos();
 		return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));	

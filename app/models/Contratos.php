@@ -18,10 +18,11 @@ class Contratos extends \Phalcon\Mvc\Model
 	
 	public function listContrato($contrato_id)
 	{
-		$sql = "SELECT co.*,cl.razon_social,cl.nit,cl.representante_legal,CONCAT(COALESCE(paterno,' '),' ',COALESCE(materno,' '),' ',COALESCE(nombre,' ')) as responsable
+		$sql = "SELECT co.*,cl.razon_social,cl.nit,cl.representante_legal,CONCAT(COALESCE(paterno,' '),' ',COALESCE(materno,' '),' ',COALESCE(nombre,' ')) as responsable,p.valor_1
 		FROM contratos co
 		INNER JOIN clientes cl ON co.cliente_id=cl.id 
 		INNER JOIN usuarios u ON co.responsable_id = u.id
+		INNER JOIN parametros p ON co.estado = p.nivel AND p.parametro = 'contratos_estados'
 		WHERE co.id='$contrato_id' AND co.baja_logica=1 LIMIT 1";
 		$this->_db = new Contratos();
 		return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));
@@ -29,13 +30,14 @@ class Contratos extends \Phalcon\Mvc\Model
 
 	public function listcp($contrato_id)
 	{
-		$sql = "SELECT g.grupo,l.linea, e.estacion,p.producto,c.contrato,cp.*
+		$sql = "SELECT g.grupo,l.linea, e.estacion,p.producto,p.codigo,c.contrato,cp.*,pa.valor_1
 		FROM contratosproductos cp 
 		INNER JOIN contratos c ON cp.contrato_id=c.id
 		INNER JOIN productos p	ON cp.producto_id = p.id
 		INNER JOIN estaciones e ON p.estacion_id = e.id
 		INNER JOIN lineas l ON e.linea_id = l.id
 		INNER JOIN grupos g ON p.grupo_id = g.id
+		INNER JOIN parametros pa ON cp.estado = pa.nivel AND pa.parametro ='contratos_estados'
 		WHERE cp.baja_logica=1 AND cp.contrato_id='$contrato_id' 
 		ORDER BY fecha_fin ASC";
 		$this->_db = new Contratos();
@@ -44,17 +46,18 @@ class Contratos extends \Phalcon\Mvc\Model
 
 	public function listadocontratos()
 	{
-		$sql = "SELECT c.*, CONCAT(COALESCE(u.paterno,' '),' ',COALESCE(u.materno,' '),' ',COALESCE(u.nombre,' ')) as responsable,
+		$sql = "SELECT c.*,p.valor_1, CONCAT(COALESCE(u.paterno,' '),' ',COALESCE(u.materno,' '),' ',COALESCE(u.nombre,' ')) as responsable,
 		(SELECT COUNT(cp.id) FROM contratosproductos cp WHERE cp.baja_logica = 1 AND cp.contrato_id = c.id) as num_productos,
-	cl.razon_social
-FROM contratos c
-INNER JOIN usuarios u ON c.responsable_id = u.id
-INNER JOIN clientes cl ON c.cliente_id = cl.id
-WHERE c.baja_logica = 1
-ORDER BY c.fecha_contrato DESC ";
-$this->_db = new Contratos();
-return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));			
-}
+		cl.razon_social
+		FROM contratos c
+		INNER JOIN usuarios u ON c.responsable_id = u.id
+		INNER JOIN clientes cl ON c.cliente_id = cl.id
+		INNER JOIN parametros p ON c.estado = p.nivel AND p.parametro='contratos_estados'
+		WHERE c.baja_logica = 1
+		ORDER BY c.fecha_contrato DESC ";
+		$this->_db = new Contratos();
+		return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));			
+	}
 
 public function getcontrato($contratoproducto_id)
 {
@@ -146,6 +149,12 @@ $this->_db = new Contratos();
 return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));
 }
 
-
+	public function finalizarProductos($contrato_id,$estado,$observacion,$usuario)
+	{
+		$sql="UPDATE contratosproductos SET estado='$estado',fecha_finalizacion=now() , obs_finalizacion = '$observacion', usuario_finalizacion = '$usuario'
+		WHERE baja_logica = 1 AND estado = 1 AND contrato_id = '$contrato_id'";
+		$this->_db = new Contratos();
+		return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));
+	}
 
 }

@@ -110,6 +110,8 @@ class ProductosController extends ControllerBase
                 'descripcion' => $v->descripcion,
                 'precio_unitario' => $v->precio_unitario,
                 'cantidad' => $v->cantidad,
+                'cantidad_alquilada' => $v->cantidad_alquilada,
+                'cantidad_disponible' => $v->cantidad_disponible,
                 // 'cant_solicitud' => $v->cant_solicitud,
                 'cant_solicitud' => '<a class="solicitudes" href="javascript:void(0)" producto_id="'.$v->id.'" title="Ver Solicitudes">'.$v->cant_solicitud.'</a>',
                 'tiempo' => $v->tiempo,

@@ -17,6 +17,8 @@ $(document).ready(function (){
 			{ name: 'descripcion',type:'string'},
 			{ name: 'precio_unitario',type:'number'},
 			{ name: 'cantidad',type:'number'},
+			{ name: 'cantidad_alquilada',type:'number'},
+			{ name: 'cantidad_disponible',type:'number'},
 			{ name: 'tiempo',type:'string'},
 			{ name: 'foto'},
 			],
@@ -90,11 +92,13 @@ $(document).ready(function (){
 			{ text: 'linea', datafield: 'linea', filtertype: 'checkedlist',width: '9%' },
 			{ text: 'Estación', datafield: 'estacion', filtertype: 'checkedlist',width: '10%' },
 			{ text: 'Grupo', datafield: 'grupo', filtertype: 'checkedlist',width: '10%' },
-			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '20%' },
+			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '15%' },
 			{ text: 'Codigo', datafield: 'codigo', filtertype: 'input',width: '5%' },
-			{ text: 'Descripción', datafield: 'descripcion', filtertype: 'input',width: '25%' },
+			{ text: 'Descripción', datafield: 'descripcion', filtertype: 'input',width: '20%' },
 			{ text: 'Precio Unitario', datafield: 'precio_unitario', filtertype: 'input',width: '5%' },
-			{ text: 'Cantidad', datafield: 'cantidad',filtertype: 'input', width: '5%', cellclassname: cellclass },
+			{ text: 'Cant. Total', datafield: 'cantidad',filtertype: 'input', width: '5%'},
+			{ text: 'Cant. Alquilada', datafield: 'cantidad_alquilada',filtertype: 'input', width: '5%'},
+			{ text: 'Cant. Disponible', datafield: 'cantidad_disponible',filtertype: 'input', width: '5%', cellclassname: cellclass },
 			{ text: 'Tiempo', datafield: 'tiempo',filtertype: 'input', width: '5%' },
 			]
 		});
@@ -200,7 +204,7 @@ $("#add_contrato").click(function() {
  	if (rowindex > -1)
  	{
  		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
- 		if (dataRecord.cantidad>0) {
+ 		if (dataRecord.cantidad_disponible>0) {
  			$("#producto_id").val(dataRecord.id);
  			$("#titulo").text("Añadir Producto al Contrato");
 
