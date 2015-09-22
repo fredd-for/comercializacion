@@ -10,7 +10,7 @@
         'host'        => 'localhost',
         'username'    => 'user_comercial',
         'password'    => 'pass_comercial',
-        'dbname'      => 'bd_comercial2',
+        'dbname'      => 'bd_comercial',
         
     ),
     'application' => array(
