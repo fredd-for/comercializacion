@@ -14,7 +14,7 @@ class Solicitudes extends \Phalcon\Mvc\Model
 		FROM solicitudes s
 		INNER JOIN usuarios u ON s.responsable_id = u.id
 		INNER JOIN clientes cl ON s.cliente_id = cl.id
-		INNER JOIN parametros p ON s.estado = p.nivel AND p.baja_logica = 1
+				INNER JOIN parametros p ON s.estado = p.nivel AND p.baja_logica = 1 AND p.parametro= 'solicitudes_estados'
 		WHERE s.baja_logica = 1
 		ORDER BY s.id DESC ";
 		$this->_db = new Solicitudes();
