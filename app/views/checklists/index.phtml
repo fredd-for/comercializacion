@@ -2,7 +2,7 @@
 	<div class="col-sm-12">
 		<div class="panel">
 			<div class="panel-heading">
-				<h4>Listado de Estaciones</h4>
+				<h4> Listado de Parametros Check List</h4>
 				<div class="options">
 					<ul class="nav nav-tabs">
 						<li class="active"><a data-toggle="tab" href="#domshortcuttiles"><i class="fa fa-users"></i></a></li>
@@ -10,6 +10,7 @@
 					</ul>
 				</div>
 			</div>
+
 			<div class="panel-body">
 				<div class="tab-content">
 					<div class="row">
@@ -34,9 +35,11 @@
 							</div>
 						</div>
 					</div>
+					
 					<div class="row">
 						<div class="col-md-12">
 							<div id="jqxgrid" style="height: 550px; width: 100%;" ></div>
+							<input value="Expand All Groups" type="button" id='expandall' />
 						</div>
 					</div>
 				</div>
@@ -46,40 +49,32 @@
 </div>
 
 
-
-<!-- Modal Crear Contrato -->
+<!-- Modal Adicinar archivo -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form class="form-horizontal" id="testForm" data-toggle="validator" action="" method="post" />
+		
+			<form method="post" action="" class="form-horizontal" id="testForm" enctype="multipart/form-data">
 			<input type="hidden" name="id" id="id">
+			<input type="text" name="contrato_id" id="contrato_id" value="<?php echo $contrato_id ?>">
+			<input type="text" name="cliente_id" id="cliente_id" value="<?php echo $cliente_id ?>">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				<h4 class="modal-title" id="titulo">Editar</h4>
+				<h4 class="modal-title" id="titulo">Documento Digital</h4>
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
-					<label class="col-md-4 control-label">Linea</label>
-					<div class="col-md-8">
-						<?php echo $linea ?>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-4 control-label">Estación</label>
-					<div class="col-md-8">
-						<input type="text" name="estacion" id="estacion" class="form-control" placeholder="" required>
+					<div class="col-md-12">
+						<input id="file-1" name="file-1" type="file" data-overwrite-initial="false" data-min-file-count="1">
 					</div>
 				</div>
 			</div>
-			<div class="modal-footer">
+			<!-- <div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 				<button type="submit" class="btn btn-primary" id="Save">Guardar</button>
-			</div>
+			</div> -->
 		</form>
 	</div>
 </div>
 </div>
 <!-- end  modal -->
-
-
-

@@ -40,7 +40,7 @@ class ContratosController extends ControllerBase
                 ->addJs('/jqwidgets/jqxgrid.aggregates.js')
                 ->addJs('/media/plugins/bootbox/bootbox.min.js')
                 ->addJs('/jqwidgets/jqxtooltip.js')
-                ->addJs('/assets//js/plugins.js')
+                ->addJs('/assets/js/plugins.js')
                 ->addJs('/assets/js/app.js')
                 ->addJs('/js/app.plugin.js')
                 // ->addJs('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js')

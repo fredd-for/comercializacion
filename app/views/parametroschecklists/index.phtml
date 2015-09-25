@@ -2,7 +2,7 @@
 	<div class="col-sm-12">
 		<div class="panel">
 			<div class="panel-heading">
-				<h4>Listado de Estaciones</h4>
+				<h4>Listado de Parametros Check List</h4>
 				<div class="options">
 					<ul class="nav nav-tabs">
 						<li class="active"><a data-toggle="tab" href="#domshortcuttiles"><i class="fa fa-users"></i></a></li>
@@ -59,15 +59,27 @@
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
-					<label class="col-md-4 control-label">Linea</label>
+					<label class="col-md-4 control-label">Tipo de Empresa o Institución</label>
 					<div class="col-md-8">
-						<?php echo $linea ?>
+						<?php echo $tipo_empresa ?>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-4 control-label">Estación</label>
+					<label class="col-md-4 control-label">Parametro</label>
 					<div class="col-md-8">
-						<input type="text" name="estacion" id="estacion" class="form-control" placeholder="" required>
+						<input type="text" name="parametro" id="parametro" class="form-control" placeholder="" required>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label">Campo Obligatorio</label>
+					<div class="col-md-8">
+						<?php echo $obligatorio ?>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label">Archivo de respaldo</label>
+					<div class="col-md-8">
+						<?php echo $escaner ?>
 					</div>
 				</div>
 			</div>
@@ -80,6 +92,4 @@
 </div>
 </div>
 <!-- end  modal -->
-
-
 

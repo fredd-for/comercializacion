@@ -230,6 +230,25 @@ $("#edit_contrato").click(function(){
 
 
 /*
+Ver Check List
+ */
+$("#ver_checklist").click(function(){
+	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+	// alert(rowindex);
+ 	if (rowindex > -1)
+ 	{
+ 		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
+ 		var url = "/checklists/index/"+dataRecord.id;    
+		$(location).attr('href',url);	
+ 	}
+ 	else
+ 	{
+ 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro.");
+ 	}
+});
+
+
+/*
 Ver Productod del Contrato
  */
 $("#ver_productos").click(function(){
