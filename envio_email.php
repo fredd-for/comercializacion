@@ -177,7 +177,7 @@ mysql_close($link);
 // $mail->FromName = utf8_decode("\"MI TELEFERICO\"");
 // $mail->Subject = utf8_decode("Notificación Pago de Alquiler");
 // $mail->MsgHTML(utf8_decode($html));
-// $mail->AddAddress($correo_destinatario, $destinatario);
+// $mail->AddAddress('fvelasco@miteleferico.bo', 'Juan mamami');
 // $mail->AddCC( 'fvelasco@miteleferico.bo', 'Luis Velasco');
 // $mail->AddCC( 'luis.freddy.velasco@gmail.com', 'Luis Freddy Velasco');
 // $mail->IsHTML(true);

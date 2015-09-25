@@ -2,6 +2,7 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
         <group>
             <file>file:/var/www/html/comercializacion/app/controllers/ContratosController.php</file>
             <file>file:/var/www/html/comercializacion/app/controllers/ControllerBase.php</file>
@@ -9,5 +10,8 @@
             <file>file:/var/www/html/comercializacion/app/controllers/ChecklistsController.php</file>
             <file>file:/var/www/html/comercializacion/public/index.php</file>
         </group>
+=======
+        <group/>
+>>>>>>> f367b6b2b60ac87d918ab02ac2583320c470538a
     </open-files>
 </project-private>
