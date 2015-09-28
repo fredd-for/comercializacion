@@ -9,13 +9,45 @@ class Checklists extends \Phalcon\Mvc\Model
 	private $_db;
 	public function lista($contrato_id)
 	{
-		$sql= "SELECT pck.*,p.valor_1 as tipo_empresa_text, IF(pck.obligatorio,'SI','NO') as obligatorio_text,IF(pck.escaner,'SI','NO') as escaner_text, COALESCE(ck.cumple,0) as cumple
+		$sql= "SELECT pck.*,p.valor_1 as tipo_empresa_text, IF(pck.obligatorio,'SI','NO') as obligatorio_text,IF(pck.escaner,'SI','NO') as escaner_text, COALESCE(ck.cumple,0) as cumple, COALESCE(ck.id,0) as checklist_id
 		FROM parametroschecklists pck
 		INNER JOIN parametros p ON pck.tipo_empresa = p.nivel AND p.parametro='checklist_tipoempresas'
-		LEFT JOIN checklists ck ON pck.id=ck.parametro_id AND ck.contrato_id='$contrato_id' AND ck.baja_logica=1
+		LEFT JOIN checklists ck ON pck.id=ck.parametro_id AND ck.contrato_id='$contrato_id'
 		WHERE pck.baja_logica = 1  
 		ORDER BY pck.tipo_empresa,pck.parametro";
-		$this->_db = new Parametroschecklists();
+		$this->_db = new Checklists();
 		return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));
+	}
+
+	public function obtenerarchivo($checklist_id)
+	{
+		$sql="SELECT ack.* ,COUNT(cliente_id)-1 as archivosactualizados
+		FROM checklistsarchivos ckl
+		INNER JOIN archivoschecklists ack ON ckl.archivo_id = ack.id
+		WHERE checklist_id='$checklist_id'
+		ORDER BY fecha_reg DESC
+		LIMIT 1";
+		$this->_db = new Checklists();
+		return new Resultset(null, $this->_db,$this->_db->getReadConnection()->query($sql));
+	}
+
+	public function getContrato($cliente_id,$contrato_id)
+	{
+		$sql = "SELECT * 
+		FROM contratos c
+		WHERE c.cliente_id='$cliente_id' AND c.id<>'$contrato_id' AND c.baja_logica =1
+		ORDER BY fecha_contrato DESC
+		LIMIT 1";
+		$this->_db = new Checklists();
+		return new Resultset(null, $this->_db,$this->_db->getReadConnection()->query($sql));
+	}
+
+	public function cantChecklist($contrato_id)
+	{
+		$sql = "SELECT COUNT(contrato_id) as cant_checklist
+		FROM checklists 
+		WHERE contrato_id = '$contrato_id' AND baja_logica = 1 AND cumple=1";
+		$this->_db = new Checklists();
+		return new Resultset(null, $this->_db,$this->_db->getReadConnection()->query($sql));
 	}
 }

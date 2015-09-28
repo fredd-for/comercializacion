@@ -28,10 +28,10 @@
 					</div>
 					<div class="row">
 						<div class="col-md-12">
-							<div class="pull-right">
-								<button class="btn btn-sm btn-primary" type="button" id="add"><i class="fa fa-subway"></i>Adicionar</button>
+							<div class="pull-left">
+								<button class="btn btn-sm btn-primary" type="button" id="migrar"><i class="fa fa-subway"></i>Migrar Ultimo Contrato</button>
 								<button class="btn btn-sm btn-warning" type="button" id="edit"><i class="fa fa-pencil fa-fw"></i> Editar</button>
-								<button class="btn btn-sm btn-danger" type="button" id="delete"><i class="fa fa-trash-o fa-fw"></i> Eliminar</button>
+								<!-- <button class="btn btn-sm btn-danger" type="button" id="delete"><i class="fa fa-trash-o fa-fw"></i> Eliminar</button> -->
 							</div>
 						</div>
 					</div>
@@ -54,8 +54,8 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 		
-			<form method="post" action="" class="form-horizontal" id="testForm" enctype="multipart/form-data">
-			<input type="hidden" name="id" id="id">
+			<form method="post" action="/checklists/savearchivo/" class="form-horizontal" id="testForm" enctype="multipart/form-data">
+			<input type="text" name="checklist_id" id="checklist_id" value="">
 			<input type="text" name="contrato_id" id="contrato_id" value="<?php echo $contrato_id ?>">
 			<input type="text" name="cliente_id" id="cliente_id" value="<?php echo $cliente_id ?>">
 			<div class="modal-header">
