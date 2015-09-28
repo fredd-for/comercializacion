@@ -44,7 +44,7 @@ $("#file-1").fileinput({
 			{ name: 'cumple',type: 'number'},
 			{ name: 'accion',type: 'string'},
 			{ name: 'archivo',type: 'string'},
-			{ name: 'checklist_id',type: 'number'},
+			{ name: 'parametro_id',type: 'number'},
 			],
 			url: '/checklists/list/'+$("#contrato_id").val(),
 			cache: false
@@ -102,30 +102,53 @@ $("#expandall").click(function(){
 adicionar 
 */
 $("#migrar").click(function(){
-	
-	var v = $.ajax({
-				url: '/checklists/migrar/',
-				type: 'POST',
-				datatype: 'json',
-				data: {cliente_id: $("#cliente_id").val(), contrato_id:$("#contrato_id").val()},
-				success: function(data) {
-                            // alert(data);
-                            bootbox.confirm("<strong>¡Mensaje!</strong> "+ data,function (result) {
-                            	if(result==true){
-                            		alert("si");
-                            	}
-                            })
-                        }, //mostramos el error
-                        error: function() {
-                        	alert('Se ha producido un error Inesperado');
-                        }
-    });
+	$('#myModal_migrar').modal('show');
+	// var v = $.ajax({
+	// 			url: '/checklists/migrar/',
+	// 			type: 'POST',
+	// 			datatype: 'json',
+	// 			data: {cliente_id: $("#cliente_id").val(), contrato_id:$("#contrato_id").val()},
+	// 			success: function(data) {
+ //                            // alert(data);
+ //                            bootbox.confirm("<strong>¡Mensaje!</strong> "+ data,function (result) {
+ //                            	if(result==true){
+ //                            		alert("si");
+ //                            	}
+ //                            })
+ //                        }, //mostramos el error
+ //                        error: function() {
+ //                        	alert('Se ha producido un error Inesperado');
+ //                        }
+ //    });
 
 	// bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de migrar del ultimo contrato.", function(result) {
 	// 	if (result == true) {
 			
 	// 	}
 	// });
+});
+
+/*
+Save Migrar 
+ */
+$("#testForm_migrar").submit(function() {
+	var contrato_id_migrar = $('input:radio[name=contrato_id_migrar]:checked').val();
+	var v=$.ajax({
+            	url:'/checklists/savemigrar/',
+            	type:'POST',
+            	datatype: 'json',
+            	data:{contrato_id_migrar:contrato_id_migrar,contrato_id:$("#contrato_id").val()},
+				success: function(data) { cargar(); 
+					$("#divMsjeExito").show();
+                    $("#divMsjeExito").addClass('alert alert-info alert-dismissable');
+                    $("#aMsjeExito").html(data); 
+                    cargar();
+				}, //mostramos el error
+			error: function() { alert('Se ha producido un error Inesperado'); }
+			}); //   
+
+	 		$('#myModal_migrar').modal('hide');
+            return false; // ajax used, block the normal submit
 });
 
 // /*
@@ -211,7 +234,7 @@ var add_archivo = function (row) {
 	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
 	if (rowindex > -1) {
 		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
-		$("#checklist_id").val(dataRecord.checklist_id);
+		$("#parametro_id").val(dataRecord.parametro_id);
 		// $("#tipo").val(dataRecord.tipo);
 		$('#myModal').modal('show');
 	

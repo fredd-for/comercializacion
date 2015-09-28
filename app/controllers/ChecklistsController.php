@@ -58,6 +58,10 @@ class ChecklistsController extends ControllerBase
          $resul = Contratos::findFirstById($contrato_id);
          $this->view->setVar('contrato_id',$resul->id);
          $this->view->setVar('cliente_id',$resul->cliente_id);
+
+        $model = new Checklists();
+        $listcontratos = $model->getContrato($resul->cliente_id,$resul->id);
+        $this->view->setVar('listcontratos',$listcontratos);
    
 
     }
@@ -80,21 +84,21 @@ class ChecklistsController extends ControllerBase
             'escaner_text' =>$v->escaner_text,
             'clase' =>$v->clase,
             'cumple' =>$v->cumple,
-            'archivo' => $this->archivo($v->checklist_id),
-            'checklist_id' => $v->checklist_id,
+            'archivo' => $this->archivo($v->parametro_id,$v->contrato_id),
+            'parametro_id' => $v->parametro_id,
             'accion' => '<a class="btn btn-xs btn-warning" onclick="add_archivo()" title="Adicionar Archivo"><i class="fa fa-pencil"></i></a>',
             );
         }
     echo json_encode($customers);
     }
 
-public function archivo($checklist_id)
+public function archivo($parametro_id,$contrato_id)
 {
     // $file = "/file/productos/images.png";
     $file = "";
-    if($checklist_id>0){
+    if($parametro_id>0){
         $model=new Checklists();
-        $resul = $model->obtenerarchivo($checklist_id);
+        $resul = $model->obtenerarchivo($parametro_id,$contrato_id);
         // $file = $resul[0]->carpeta . $resul[0]->nombre_archivo;
         if(file_exists($resul[0]->carpeta . $resul[0]->nombre_archivo)){
             $arc="/".$resul[0]->carpeta . $resul[0]->nombre_archivo;
@@ -104,23 +108,6 @@ public function archivo($checklist_id)
     return $file;
 }
 
-public function migrarAction()
-{
-    $model = new Checklists();
-    $resul = $model->getContrato($_POST['cliente_id'],$_POST['contrato_id']);
-    if(count($resul)>0){
-        $model2 = new Checklists();
-        $resul2 = $model2->cantChecklist($resul[0]->id);
-        $msm='No se llenaron documentos en el contrato Nro.'.$resul[0]->contrato;
-        if($resul2[0]->cant_checklist>0){
-            $msm='Se actualizara según el contrato Nro.'.$resul[0]->contrato .'. Esta seguro de realizar la migración?';
-        }
-    }else{
-        $msm = 'Es el primer contrato';
-    }
-    $this->view->disable();
-    echo $msm;
-}
 
 public function savecumpleAction()
 {
@@ -186,9 +173,10 @@ public function savearchivoAction()
                         $resul3->baja_logica = 1;
                         if ($resul3->save()) {
                             $resul = new Checklistsarchivos();
-                            $resul->checklist_id = $_POST['checklist_id'];
+                            $resul->parametro_id = $_POST['parametro_id'];
                             $resul->archivo_id = $resul3->id;
                             $resul->estado = 1;
+                            $resul->contrato_id = $_POST['contrato_id'];
                             $resul->save();
 
                             $this->flashSession->success("Exito: Registro guardado correctamente...");    
@@ -204,6 +192,21 @@ public function savearchivoAction()
     $this->response->redirect('/checklists/index/'.$_POST['contrato_id']);            
 }
 
+
+public function savemigrarAction()
+{
+    $msm='';
+    if (isset($_POST['contrato_id_migrar'])) {
+        $contrato_id = $_POST['contrato_id'];
+        $contrato_id_migrar = $_POST['contrato_id_migrar'];
+
+        $model = new Checklists();
+        $resul = $model->migrar($contrato_id,$contrato_id_migrar);
+        $msm = 'Se migro correctamente';
+    }
+    $this->view->disable();
+    echo $msm;
+}
 // public function deleteAction(){
 //     $resul = Estaciones::findFirstById($this->request->getPost('id'));
 //     $resul->baja_logica = 0;

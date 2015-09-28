@@ -55,7 +55,7 @@
 		<div class="modal-content">
 		
 			<form method="post" action="/checklists/savearchivo/" class="form-horizontal" id="testForm" enctype="multipart/form-data">
-			<input type="text" name="checklist_id" id="checklist_id" value="">
+			<input type="text" name="parametro_id" id="parametro_id" value="">
 			<input type="text" name="contrato_id" id="contrato_id" value="<?php echo $contrato_id ?>">
 			<input type="text" name="cliente_id" id="cliente_id" value="<?php echo $cliente_id ?>">
 			<div class="modal-header">
@@ -78,3 +78,58 @@
 </div>
 </div>
 <!-- end  modal -->
+
+<!-- Modal Crear Contrato -->
+<div class="modal fade" id="myModal_migrar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form class="form-horizontal" id="testForm_migrar" data-toggle="validator" action="" method="post" />
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title" id="titulo">Migrar Check List del siguiente contrato</h4>
+			</div>
+			<div class="modal-body">
+			<?php if (count($listcontratos)>0) { ?>
+			<?php foreach ($listcontratos as $v) { ?>
+				<div class="table-responsive">
+					<table class="table table-vcenter table-striped">
+						<thead>
+							<tr>
+								
+								<th>Contrato</th>
+								<th>Descripción</th>
+								<th>Fecha Contrato</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								
+								<td><?php echo $v->contrato ?></td>
+								<td><?php echo $v->descripcion ?></td>
+								<td><?php echo $v->fecha_contrato ?></td>
+								<td>
+									<input type="radio" name="contrato_id_migrar" value="<?php echo $v->id ?>" required/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			<?php } ?>
+				
+			<?php }	else {
+				echo "Es el primer contrato para llenar check list. ";
+				}?>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				<?php if (count($listcontratos)>0) { ?>
+				<button type="submit" class="btn btn-primary" id="Save">Migrar</button>
+				<?php } ?>
+			</div>
+		</form>
+	</div>
+</div>
+</div>
+<!-- end  modal -->
+
