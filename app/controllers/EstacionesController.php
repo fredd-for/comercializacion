@@ -126,7 +126,7 @@ public function pruebapdfAction()
 {
 // Include the main TCPDF library (search for installation path).
 require_once('tcpdf/examples/tcpdf_include.php');
-
+ob_clean();
 // create new PDF document
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LETTER', true, 'UTF-8', false);
 
@@ -235,13 +235,14 @@ for ($i=1; $i <100 ; $i++) {
 
 // Close and output PDF document
 // This method has several options, check the source code documentation for more information.
-$pdf->Output('example_001.pdf', 'I');
-
+// $pdf->Output('example_001.pdf', 'I');
+$pdf->Output('/var/www/html/comercializacion/public/file/example_001.pdf', 'F');
+exit();
 //============================================================+
 // END OF FILE
 //============================================================+
 
-$this->view->disable();
+// $this->view->disable();
 }
 
 

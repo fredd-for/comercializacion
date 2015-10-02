@@ -78,9 +78,9 @@ $("#edit").click(function() {
 
  });
 
-/*
+
 Eliminar
- */
+ 
 $("#delete").click(function() {
  	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
  	if (rowindex > -1)

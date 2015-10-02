@@ -142,7 +142,7 @@ $("#testForm_migrar").submit(function() {
 					$("#divMsjeExito").show();
                     $("#divMsjeExito").addClass('alert alert-info alert-dismissable');
                     $("#aMsjeExito").html(data); 
-                    cargar();
+                    cargar();jit
 				}, //mostramos el error
 			error: function() { alert('Se ha producido un error Inesperado'); }
 			}); //   

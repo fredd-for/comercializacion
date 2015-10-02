@@ -258,7 +258,7 @@ class CargosController extends ControllerRrhh {
                 $resul->cargo_estado_id = 1;
                 $resul->estado = 0;
                 $resul->baja_logica = 1;
-                $resul->user_reg_id = 1;
+                $resul->user_reg_id = $user->id;
                 $resul->fecha_reg = date("Y-m-d H:i:s");
                 $resul->fin_partida_id = $_POST['fin_partida_id'];
                 $resul->poa_id = 1;
