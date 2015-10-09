@@ -103,29 +103,6 @@ adicionar
 */
 $("#migrar").click(function(){
 	$('#myModal_migrar').modal('show');
-	// var v = $.ajax({
-	// 			url: '/checklists/migrar/',
-	// 			type: 'POST',
-	// 			datatype: 'json',
-	// 			data: {cliente_id: $("#cliente_id").val(), contrato_id:$("#contrato_id").val()},
-	// 			success: function(data) {
- //                            // alert(data);
- //                            bootbox.confirm("<strong>¡Mensaje!</strong> "+ data,function (result) {
- //                            	if(result==true){
- //                            		alert("si");
- //                            	}
- //                            })
- //                        }, //mostramos el error
- //                        error: function() {
- //                        	alert('Se ha producido un error Inesperado');
- //                        }
- //    });
-
-	// bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de migrar del ultimo contrato.", function(result) {
-	// 	if (result == true) {
-			
-	// 	}
-	// });
 });
 
 /*
@@ -142,7 +119,7 @@ $("#testForm_migrar").submit(function() {
 					$("#divMsjeExito").show();
                     $("#divMsjeExito").addClass('alert alert-info alert-dismissable');
                     $("#aMsjeExito").html(data); 
-                    cargar();jit
+                    cargar();
 				}, //mostramos el error
 			error: function() { alert('Se ha producido un error Inesperado'); }
 			}); //   
@@ -151,28 +128,65 @@ $("#testForm_migrar").submit(function() {
             return false; // ajax used, block the normal submit
 });
 
-// /*
-// Editar
-//  */
-// $("#edit").click(function() {
-//  	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
-//  	if (rowindex > -1)
-//  	{
-//  		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
-//  		$("#id").val(dataRecord.id);
-//  		$("#titulo").text("Editar Parametro Check List");
-//  		$("#tipo_empresa").val(dataRecord.tipo_empresa);
-//  		$("#parametro").val(dataRecord.parametro);
-//  		$("#obligatorio").val(dataRecord.obligatorio);
-//  		$("#escaner").val(dataRecord.escaner);
-//  		$('#myModal').modal('show');
-//  	}
-//  	else
-//  	{
-//  		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para editar.");
-//  	}
+/*
+Editar Archivos
+ */
+$("#edit").click(function() {
+ 	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+ 	if (rowindex > -1)
+ 	{
+ 		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
+ 		// alert("Parametro_id:"+dataRecord.parametro_id+ " ==> Contrato_id:"+$("#contrato_id").val());
+		lista_archivos(dataRecord.parametro_id,$("#contrato_id").val(),dataRecord.parametro); 		 
+ 		$('#myModal_deletearchivo').modal('show');
 
-//  });
+ 	}
+ 	else
+ 	{
+ 		bootbox.alert("<strong>¡Mensaje!</strong> Seleccionar un registro para editar.");
+ 	}
+
+ });
+
+
+function lista_archivos(parametro,contrato,parametro_text){
+  
+var v=$.ajax({
+ 			url:'/checklists/edit/',
+ 			type:'POST',
+ 			datatype: 'json',
+ 			complete:function(){
+ 				$(".delete_archivo").click(function(){
+ 					var parametro_x = $(this).attr("parametro");
+ 					var archivo_x = $(this).attr("archivo");
+ 					var contrato_x = $("#contrato_id").val();
+ 					bootbox.confirm("<strong>¡Mensaje!</strong> Esta seguro de eliminar el archivo. ", function(result) {
+ 						if (result==true) {
+ 							var v=$.ajax({
+ 								url:'/checklists/deletearchivo/',
+ 								type:'POST',
+ 								datatype: 'json',
+ 								data:{parametro_id:parametro_x,archivo_id:archivo_x,contrato_id:contrato_x},
+ 								success: function(data) { alert(data);
+ 									lista_archivos(parametro,contrato,parametro_text);
+ 									$("#jqxgrid").jqxGrid('updatebounddata', 'cells');
+                        }, //mostramos el error
+                        error: function() { alert('Se ha producido un error Inesperado'); }
+                    });
+ 						}
+ 					});
+ 				});
+ 				
+ 			},
+ 			data:{parametro_id:parametro,contrato_id:contrato,parametro_text},
+ 			success: function(data) { 
+ 				$("#li_da").html(data);
+ 				$("#titulo_deletearchivo").text(parametro_text);	 
+				}, //mostramos el error
+				error: function() { alert('Se ha producido un error Inesperado'); }
+		}); //   
+}
+
 
 // /*
 // Eliminar

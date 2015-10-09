@@ -42,10 +42,10 @@ $(document).ready(function (){
 					return "<div style='margin:4px;'>" + (value + 1) + "</div>";
 				}
 			},
-			{ text: 'Cliente / Razón Social', datafield: 'razon_social', filtertype: 'input',width: '20%' },
-			{ text: 'Solicitud', datafield: 'nro_solicitud', filtertype: 'input',width: '20%' },
+			{ text: 'Cliente / Razón Social', datafield: 'razon_social', filtertype: 'input',width: '30%' },
+			{ text: 'Solicitud', datafield: 'nro_solicitud', filtertype: 'input',width: '30%' },
 			{ text: 'Hoja de Ruta', datafield: 'nur', filtertype: 'input',width: '20%' },
-			{ text: 'Acción', datafield: 'accion', filtertype: 'input',width: '5%' },
+			{ text: 'Acción', datafield: 'accion', filtertype: 'input',width: '17%' },
 			]
 		});
 }

@@ -33,6 +33,17 @@ class Checklists extends \Phalcon\Mvc\Model
 		return new Resultset(null, $this->_db,$this->_db->getReadConnection()->query($sql));
 	}
 
+	public function obtenerarchivos($parametro_id,$contrato_id)
+	{
+		$sql="SELECT ack.*,ckl.parametro_id
+		FROM checklistsarchivos ckl
+		INNER JOIN archivoschecklists ack ON ckl.archivo_id = ack.id
+		WHERE ckl.parametro_id='$parametro_id' AND ckl.contrato_id='$contrato_id'
+		ORDER BY fecha_reg DESC";
+		$this->_db = new Checklists();
+		return new Resultset(null, $this->_db,$this->_db->getReadConnection()->query($sql));
+	}
+
 	public function getContrato($cliente_id,$contrato_id)
 	{
 		$sql = "SELECT * 

@@ -58,6 +58,8 @@ class ChecklistsController extends ControllerBase
          $resul = Contratos::findFirstById($contrato_id);
          $this->view->setVar('contrato_id',$resul->id);
          $this->view->setVar('cliente_id',$resul->cliente_id);
+         $this->view->setVar('contrato_nro',$resul->contrato);
+         $this->view->setVar('descripcion',$resul->descripcion);
 
         $model = new Checklists();
         $listcontratos = $model->getContrato($resul->cliente_id,$resul->id);
@@ -86,11 +88,67 @@ class ChecklistsController extends ControllerBase
             'cumple' =>$v->cumple,
             'archivo' => $this->archivo($v->parametro_id,$v->contrato_id),
             'parametro_id' => $v->parametro_id,
-            'accion' => '<a class="btn btn-xs btn-warning" onclick="add_archivo()" title="Adicionar Archivo"><i class="fa fa-pencil"></i></a>',
+            'accion' => '<a class="btn btn-xs btn-sucess" onclick="add_archivo()" title="Adicionar Archivo"><i class="gi gi-upload"></i></a>',
             );
         }
     echo json_encode($customers);
     }
+
+public function editAction()
+{
+    $model = new Checklists();
+    $resul = $model->obtenerarchivos($_POST['parametro_id'],$_POST['contrato_id']);
+
+
+    $html='<div class="table-responsive">';
+        
+            if (count($resul)>0) {
+                $html.='<table class="table table-vcenter table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre Archivo</th>
+                                        <th>Fecha Registro</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>';
+                foreach ($resul as $v) {
+                    if(file_exists($v->carpeta . $v->nombre_archivo)){
+                        $arc="/".$v->carpeta . $v->nombre_archivo;
+                        $file = '<a href="'.$arc.'"  title="'.$v->nombre_archivo.'" target="_blank" class="pull-left">'.$v->nombre_archivo.'</a>';
+                    }
+                    $html.='<tr>
+                                <td>'.$file.'</td>
+                                <td class="text-right">'.date("d-m-Y H:i:s",strtotime($v->fecha_reg)).' </td>
+                                <td class="text-center">
+                            <div class="btn-group">
+                                <a href="javascript:void(0)" data-toggle="tooltip" title="Eliminar" class="btn btn-xs btn-danger delete_archivo" parametro="'.$v->parametro_id.'" archivo="'.$v->id.'"><i class="fa fa-times"></i></a>
+                            </div>
+                        </td>
+                            </tr>';
+
+                }   
+            }else{
+                $html.='<p>No se tiene archivos</p>';
+            }
+               
+        
+        $html.='</div>';
+        $this->view->disable();
+        echo $html;
+}
+
+public function deletearchivoAction()
+{
+    $resul = Checklistsarchivos::findFirst(array("parametro_id='".$_POST['parametro_id']."' and archivo_id='".$_POST['archivo_id']."' and contrato_id='".$_POST['contrato_id']."'"));
+     if ($resul->delete()) {
+                $msm ='Exito: Se elimino correctamente';
+            }else{
+                $msm = 'Error: No se elimino el registro';
+            }
+    $this->view->disable();
+    echo $msm;
+}
 
 public function archivo($parametro_id,$contrato_id)
 {
@@ -98,12 +156,15 @@ public function archivo($parametro_id,$contrato_id)
     $file = "";
     if($parametro_id>0){
         $model=new Checklists();
-        $resul = $model->obtenerarchivo($parametro_id,$contrato_id);
-        // $file = $resul[0]->carpeta . $resul[0]->nombre_archivo;
-        if(file_exists($resul[0]->carpeta . $resul[0]->nombre_archivo)){
-            $arc="/".$resul[0]->carpeta . $resul[0]->nombre_archivo;
-            $file = '<a href="'.$arc.'"  title="'.$resul[0]->nombre_archivo.'" target="_blank" class="pull-left"><i class="fa-1x gi gi-folder_open"></i></a><span class="pull-right"><strong>'.$resul[0]->archivosactualizados.'</strong></span>';
+        $resul = $model->obtenerarchivos($parametro_id,$contrato_id);
+        foreach ($resul as $v) {
+            if(file_exists($v->carpeta . $v->nombre_archivo)){
+            $arc="/".$v->carpeta . $v->nombre_archivo;
+            $file = '<a href="'.$arc.'"  title="'.$v->nombre_archivo.'" target="_blank" class="pull-left"><i class="fa-1x gi gi-file_export"></i></a><span class="pull-right"><strong>'.count($resul).'</strong></span>';
+            }
+            break;    
         }
+        
     }
     return $file;
 }
