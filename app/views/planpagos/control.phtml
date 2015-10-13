@@ -50,7 +50,7 @@
 							<table class="table table-vcenter table-striped" style="font-size:12px">
 								<tbody>
 									<tr class="active" id="html_derechollave">
-									<?php if ($user->nivel==2) { ?>
+									<?php if ($user->nivel==2 || $user->nivel==1) { ?>
 										<td><a href="javascript:void(0)" id='<?php echo $AddEdit_derechollave ?>' garantia_id='<?php echo $garantia_id ?>' fecha_deposito='<?php echo $fecha_deposito ?>' nro_deposito='<?php echo $nro_deposito ?>' monto_deposito=<?php echo $monto_deposito ?>><strong>DERECHO DE LLAVE </strong></a></td>
 									<?php } else { ?>
 										<td><a href="javascript:void(0)"><strong>DERECHO DE LLAVE </strong></a></td>
@@ -89,7 +89,7 @@
 									}
 									?>
 									<tr class="active" id="html_garantia">
-									<?php if ($user->nivel==2) { ?>
+									<?php if ($user->nivel==2 || $user->nivel==1) { ?>
 										<td><a href="javascript:void(0)" id='<?php echo $AddEdit_garantia ?>' garantia_id='<?php echo $garantia_id ?>' fecha_deposito='<?php echo $fecha_deposito ?>' nro_deposito='<?php echo $nro_deposito ?>' monto_deposito=<?php echo $monto_deposito ?> fecha_devolucion='<?php echo $fecha_devolucion ?>' nro_devolucion='<?php echo $nro_devolucion ?>' monto_devolucion=<?php echo $monto_devolucion ?>><strong>GARANTIA </strong></a></td>
 									<?php } else {?>
 									<td><a href="javascript:void(0)"><strong>GARANTIA </strong></a></td>

@@ -1,7 +1,3 @@
-<style>
-    div.node{border: 3px solid #ccc !important;}
-    a.personigrama{display: block !important;}
-</style>
 <div class="row">
     <div class="col-sm-12">
         <div class="panel">
@@ -99,22 +95,39 @@
 
     </div>
 </div>
-
-
-<div class="row">
-    <div class="col-sm-12 ">
-        <div id="basicdiagram" style="width: 100%; height: 580px; border-style: dotted; border-width: 1px;" />
-    </div>
+ <div id="modal-large" class="modal" tabindex="-1" role="dialog" aria-hidden="true"   >
+        <div class="modal-dialog modal-lg">
+        <table id="datatable">     
+        <?php echo $html_tabla; ?>
+        </table>       
+        </div>
 </div>
 
 
 <div class="row">
-    <div class="col-sm-12 ">
+    <div class="col-sm-6">
         <div class="widget">
-            <div style="width: 100%;" ><?php echo $lista; ?></div>
+            <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
         </div>
     </div>
+    <div class="col-sm-6">
+          <div class="widget">
+            <div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+        </div>      
+    </div>
 </div>
+<div class="row">
+    <div class="col-sm-6 ">
+        <div id="container3" style="min-width: 310px; max-width: 600px; height: 400px; margin: 0 auto"></div>
+
+    </div>
+    <div class="col-sm-6 ">
+        <div id="container4" style="min-width: 310px; max-width: 600px; height: 400px; margin: 0 auto"></div>
+
+    </div>
+</div>
+
+
 <div class="row">
     <div class="col-sm-12">
         <div class="widget" style="overflow-x: auto; ">

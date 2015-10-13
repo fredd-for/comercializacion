@@ -53,7 +53,7 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="pull-right">
-								<?php if ($user->nivel==2 && $contrato->estado==1) { ?>
+								<?php if (($user->nivel==2 || $user->nivel==1) && $contrato->estado==1) { ?>
 								<button class="btn btn-sm btn-default" type="button" id="definir_pp"><i class="fa fa-plus fa-fw"></i>Definir Plan Pagos</button>
 								<button class="btn btn-sm btn-danger" type="button" id="quitar"><i class="fa fa-trash-o fa-fw"></i> Quitar Producto</button>
 								<?php } ?>
@@ -72,7 +72,7 @@
 					</div>
 					<br>
 					
-					<?php if ($user->nivel==2 && $contrato->estado==1) { ?>
+					<?php if (($user->nivel==2 || $user->nivel==1) && $contrato->estado==1) { ?>
 					<div class="row">
 						<div class="col-md-12">
 							<div class="pull-right">

@@ -116,10 +116,79 @@ public function deleteAction(){
     echo $msm;
 }
 
+public function pruebaarrayAction()
+{
+
+ $this->view->disable();
+
+
+ // $query = mysql_query("SELECT month, wordpress, codeigniter, highcharts FROM project_requests");
+
+$category = array();
+$category['name'] = 'Meses';
+
+$series15 = array();
+$series15['name'] = 'Wordpress';
+
+$series2 = array();
+$series2['name'] = 'CodeIgniter';
+
+$series3 = array();
+$series3['name'] = 'Highcharts';
+
+// while($r = mysql_fetch_array($query)) {
+    $category['data'][] = 'Ene';
+    $series15['data'][] = 25;
+    $series2['data'][] = 46;
+    $series3['data'][] = 2;  
+
+$category['data'][] = 'Feb';
+    $series15['data'][] = 25;
+    $series2['data'][] = 46;
+    $series3['data'][] = 2;  
+
+    $category['data'][] = 'Mar';
+    $series15['data'][] = 25;
+    $series2['data'][] = 46;
+    $series3['data'][] = 2;  
+// }
+
+$result = array();
+array_push($result,$category);
+array_push($result,$series15);
+array_push($result,$series2);
+array_push($result,$series3);
+
+echo json_encode($result, JSON_NUMERIC_CHECK);
+
+ // $rows = array();
+ // $row[0] = 'juan';
+ // $row[1] = '25';
+ // $row[2] = '25';
+ // $row[3] = '25';
+ // array_push($rows,$row);
+ // $row[0] = 'Pedro';
+ // $row[1] = '75';
+ // $row[2] = '75';
+ // $row[3] = '75';
+ // array_push($rows,$row);
+ // echo json_encode($rows, JSON_NUMERIC_CHECK);
+ 
+}
+
 public function pruebaAction()
 {
     $password = hash_hmac('sha256', 'lucas', '2, 4, 6, 7, 9, 15, 20, 23, 25, 30');
     echo $password;
+}
+
+public function pruebamesesAction()
+{
+echo    $fecha = date('Y-m');
+echo "<br>";
+$nuevafecha = strtotime ( '-11 month' , strtotime ( $fecha ) ) ;
+$nuevafecha = date ( 'Y-m' , $nuevafecha );
+echo $nuevafecha;
 }
 
 public function pruebapdfAction()

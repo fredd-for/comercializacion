@@ -5,6 +5,14 @@ use Phalcon\Mvc\Model\Resultset\Simple as Resultset;
 class Consultas extends \Phalcon\Mvc\Model {
     /* personal activo de la instatitucion */
 
+    public static function contratosComerciales($mesanio,$comercial)
+    {
+        $sql = "SELECT COUNT(id) as cant from contratos 
+        WHERE Date_format(fecha_contrato,'%Y-%m') = '".$mesanio."' AND responsable_id = '".$comercial."' AND baja_logica = 1";
+        $db = new Clientes();
+        return new Resultset(null, $db, $db->getReadConnection()->query($sql));
+    }
+
     public static function clientesContrato() {
         $sql = "SELECT c.cliente_id
         FROM contratosproductos cp
