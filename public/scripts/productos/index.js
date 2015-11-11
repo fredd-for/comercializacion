@@ -1,6 +1,6 @@
 $(document).ready(function (){
-	cargar();	
-	function cargar(){	
+	// cargar();	
+	// function cargar(){	
 		var source =
 		{
 			datatype: "json",
@@ -25,8 +25,9 @@ $(document).ready(function (){
 			url: '/productos/list',
 			cache: true
 		};
-		var dataAdapter = new $.jqx.dataAdapter(source);
+		// var dataAdapter = new $.jqx.dataAdapter(source);
 
+		
 		var cellclass = function (row, columnfield, value) {
 			if (value < 0) {
 				return 'red';
@@ -36,6 +37,21 @@ $(document).ready(function (){
 			}
 			else return 'yellow';
 		}
+
+		var dataAdapter = new $.jqx.dataAdapter(source, {
+                // downloadComplete: function (data, status, xhr) { },
+                loadComplete: function (data) { 
+                	if ($("#opcion").val()==0) {
+                		$("#jqxgrid").jqxGrid('sortby', 'cantidad_disponible', 'desc');	
+                	}
+                	if ($("#opcion").val()==1) {
+                		$("#jqxgrid").jqxGrid('sortby', 'cantidad_alquilada', 'desc');	
+                	}
+
+                	
+            	},
+                // loadError: function (xhr, status, error) { }
+            });
 
 		$("#jqxgrid").jqxGrid({
 			width: '100%',
@@ -65,7 +81,7 @@ $(document).ready(function (){
 			columns: [
 			{text: 'Image', datafield: 'foto', width: 100, cellsrenderer: function (row, column, value) {
 				return '<img style="margin-left: 5px;" height="80" width="100%" src="' + value + '" />';
-				}
+			}
 			},
 					// { text: 'ID', datafield: 'id', filtertype: 'input',width: '5%' },
 					{ text: 'linea', datafield: 'linea', filtertype: 'input',width: '8%' },
@@ -74,13 +90,19 @@ $(document).ready(function (){
 					{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '15%' },
 					{ text: 'Codigo', datafield: 'codigo', filtertype: 'input',width: '5%' },
 					{ text: 'Descripción', datafield: 'descripcion', filtertype: 'input',width: '19%' },
-					{ text: 'Precio Unitario', datafield: 'precio_unitario', filtertype: 'input',width: '7%' },
-					{ text: 'Cant. Total', datafield: 'cantidad',filtertype: 'input', width: '5%'},
-					{ text: 'Cant. Alquilada', datafield: 'cantidad_alquilada',filtertype: 'input', width: '5%'},
-					{ text: 'Cant. Disponible', datafield: 'cantidad_disponible',filtertype: 'input', width: '5%',cellclassname: cellclass},
+					{ text: 'Precio Unitario', datafield: 'precio_unitario', filtertype: 'number', width: '7%',cellsformat: "c2", cellsalign: 'right'},
+					{ text: 'Cant. Total', datafield: 'cantidad',filtertype: 'number', width: '5%'},
+					{ text: 'Cant. Alquilada', datafield: 'cantidad_alquilada',filtertype: 'number', width: '5%'},
+					{ text: 'Cant. Disponible', datafield: 'cantidad_disponible',filtertype: 'number', width: '5%',cellclassname: cellclass},
 					{ text: 'Tiempo', datafield: 'tiempo',filtertype: 'input', width: '5%'},
 					]
 				});
+
+			var localizationobj = {};
+            localizationobj.currencysymbol = "Bs ";
+            $("#jqxgrid").jqxGrid('localizestrings', localizationobj);
+
+
 
 $("#jqxgrid").bind("bindingcomplete", function(event) {
 	var visibleRows = $('#jqxgrid').jqxGrid('getrows');
@@ -94,8 +116,17 @@ $("#jqxgrid").bind("bindingcomplete", function(event) {
 	$('#statusbarjqxgrid').html('Total: <b>' + count + '</b>');
 });
 
+if ($("#opcion").val()>0) {
+	ordenar('cantidad_disponible','desc');
+}
+function ordenar (campo,orden) {
+	$("#jqxgrid").jqxGrid('sortby', campo, orden);	
 }
 
+
+// }
+
+ 
 /*
 adicionar 
 */
@@ -170,7 +201,8 @@ $("#delete").click(function() {
  					datatype: 'json',
  					data: {id: dataRecord.id},
  					success: function(data) {
-                            cargar(); //alert('Guardado Correctamente'); 
+                            // cargar(); //alert('Guardado Correctamente'); 
+                            $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
                             $("#divMsjeExito").show();
                             $("#divMsjeExito").addClass('alert alert-warning alert-dismissable');
                             $("#aMsjeExito").html(data); 
@@ -215,7 +247,8 @@ $("#testForm").submit(function() {
 		type:'POST',
 		datatype: 'json',
 		data:{id:$("#id").val(),grupo_id:$("#grupo_id").val(),estacion_id:$("#estacion_id").val(),producto:$("#producto").val(),codigo:$("#codigo").val(),descripcion:$("#descripcion").val(),precio_unitario:$("#precio_unitario").val(),cantidad:$("#cantidad").val(),tiempo:$("#tiempo").val(),estacion_id:$("#estacion_id").val()},
-		success: function(data) { cargar(); 
+		success: function(data) { 
+			$("#jqxgrid").jqxGrid('updatebounddata', 'cells'); //cargar(); 
 			$("#divMsjeExito").show();
 			$("#divMsjeExito").addClass('alert alert-info alert-dismissable');
 			$("#aMsjeExito").html(data); 

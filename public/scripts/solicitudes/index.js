@@ -152,6 +152,10 @@ $("#jqxgrid_productos").jqxGrid({
 	],
 });
 
+var localizationobj = {};
+localizationobj.currencysymbol = "Bs ";
+$("#jqxgrid_productos").jqxGrid('localizestrings', localizationobj);
+
 }
 
 /* ************************************************************* */	

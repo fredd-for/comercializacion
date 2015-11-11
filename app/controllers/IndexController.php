@@ -63,43 +63,43 @@ class IndexController extends ControllerBase {
         
     }
 
-    public function solicitudesAction()
-    {
-        $this->view->disable();
-        $fechaActual = date('Y-m');
-        $nuevafecha = strtotime ('-11 month' , strtotime ( $fechaActual ) ) ;
-        $nuevafecha = date ( 'Y-m' , $nuevafecha );
+    // public function solicitudesAction()
+    // {
+    //     $this->view->disable();
+    //     $fechaActual = date('Y-m');
+    //     $nuevafecha = strtotime ('-11 month' , strtotime ( $fechaActual ) ) ;
+    //     $nuevafecha = date ( 'Y-m' , $nuevafecha );
 
-        $category = array();
-        $category['name'] = 'Meses';
-        $usuariocomercial = Usuarios::find(array('habilitado = 1 and nivel in (2,3)',"order"=>"id ASC"));
-        $ids = array();
-        foreach ($usuariocomercial as $v) {
-            $series.$v->id = array();
-            $series.$v->id['name'] = $v->nombre.' '.$v->paterno;            
-            $ids[] = $v->id 
-        }
+    //     $category = array();
+    //     $category['name'] = 'Meses';
+    //     $usuariocomercial = Usuarios::find(array('habilitado = 1 and nivel in (2,3)',"order"=>"id ASC"));
+    //     $ids = array();
+    //     foreach ($usuariocomercial as $v) {
+    //         $series.$v->id = array();
+    //         $series.$v->id['name'] = $v->nombre.' '.$v->paterno;            
+    //         $ids[] = $v->id 
+    //     }
 
-        while ($nuevafecha<=$fechaActual) {
-            $category['data'][] = date("M",strtotime($nuevafecha));
-            for ($i=0; $i < count($ids); $i++) { 
-                $model = new Consultas();
-                $cantidadcontratos = $model->contratosComerciales($nuevafecha,$ids[$i]);
-                $series.$ids[$i]['data'][] = $cantidadcontratos[0]->cant;
-            }            
-            $nuevafecha = strtotime ('1 month' , strtotime ( $nuevafecha ) ) ;
-            $nuevafecha = date ( 'Y-m' , $nuevafecha );
-        }
+    //     while ($nuevafecha<=$fechaActual) {
+    //         $category['data'][] = date("M",strtotime($nuevafecha));
+    //         for ($i=0; $i < count($ids); $i++) { 
+    //             $model = new Consultas();
+    //             $cantidadcontratos = $model->contratosComerciales($nuevafecha,$ids[$i]);
+    //             $series.$ids[$i]['data'][] = $cantidadcontratos[0]->cant;
+    //         }            
+    //         $nuevafecha = strtotime ('1 month' , strtotime ( $nuevafecha ) ) ;
+    //         $nuevafecha = date ( 'Y-m' , $nuevafecha );
+    //     }
 
-        $result = array();
-        array_push($result,$category);
-        for ($i=0; $i < count($ids); $i++) { 
-            array_push($result,$series.$ids[$i]);
-        }
+    //     $result = array();
+    //     array_push($result,$category);
+    //     for ($i=0; $i < count($ids); $i++) { 
+    //         array_push($result,$series.$ids[$i]);
+    //     }
 
-        echo json_encode($result, JSON_NUMERIC_CHECK);
+    //     echo json_encode($result, JSON_NUMERIC_CHECK);
 
-    }
+    // }
     //organigrma
     
   //   public function organigramaAction($id){

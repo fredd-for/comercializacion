@@ -5,9 +5,10 @@
 class ProductosController extends ControllerBase
 {
 	
-	public function indexAction()
+	public function indexAction($opcion='')
 	{
-		$this->assets
+		
+        $this->assets
                 ->addCss('/jqwidgets/styles/jqx.base.css')
                 ->addCss('/jqwidgets/styles/jqx.custom.css');
         $this->assets
@@ -19,6 +20,7 @@ class ProductosController extends ControllerBase
                 ->addJs('/jqwidgets/jqxscrollbar.js')
                 ->addJs('/jqwidgets/jqxgrid.js')
                 ->addJs('/jqwidgets/jqxdata.js')
+                ->addJs('/jqwidgets/jqxpanel.js')
                 ->addJs('/jqwidgets/jqxgrid.sort.js')
                 ->addJs('/jqwidgets/jqxgrid.pager.js')
                 ->addJs('/jqwidgets/jqxgrid.filter.js')
@@ -36,6 +38,8 @@ class ProductosController extends ControllerBase
                 ->addJs('/scripts/productos/index.js')
                 ->addJs('/media/plugins/bootbox/bootbox.min.js')
         ;
+
+        $this->view->setVar('opcion', $opcion);
 
         $linea = $this->tag->select(
                 array(

@@ -157,7 +157,7 @@ Globalize.cultures[ "default" ] = {
 			// string that separates a number from the fractional portion, as in 1.99
 			".": ".",
 			// symbol used to represent currency
-			symbol: "$"
+			symbol: "B"
 		}
 	},
 	// calendars defines all the possible calendars used by this culture.
@@ -818,7 +818,7 @@ formatDate = function( value, format, culture ) {
 				case "n":
 					ret += number;
 					break;
-				case "$":
+				case "B":
 					ret += nf.currency.symbol;
 					break;
 				case "-":
@@ -1020,7 +1020,7 @@ getEraYear = function( date, cal, era, sortable ) {
 			groups.push( match[0] );
 		}
 		appendPreOrPostMatch( expFormat.slice(index), regexp );
-		regexp.push( "$" );
+		regexp.push( "B" );
 
 		// allow whitespace to differ when matching formats.
 		var regexpStr = regexp.join( "" ).replace( /\s+/g, "\\s+" ),

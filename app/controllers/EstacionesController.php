@@ -116,6 +116,35 @@ public function deleteAction(){
     echo $msm;
 }
 
+public function pruebacrearJsonAction()
+{
+    
+
+   $model = new Estaciones();
+      $resul = $model->lista();
+      $customers = array();
+      $customers['titulo'] = 'Lista de Estaciones';
+      $customers['fecha'] = date("d-m-Y H:i:s");
+      foreach ($resul as $v) {
+        $customers['estaciones'][] = array(
+            'id' => $v->id,
+            'linea_id' => $v->linea_id,
+            'linea' => $v->linea,
+            'estacion' =>$v->estacion,
+            );
+        }
+    $x = json_encode($customers);
+    $handler = fopen("file/estaciones.json","w+");
+    fwrite($handler, $x);
+    fclose($handler);
+}
+
+public function pruebaserviciowebAction()
+{
+    $this->assets
+        ->addJs('/scripts/estaciones/pruebawebservice.js');
+}
+
 public function pruebaarrayAction()
 {
 

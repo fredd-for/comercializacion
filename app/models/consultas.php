@@ -106,4 +106,32 @@ class Consultas extends \Phalcon\Mvc\Model {
         return new Resultset(null, $db, $db->getReadConnection()->query($sql));
     }
 
+/*
+SQl para obtener los el monto por contrato agrupado por Responsables
+ */
+    public function contratosResponsable()
+    {
+        $sql = "SELECT u.id,CONCAT(u.nombre,' ',u.paterno) as nombre,COALESCE(SUM(cp.total),0) as monto
+        FROM usuarios u
+        LEFT JOIN contratos c ON u.id = c.responsable_id AND c.baja_logica = 1
+        LEFT JOIN contratosproductos cp ON c.id = cp.contrato_id AND cp.baja_logica = 1
+        WHERE u.habilitado = 1 AND u.nivel = 2 
+        GROUP BY u.id";
+        $db = new Consultas();
+        return new Resultset(null, $db, $db->getReadConnection()->query($sql));
+    }
+
+   public function contratosClientes($responsable_id)
+   {
+    $sql = "SELECT cl.id,cl.razon_social,COALESCE(SUM(cp.total),0)  as monto
+    FROM 
+    contratos c 
+    INNER JOIN clientes cl ON c.cliente_id = cl.id
+    LEFT JOIN contratosproductos cp ON c.id = cp.contrato_id AND cp.baja_logica = 1
+    WHERE c.responsable_id ='$responsable_id'
+    GROUP BY c.cliente_id";
+    $db = new Consultas();
+    return new Resultset(null, $db, $db->getReadConnection()->query($sql));
+} 
+
 }

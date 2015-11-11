@@ -5,7 +5,7 @@
 class ContratosController extends ControllerBase
 {
 	
-	public function indexAction()
+	public function indexAction($opcion='')
 	{
 		$this->assets
                 ->addCss('/jqwidgets/styles/jqx.base.css')
@@ -51,6 +51,8 @@ class ContratosController extends ControllerBase
                 ->addJs('/scripts/contratos/index.js')
         ;
 
+        $this->view->setVar('opcion', $opcion);
+        
         $empresa= Empresas::findFirst(array('baja_logica=1'));
         $this->view->setVar('empresa',$empresa);
 
@@ -886,6 +888,40 @@ $output_file_name = date('Y-m-d').' '.'reporte.xlsx';
 $TBS->Show(OPENTBS_DOWNLOAD, $output_file_name); // Also merges all [onshow] automatic fields.
 exit();
 
+}
+
+
+public function pruebaAction()
+{
+
+$clientes=array(1,2,3,4,5,6,7,8,9);
+$fechas=array("2015-01-01","2015-02-01","2015-03-01","2015-04-01","2015-05-01","2015-06-01","2015-07-01","2015-08-01","2015-09-01");
+$responsables=array(640,641,643,644,645,646,647);
+// for ($i=0; $i <500 ; $i++) { 
+//     echo $clientes[array_rand($clientes)]."<br>";
+//    }   
+
+
+
+    for ($i=1; $i < 500; $i++) { 
+        $resul = new Contratos();
+        $resul->contrato = $i.'/2015';
+        $resul->solicitud_id = 10;
+        $resul->cliente_id = $clientes[array_rand($clientes)];
+        $resul->fecha_contrato = $fechas[array_rand($fechas)];
+        $resul->usuario_reg = $this->_user->id;
+        $resul->fecha_reg = date("Y-m-d H:i:s");
+        $resul->baja_logica = 1;
+        $resul->arrendador = "Juan Mamani";
+        $resul->arrendador_rep_legal = "Lucas";
+        $resul->arrendador_cargo = "cargo";
+        $resul->descripcion = "Alquiler de cabinas";
+        $resul->dias_tolerancia = 0;
+        $resul->porcentaje_mora = 0;
+        $resul->responsable_id = $responsables[array_rand($responsables)];
+        $resul->save();
+    }
+    
 }
 
 }

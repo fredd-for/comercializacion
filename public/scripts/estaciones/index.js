@@ -79,7 +79,7 @@ $("#edit").click(function() {
  });
 
 
-Eliminar
+// Eliminar
  
 $("#delete").click(function() {
  	var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');

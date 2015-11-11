@@ -24,7 +24,32 @@ function cargar(){
 			url: '/contratos/list',
 			cache: false
 		};
-		var dataAdapter = new $.jqx.dataAdapter(source);
+		// var dataAdapter = new $.jqx.dataAdapter(source);
+		var dataAdapter = new $.jqx.dataAdapter(source, {
+                // downloadComplete: function (data, status, xhr) { },
+                loadComplete: function (data) { 
+                	if ($("#opcion").val()==1) {
+                		firstNameColumnFilter();
+                	}
+                },
+                // loadError: function (xhr, status, error) { }
+            });
+
+		var firstNameColumnFilter = function () {
+	 	 $("#jqxgrid").jqxGrid('clearfilters');
+	 	var filtergroup = new $.jqx.filter();
+	 	var filter_or_operator = 1;
+	 	var filtervalue = 'Vigente';
+	 	var filtercondition = 'contains';
+	 	var filter = filtergroup.createfilter('stringfilter', filtervalue, filtercondition);
+	 	filtergroup.addfilter(filter_or_operator, filter);
+	 	// return filtergroup;
+	 	$("#jqxgrid").jqxGrid('addfilter', 'estado_text', filtergroup);
+              // apply the filters.
+        $("#jqxgrid").jqxGrid('applyfilters');
+	 	}
+
+
 		$("#jqxgrid").jqxGrid({
 			width: '100%',
 			height: '450',
@@ -39,25 +64,25 @@ function cargar(){
 			filterable: true,
 			autorowheight: true,
 			groupable: true,
-	columns: [
-		{
-		text: '#', sortable: false, filterable: false, editable: false,
-		groupable: false, draggable: false, resizable: false,
-		datafield: '', columntype: 'number', width: '3%',
-		cellsrenderer: function (row, column, value) {
-			return "<div style='margin:4px;'>" + (value + 1) + "</div>";
-		}
-	},
-	{ text: 'Responsable', datafield: 'responsable', filtertype: 'input',width: '17%' },
-	{ text: 'Razón Social', datafield: 'razon_social', filtertype: 'input',width: '17%' },
-	{ text: 'Nro Contrato', datafield: 'contrato', filtertype: 'input',width: '10%' },
-	{ text: 'Descripción', datafield: 'descripcion',filtertype: 'input', width: '20%' },
-	{ text: 'Fecha Contrato', datafield: 'fecha_contrato', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
-	{ text: 'Dias Tolerancia', datafield: 'dias_tolerancia', filtertype: 'input',width: '8%' },
-	{ text: '% Mora', datafield: 'porcentaje_mora', filtertype: 'input',width: '8%' },
-	{ text: 'Estado', datafield: 'estado_text', filtertype: 'input',width: '9%' },
-	{ text: 'Nro Productos', datafield: 'num_productos', filtertype: 'input',width: '5%' }			
-		],
+			columns: [
+			{
+				text: '#', sortable: false, filterable: false, editable: false,
+				groupable: false, draggable: false, resizable: false,
+				datafield: '', columntype: 'number', width: '3%',
+				cellsrenderer: function (row, column, value) {
+					return "<div style='margin:4px;'>" + (value + 1) + "</div>";
+				}
+			},
+			{ text: 'Responsable', datafield: 'responsable', filtertype: 'input',width: '17%' },
+			{ text: 'Razón Social', datafield: 'razon_social', filtertype: 'input',width: '17%' },
+			{ text: 'Nro Contrato', datafield: 'contrato', filtertype: 'input',width: '10%' },
+			{ text: 'Descripción', datafield: 'descripcion',filtertype: 'input', width: '20%' },
+			{ text: 'Fecha Contrato', datafield: 'fecha_contrato', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
+			{ text: 'Dias Tolerancia', datafield: 'dias_tolerancia', filtertype: 'input',width: '8%' },
+			{ text: '% Mora', datafield: 'porcentaje_mora', filtertype: 'input',width: '8%' },
+			{ text: 'Estado', datafield: 'estado_text', filtertype: 'input',width: '9%' },
+			{ text: 'Nro Productos', datafield: 'num_productos', filtertype: 'input',width: '5%' }			
+			],
 		// groups: ['razon_social']
 	});
 
@@ -117,6 +142,7 @@ $("#jqxgrid").on('rowselect', function (event) {
 	var tooltiprenderer = function (element) {
                 $(element).jqxTooltip({position: 'mouse', content: $(element).text() });
         };
+
 		$("#jqxgrid_productos").jqxGrid({
 
 			width: '100%',
@@ -160,6 +186,9 @@ $("#jqxgrid").on('rowselect', function (event) {
 			// groups: ['razon_social','contrato']
 		});
 
+			var localizationobj = {};
+            localizationobj.currencysymbol = "Bs ";
+            $("#jqxgrid_productos").jqxGrid('localizestrings', localizationobj);
 }
 
 /* ************************************************************* */	

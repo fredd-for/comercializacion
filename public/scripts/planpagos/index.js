@@ -42,7 +42,7 @@ cargar();
             altRows: true,
             columnsresize: true,
             theme: 'custom',
-            showstatusbar: true,
+            // showstatusbar: true,
             showfilterrow: true,
             filterable: true,
             autorowheight: true,
@@ -74,7 +74,9 @@ cargar();
 			]
 			//groups: ['grupo']
 		});
-
+		var localizationobj = {};
+            localizationobj.currencysymbol = "Bs ";
+            $("#jqxgrid").jqxGrid('localizestrings', localizationobj);
  		//$("#jqxgrid").jqxGrid('expandgroup',4);
 }
 
