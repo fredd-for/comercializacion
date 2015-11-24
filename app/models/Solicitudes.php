@@ -47,7 +47,7 @@ class Solicitudes extends \Phalcon\Mvc\Model
 		$sql = "SELECT c.id,s.* 
 		FROM solicitudes s
 		LEFT JOIN contratos c ON s.id = c.solicitud_id
-		WHERE s.baja_logica = 1 AND estado = 2 AND s.cliente_id = '$cliente_id' AND c.id IS NULL";
+		WHERE s.baja_logica = 1 AND s.estado = 2 AND s.cliente_id = '$cliente_id' AND c.id IS NULL";
 		$this->_db = new Solicitudes();
 		return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));
 	}

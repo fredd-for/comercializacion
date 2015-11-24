@@ -101,6 +101,8 @@ class ContratosController extends ControllerBase
                 $resul->dias_tolerancia = $this->request->getPost('dias_tolerancia');
                 $resul->porcentaje_mora = $this->request->getPost('porcentaje_mora')/100;
                 $resul->responsable_id = $this->request->getPost('responsable_id');
+                $resul->tipo_pago = $this->request->getPost('tipo_pago');
+                $resul->tipo_cobro_mora = $this->request->getPost('tipo_cobro_mora');
                 if ($resul->save()) {
                     $msm ='Exito: Se guardo correctamente';
                 }else{
@@ -123,6 +125,8 @@ class ContratosController extends ControllerBase
                 $resul->dias_tolerancia = $this->request->getPost('dias_tolerancia');
                 $resul->porcentaje_mora = $this->request->getPost('porcentaje_mora')/100;
                 $resul->responsable_id = $this->request->getPost('responsable_id');
+                $resul->tipo_pago = $this->request->getPost('tipo_pago');
+                $resul->tipo_cobro_mora = $this->request->getPost('tipo_cobro_mora');
                 if ($resul->save()) {
                     $msm ='Exito: Se guardo correctamente';
                 }else{
@@ -176,6 +180,8 @@ class ContratosController extends ControllerBase
                 'responsable_id' => $v->responsable_id,
                 'estado_text' => $estado,
                 'estado' => $v->estado,
+                'tipo_pago' => $v->tipo_pago,
+                'tipo_cobro_mora' => $v->tipo_cobro_mora,
 
             );
         }
@@ -317,6 +323,7 @@ class ContratosController extends ControllerBase
                 $producto_id = $this->request->getPost('producto_id');
                 $precio_unitario = $this->request->getPost('precio_unitario');
                 $cantidad = $this->request->getPost('cantidad');
+                $tipo_pago = $this->request->getPost('tipo_pago');
 
                 $resul = new Contratosproductos();
                 $resul->contrato_id= $contrato_id;
@@ -336,12 +343,13 @@ class ContratosController extends ControllerBase
                 
                 $resul->baja_logica = 1;
                 if ($resul->save()) {
-                    // $resul2 = Productos::findFirstById($this->request->getPost('producto_id'));
-                    // $resul2->cantidad = $resul2->cantidad-$this->request->getPost('cantidad');
-                    // $resul2->save();
                     //Crear Plan de Pagos
                     if ($this->request->getPost('tiempo') == 'Mensual') {
-                        $msm = $this->mensual_planpagos($fecha_inicio,$fecha_fin,$precio_unitario,$cantidad,$contrato_id, $producto_id, $resul->id);
+                        if ($tipo_pago=='2') {
+                            $msm = $this->mensual_cumplido_planpagos($fecha_inicio,$fecha_fin,$precio_unitario,$cantidad,$contrato_id, $producto_id, $resul->id);    
+                        }else{
+                            $msm = $this->mensual_planpagos($fecha_inicio,$fecha_fin,$precio_unitario,$cantidad,$contrato_id, $producto_id, $resul->id);    
+                        }
                     }elseif ($_POST['tiempo'] == 'Dia') {
                         $msm = $this->dias_planpagos($fecha_inicio,$fecha_fin,$precio_unitario,$cantidad,$contrato_id, $producto_id, $resul->id);
                     }elseif ($_POST['tiempo']=='Hora') {
@@ -380,15 +388,20 @@ class ContratosController extends ControllerBase
 
     public function calculocostoAction()
     {
+        
         $fecha_inicio = date("Y-m-d",strtotime($_POST['fecha_inicio']));
         $fecha_fin = date("Y-m-d",strtotime($_POST['fecha_fin']));
-
         $hora_inicio = $_POST['hora_inicio'];
         $hora_fin = $_POST['hora_fin'];
-
         $precio_unitario = $_POST['precio_unitario'];
+        $tipo_pago = $_POST['tipo_pago'];
+
         if ($_POST['tiempo'] == 'Mensual') {
-            $costo = $this->mensual($fecha_inicio,$fecha_fin,$precio_unitario);
+            if ($tipo_pago=='2') {
+                $costo = $this->mensual_cumplido($fecha_inicio,$fecha_fin,$precio_unitario);    
+            }else{
+                $costo = $this->mensual($fecha_inicio,$fecha_fin,$precio_unitario);    
+            }
         }elseif ($_POST['tiempo'] == 'Dia') {
             $costo = $this->dias($fecha_inicio,$fecha_fin,$precio_unitario);
         }elseif ($_POST['tiempo']=='Hora') {
@@ -645,6 +658,68 @@ public function saveppAction()
 /*
 Funcionesa para plan de pagos
  */
+public function mensual_cumplido_planpagos($fecha_inicio='2014-12-14',$fecha_fin='2015-02-15',$costo_mes='2000',$cantidad=1,$contrato_id='8', $producto_id = '1', $contratoproducto_id ='1')
+    {
+        $msm = 0;
+        $dia_i = date('j',strtotime($fecha_inicio)); //dia inicial de la fecha de inicio
+        $dia_f = date('j',strtotime($fecha_fin)); //dia final de la fecha final
+        $fecha_inicio = strtotime ('-1 day',strtotime($fecha_inicio));
+        $fecha_inicio = date('Y-m-d',$fecha_inicio);
+        
+        $fecha_aux =date("Y-m-d",strtotime('+1 month',strtotime($fecha_inicio)));
+        while ( strtotime($fecha_aux)<=strtotime($fecha_fin) ) {
+            // $costo_total=$costo_total+$costo_mes;
+            $fecha_inicio = $fecha_aux;
+            $fecha_aux =date("Y-m-d",strtotime('+1 month',strtotime($fecha_inicio)));
+
+            $monto_programado=$costo_mes*$cantidad;
+            $resul = new Planpagos();
+            $resul->contratoproducto_id = $contratoproducto_id;
+            $resul->contrato_id = $contrato_id;
+            $resul->producto_id = $producto_id;
+            $resul->fecha_programado = $fecha_inicio;
+            $resul->monto_programado = $monto_programado;
+            $resul->monto_reprogramado = $monto_programado;
+            $resul->baja_logica = 1;
+            if ($resul->save()==false) {
+                $msm = 1;
+            }
+        }
+
+        $datetime1 = new DateTime($fecha_inicio);
+        $datetime2 = new DateTime($fecha_fin);
+        $interval = $datetime1->diff($datetime2);
+        $nro_dias = $interval->format('%a');
+        if ($nro_dias>0) {
+            $mes = date('n',strtotime($fecha_fin));
+            $anio = date('Y',strtotime($fecha_fin));
+            if( is_callable("cal_days_in_month")){
+                $nro_dias_mes= cal_days_in_month(CAL_GREGORIAN, $mes, $anio);
+            }
+            else{
+                $nro_dias_mes = date("t",mktime(0,0,0,$mes,1,$anio));
+            }    
+
+            $monto_programado = $nro_dias*($costo_mes/$nro_dias_mes) * $cantidad;
+            $dia_i = 1;
+            $resul = new Planpagos();
+            $resul->contratoproducto_id = $contratoproducto_id;
+            $resul->contrato_id = $contrato_id;
+            $resul->producto_id = $producto_id;
+            $resul->fecha_programado = $fecha_fin;
+            $resul->monto_programado = $monto_programado;
+            $resul->monto_reprogramado = $monto_programado;
+            $resul->baja_logica = 1;
+            if ($resul->save()==false) {
+                $msm = 1;
+            }
+        }
+        
+        return $msm;
+
+    }
+
+
 public function mensual_planpagos($fecha_inicio='2014-12-14',$fecha_fin='2015-02-15',$costo_mes='2000',$cantidad=1,$contrato_id='8', $producto_id = '1', $contratoproducto_id ='1')
     {
         $msm = 0;
@@ -779,6 +854,43 @@ public function mensual_planpagos($fecha_inicio='2014-12-14',$fecha_fin='2015-02
 /*
 Calculo de monto a pagar
  */
+    public function mensual_cumplido($fecha_inicio='2014-12-14',$fecha_fin='2015-02-14',$costo_mes='2000')
+    {
+        $dia_i = date('j',strtotime($fecha_inicio)); //dia inicial de la fecha de inicio
+        $dia_f = date('j',strtotime($fecha_fin)); //dia final de la fecha final
+        $costo_total = 0;
+        $fecha_inicio = strtotime ('-1 day',strtotime($fecha_inicio));
+        $fecha_inicio = date('Y-m-d',$fecha_inicio);
+
+        
+                        $fecha_aux =date("Y-m-d",strtotime('+1 month',strtotime($fecha_inicio)));
+                        while ( strtotime($fecha_aux)<=strtotime($fecha_fin) ) {
+                            $costo_total=$costo_total+$costo_mes;
+                            $fecha_inicio = $fecha_aux;
+                            $fecha_aux =date("Y-m-d",strtotime('+1 month',strtotime($fecha_inicio)));
+                        }
+
+                        $datetime1 = new DateTime($fecha_inicio);
+                        $datetime2 = new DateTime($fecha_fin);
+                        $interval = $datetime1->diff($datetime2);
+                        $nro_dias = $interval->format('%a');
+                        if ($nro_dias>0) {
+                            $mes = date('n',strtotime($fecha_fin));
+                            $anio = date('Y',strtotime($fecha_fin));
+                            if( is_callable("cal_days_in_month")){
+                                $nro_dias_mes= cal_days_in_month(CAL_GREGORIAN, $mes, $anio);
+                            }
+                            else{
+                                $nro_dias_mes = date("t",mktime(0,0,0,$mes,1,$anio));
+                            }    
+
+                           $costo_total+=$nro_dias*($costo_mes/$nro_dias_mes); 
+                        }
+        
+          return $costo_total;
+        
+    }
+
     public function mensual($fecha_inicio='2014-12-14',$fecha_fin='2015-02-15',$costo_mes='2000')
     {
         $dia_i = date('j',strtotime($fecha_inicio)); //dia inicial de la fecha de inicio

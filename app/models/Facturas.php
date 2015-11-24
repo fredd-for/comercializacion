@@ -27,7 +27,7 @@ class Facturas extends \Phalcon\Mvc\Model
 
 	public function listafacturas()
 	{
-		$sql = "SELECT cl.razon_social,cl.nit,g.grupo,l.linea,e.estacion,c.contrato,p.producto,pp.*,DATEDIFF(CURRENT_DATE(),pp.fecha_programado) AS diferencia_dias,ppf.id as planpagofactura_id,ppf.fecha_factura,ppf.monto_factura,ppf.nro_factura,ppf.fecha_reg
+		$sql = "SELECT cl.razon_social,cl.nit,g.grupo,l.linea,e.estacion,c.contrato,p.producto,pp.*,DATEDIFF(CURRENT_DATE(),pp.fecha_programado) AS diferencia_dias,ppf.id as planpagofactura_id,ppf.fecha_factura,ppf.fecha_recepcion_cliente,ppf.monto_factura,ppf.nro_factura,ppf.fecha_reg
 		FROM planpagos pp
 		LEFT JOIN planpagofacturas ppf ON pp.id=ppf.planpago_id AND ppf.baja_logica = 1
 		INNER JOIN productos p ON pp.producto_id = p.id

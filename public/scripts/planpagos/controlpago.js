@@ -24,6 +24,7 @@ $(document).ready(function (){
 			{ name: 'monto_deposito_mora',type: 'string'},
 			{ name: 'nro_factura',type: 'string'},
 			{ name: 'fecha_factura',type: 'string'},
+			{ name: 'fecha_recepcion_cliente',type: 'string'},
 			{ name: 'monto_factura',type: 'string'},
 			{ name: 'fecha_actual',type: 'date'},
 			{ name: 'fecha_10',type: 'date'},
@@ -89,12 +90,13 @@ $(document).ready(function (){
             altrows: true,
             theme: 'custom',
             columnsresize: true,
-            
             showstatusbar: true,
             statusbarheight: 25,
             showaggregates: true,
             renderstatusbar: barra,
-
+            ready: function () {
+                    // callback function which is called by jqxGrid when the widget is initialized and the binding is completed.
+            },
 			columns: [
 			{ text: 'Fecha Programado', datafield: 'fecha_programado', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
 			{ text: 'Monto Programado', datafield: 'monto_reprogramado_div', filtertype: 'input',width: '12%' ,cellsformat: 'c2',cellsalign: 'right',align:'center',aggregates: [{ '<b>Total Bs.</b>': 
@@ -104,8 +106,8 @@ $(document).ready(function (){
                             }
                       }]                  
             },
-			// { text: 'Nro Factura', datafield: 'nro_factura', filtertype: 'input',width: '8%' },
 			{ text: 'Fecha Factura', datafield: 'fecha_factura', filtertype: 'input',width: '10%', cellsalign: 'center',align:'center',cellclassname: cellclass },
+			{ text: 'Fecha Recep.Cliente', datafield: 'fecha_recepcion_cliente', filtertype: 'input',width: '10%', cellsalign: 'center',align:'center',cellclassname: cellclass ,hidden: true},
 			{ text: 'Monto Factura', datafield: 'monto_factura', filtertype: 'input',width: '10%', cellsformat: 'c2',cellsalign: 'right',align:'center',cellclassname: cellclass,aggregates: [{ '<b>Bs.</b>': 
                             function (aggregatedValue, currentValue, column, record) {
                                 var total = aggregatedValue + record['factura_total'];
@@ -113,7 +115,7 @@ $(document).ready(function (){
                             }
                       }]
                   },
-			// { text: 'Nro Deposito', datafield: 'nro_deposito', filtertype: 'input',width: '8%' },
+			{ text: 'Nro Deposito', datafield: 'nro_deposito', filtertype: 'input',width: '8%',cellclassname:cellclassdeposito,hidden: true },
 			{ text: 'Fecha Deposito', datafield: 'fecha_deposito', filtertype: 'input',width: '10%', cellsalign: 'center',align:'center',cellclassname:cellclassdeposito },
 			{ text: 'Monto Deposito', datafield: 'monto_deposito', filtertype: 'input',width: '12%', cellsformat: 'c2',cellsalign: 'right',align:'center',cellclassname:cellclassdeposito,
 				aggregates: [{ '<b>Bs.</b>': 
@@ -132,9 +134,9 @@ $(document).ready(function (){
 				}
 				}]
 			},
-			// { text: 'Nro Deposito Mora', datafield: 'nro_deposito_mora', filtertype: 'input',width: '8%' },
-			{ text: 'Fecha Deposito Mora', datafield: 'fecha_deposito_mora', filtertype: 'input',width: '10%', cellsalign: 'center',align:'center',cellclassname:cellclassmora },
-			{ text: 'Monto Deposito Mora', datafield: 'monto_deposito_mora', filtertype: 'input',width: '10%',cellsformat: 'c2', cellsalign: 'right',align:'center',cellclassname:cellclassmora,
+			{ text: 'Nro Dep. Mora', datafield: 'nro_deposito_mora', filtertype: 'input',width: '8%',cellclassname:cellclassmora,hidden: true },
+			{ text: 'Fecha Dep. Mora', datafield: 'fecha_deposito_mora', filtertype: 'input',width: '10%', cellsalign: 'center',align:'center',cellclassname:cellclassmora},
+			{ text: 'Monto Dep. Mora', datafield: 'monto_deposito_mora', filtertype: 'input',width: '10%',cellsformat: 'c2', cellsalign: 'right',align:'center',cellclassname:cellclassmora,
 				aggregates: [{ '<b>Bs.</b>': 
 				function (aggregatedValue, currentValue, column, record) {
 					var total = aggregatedValue + record['mora_total'];
@@ -144,7 +146,37 @@ $(document).ready(function (){
 			},
 			]
 		});
+
+	
 }
+
+var listSource =[	{ label: 'Fecha Programado', value: 'fecha_programado', checked: true }, 
+					{ label: 'Monto Programado', value: 'monto_reprogramado_div', checked: true },
+					{ label: 'Fecha Factura', value: 'fecha_factura', checked: true },
+					{ label: 'Fecha Recep.Cliente', value: 'fecha_recepcion_cliente', checked: false },
+					{ label: 'Monto Factura', value: 'monto_factura', checked: true },
+					{ label: 'Nro Deposito', value: 'nro_deposito', checked: false },
+					{ label: 'Fecha Deposito', value: 'fecha_deposito', checked: true },
+					{ label: 'Monto Deposito', value: 'monto_deposito', checked: true },
+					{ label: 'Dias Atraso', value: 'dias_atraso', checked: true },
+					{ label: 'Mora', value: 'mora', checked: true },
+					{ label: 'Nro Dep. Mora', value: 'nro_deposito_mora', checked: false },
+					{ label: 'Fecha Dep. Mora', value: 'fecha_deposito_mora', checked: true },
+					{ label: 'Monto Dep. Mora', value: 'monto_deposito_mora', checked: true }
+
+				];
+$("#jqxlistbox").jqxListBox({ source: listSource, width: '100%', height: 340, theme: 'custom', checkboxes: true });
+$("#jqxlistbox").on('checkChange', function (event) {
+	$("#jqxgrid").jqxGrid('beginupdate');
+	if (event.args.checked) {
+		$("#jqxgrid").jqxGrid('showcolumn', event.args.value);
+	}
+	else {
+		$("#jqxgrid").jqxGrid('hidecolumn', event.args.value);
+	}
+	$("#jqxgrid").jqxGrid('endupdate');
+});
+
 
 // grid garantia
 garantia()
@@ -361,6 +393,9 @@ $("#reg_deposito").click(function() {
  		$("#planpago_id").val(dataRecord.id);
  		$("#titulo_deposito").text("Registrar Deposito");
  		$("#tipo_deposito").val(1);
+ 		var fp = $.jqx.dataFormat.formatdate(dataRecord.fecha_programado, 'dd-MM-yyyy');
+ 		$("#fecha_deposito").val(fp);
+ 		$("#monto_deposito").val(dataRecord.monto_reprogramado);
  		$('#myModal_deposito').modal('show');
  	}
  	else

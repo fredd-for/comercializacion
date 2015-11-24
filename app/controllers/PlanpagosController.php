@@ -136,6 +136,7 @@ public function controlpagoAction($contratoproducto_id)
         ->addJs('/scripts/planpagos/controlpago.js')
         ->addJs('/media/plugins/bootbox/bootbox.min.js')
         ;
+
         $model = new Planpagos();
         $resul = $model->getcontrato($contratoproducto_id);
         // $contratoproducto = array();
@@ -176,19 +177,58 @@ public function listcontrolpagoAction($contratoproducto_id)
         /* calculo de mora */
         $dias_atraso = '';
         $mora='';
+        
+        //segun fecha programada
         $fecha_tolerancia = date("Y-m-d",strtotime( '+'.$contrato[0]->dias_tolerancia.' day' , strtotime($v->fecha_programado)));
-        if ($fecha_tolerancia<date("Y-m-d")) {
-            if ($v->mora>0) {
-                $dias_atraso = $v->dias_atraso;
-                $mora=$v->mora;
-            }elseif($v->deposito_total<$v->monto_reprogramado) {
-                $datetime1 = new DateTime($fecha_tolerancia);
-                $datetime2 = new DateTime(date("Y-m-d"));
-                $interval = $datetime1->diff($datetime2);
-                $dias_atraso = $interval->format('%R%a');
-                $mora=($contrato[0]->total/$contrato[0]->nro_dias*$contrato[0]->porcentaje_mora)*$dias_atraso;
-            }
+        if ($contrato[0]->tipo_cobro_mora==1) {
+            if ($fecha_tolerancia<date("Y-m-d")) {
+                if ($v->mora>0) {
+                    $dias_atraso = $v->dias_atraso;
+                    $mora=$v->mora;
+                }elseif($v->deposito_total<$v->monto_reprogramado) {
+                    $datetime1 = new DateTime($fecha_tolerancia);
+                    $datetime2 = new DateTime(date("Y-m-d"));
+                    $interval = $datetime1->diff($datetime2);
+                    $dias_atraso = $interval->format('%R%a');
+                    $mora=($contrato[0]->total/$contrato[0]->nro_dias*$contrato[0]->porcentaje_mora)*$dias_atraso;
+                }
+            }    
         }
+        //segun fecha factura
+        if ($contrato[0]->tipo_cobro_mora==2 && $v->fecha_factura) {
+            $fecha_tolerancia = date("Y-m-d",strtotime( '+'.$contrato[0]->dias_tolerancia.' day' , strtotime($v->fecha_factura)));            
+            if ($fecha_tolerancia<date("Y-m-d")) {
+                if ($v->mora>0) {
+                    $dias_atraso = $v->dias_atraso;
+                    $mora=$v->mora;
+                }elseif($v->factura_total>=$v->monto_reprogramado) {
+                    $datetime1 = new DateTime($fecha_tolerancia);
+                    $datetime2 = new DateTime(date("Y-m-d"));
+                    $interval = $datetime1->diff($datetime2);
+                    $dias_atraso = $interval->format('%R%a');
+                    $mora=($contrato[0]->total/$contrato[0]->nro_dias*$contrato[0]->porcentaje_mora)*$dias_atraso;
+                }
+            }    
+        }
+
+        //segun fecha factura
+        if ($contrato[0]->tipo_cobro_mora==3 && $v->fecha_recepcion_cliente) {
+            $fecha_tolerancia = date("Y-m-d",strtotime( '+'.$contrato[0]->dias_tolerancia.' day' , strtotime($v->fecha_recepcion_cliente)));            
+            if ($fecha_tolerancia<date("Y-m-d")) {
+                if ($v->mora>0) {
+                    $dias_atraso = $v->dias_atraso;
+                    $mora=$v->mora;
+                }elseif($v->factura_total>=$v->monto_reprogramado) {
+                    $datetime1 = new DateTime($fecha_tolerancia);
+                    $datetime2 = new DateTime(date("Y-m-d"));
+                    $interval = $datetime1->diff($datetime2);
+                    $dias_atraso = $interval->format('%R%a');
+                    $mora=($contrato[0]->total/$contrato[0]->nro_dias*$contrato[0]->porcentaje_mora)*$dias_atraso;
+                }
+            }    
+        }
+        
+        
         /* fin calculo de mora*/
         $customers[] = array(
             'id' => $v->id,
@@ -211,6 +251,7 @@ public function listcontrolpagoAction($contratoproducto_id)
             'nro_factura' =>$html[6],
             'fecha_factura' =>$html[7],
             'monto_factura' =>$html[8],
+            'fecha_recepcion_cliente' =>$html[9],
             'fecha_actual' =>$hoy,
             'fecha_10' =>$fecha_10,
             'fecha_tolerancia' =>$fecha_tolerancia,
@@ -249,12 +290,14 @@ public function depositos($planpago_id='',$diferencia,$sw='0')
     $nro_factura = '';
     $fecha_factura ='';
     $monto_factura = '';
+    $fecha_recepcion_cliente ='';
     foreach ($resul3 as $v) {
         $nro_factura.="<div>".$v->nro_factura."</div>";
         $fecha_factura.="<div>".date("d-m-Y",strtotime($v->fecha_factura))."</div>";
         $monto_factura.="<div>".number_format($v->monto_factura,2,'.',',')."</div>";
+        $fecha_recepcion_cliente.="<div>".date("d-m-Y",strtotime($v->fecha_recepcion_cliente))."</div>";
     }
-    $res = array($nro_deposito,$fecha_deposito,$monto_deposito,$nro_deposito_mora,$fecha_deposito_mora,$monto_deposito_mora,$nro_factura,$fecha_factura,$monto_factura);
+    $res = array($nro_deposito,$fecha_deposito,$monto_deposito,$nro_deposito_mora,$fecha_deposito_mora,$monto_deposito_mora,$nro_factura,$fecha_factura,$monto_factura,$fecha_recepcion_cliente);
     return $res;
 }
 
@@ -312,36 +355,50 @@ function modificacionmora($planpago_id)
 {
     $model = new Planpagodepositos();
     $resulmora = $model->getdatosverificar($planpago_id,1);
+    $dias_atraso =0;
+    $mora=0;
 
     foreach ($resulmora as $v) {
         if ($v->deposito>=$v->monto_reprogramado) {
-            $nuevafecha = strtotime ( '+'.$v->dias_tolerancia.' day' , strtotime ( $v->fecha_programado ) ) ;
-            $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
 
-            $datetime1 = new DateTime($nuevafecha);
-            $datetime2 = new DateTime($v->fecha);
-            $interval = $datetime1->diff($datetime2);
-            $nro_dias = $interval->format('%R%a');
-            if ($nro_dias>0) {
-                $planpago = Planpagos::findFirstById($planpago_id);
-                $planpago->dias_atraso = $nro_dias;
-                $planpago->mora = ($v->total/$v->nro_dias*$v->porcentaje_mora)*$nro_dias;
-                $planpago->save();    
-            }else{
-                $planpago = Planpagos::findFirstById($planpago_id);
-                $planpago->dias_atraso = 0;
-                $planpago->mora = 0;
-                $planpago->save();
+            if ($v->tipo_cobro_mora=='1') {
+                $nuevafecha = strtotime ( '+'.$v->dias_tolerancia.' day' , strtotime ( $v->fecha_programado ) ) ;
+                $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
+                $datetime1 = new DateTime($nuevafecha);
+                $datetime2 = new DateTime($v->fecha);   //fecha deposito
+                $interval = $datetime1->diff($datetime2);
+                $nro_dias = $interval->format('%R%a');    
+            }elseif ($v->tipo_cobro_mora=='2' && $v->fecha_factura) {
+                $nuevafecha = strtotime ( '+'.$v->dias_tolerancia.' day' , strtotime ( $v->fecha_factura ) ) ;
+                $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
+                $datetime1 = new DateTime($nuevafecha);
+                $datetime2 = new DateTime($v->fecha);   //fecha deposito
+                $interval = $datetime1->diff($datetime2);
+                $nro_dias = $interval->format('%R%a');        
+            }elseif ($v->tipo_cobro_mora=='3' && $v->fecha_recepcion_cliente) {
+                $nuevafecha = strtotime ( '+'.$v->dias_tolerancia.' day' , strtotime ( $v->fecha_recepcion_cliente ) ) ;
+                $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
+                $datetime1 = new DateTime($nuevafecha);
+                $datetime2 = new DateTime($v->fecha);   //fecha deposito
+                $interval = $datetime1->diff($datetime2);
+                $nro_dias = $interval->format('%R%a');        
             }
 
-        }else{
-            $planpago = Planpagos::findFirstById($planpago_id);
-                $planpago->dias_atraso = 0;
-                $planpago->mora = 0;
-                $planpago->save();
+            if ($nro_dias>0) {
+                $dias_atraso = $nro_dias;
+                $mora = ($v->total/$v->nro_dias*$v->porcentaje_mora)*$nro_dias;
+            }else{
+                $dias_atraso = 0;
+                $mora = 0;
+            }
+
         }
         
     }
+    $planpago = Planpagos::findFirstById($planpago_id);
+    $planpago->dias_atraso = $dias_atraso;
+    $planpago->mora = $mora;
+    $planpago->save();
 }
 
 public function pruebaAction()

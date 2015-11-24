@@ -7,15 +7,14 @@ class Planpagofacturas extends \Phalcon\Mvc\Model
 {
 	private $_db;	
 	
-	// public function getdatosverificar($planpago_id,$tipo_deposito)
+	// public function getdatoscontrato($planpagofactura_id)
 	// {
-	// 	$sql="SELECT pp.*,cp.total, cp.nro_dias,co.dias_tolerancia,porcentaje_mora,MAX(d.fecha_deposito) as fecha,SUM(d.monto_deposito) as deposito
-	// 	FROM planpagos pp
-	// 	INNER JOIN contratosproductos cp ON pp.contratoproducto_id = cp.id
-	// 	INNER JOIN contratos co ON cp.contrato_id = co.id
-	// 	INNER JOIN planpagodepositos d ON pp.id=d.planpago_id AND d.baja_logica = 1 AND d.tipo_deposito = '$tipo_deposito'
-	// 	WHERE pp.id = '$planpago_id' ";
-	// 	$this->_db = new Planpagodepositos();
+	// 	$sql="SELECT ppf.fecha_factura,ppf.fecha_recepcion_cliente,ppf.monto_factura,ppf.nro_factura,pp.fecha_programado,pp.monto_reprogramado,c.dias_tolerancia,c.porcentaje_mora,c.tipo_pago,c.tipo_cobro_mora
+	// 	FROM planpagofacturas  ppf
+	// 	INNER JOIN planpagos pp ON ppf.planpago_id=pp.id
+	// 	INNER JOIN contratos c ON pp.contrato_id = c.id
+	// 	WHERE ppf.id = '$planpagofactura_id'";
+	// 	$this->_db = new Planpagofacturas();
 	// 	return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));
 	// }
 }

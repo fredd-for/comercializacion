@@ -84,6 +84,7 @@ cargar2();
 			{ name: 'fecha_programado',type:'date'},
 			{ name: 'monto_reprogramado',type: 'number'},
 			{ name: 'fecha_factura',type:'date'},
+			{ name: 'fecha_recepcion_cliente',type:'date'},
 			{ name: 'monto_factura',type: 'number'},
 			{ name: 'nro_factura',type: 'string'},
 			{ name: 'diferencia_dias',type:'number'}
@@ -157,6 +158,10 @@ $("#facturar").click(function() {
 		var fp = $.jqx.dataFormat.formatdate(dataRecord.fecha_programado, 'dd-MM-yyyy');
 		$("#fecha_programado").text(fp);
 		$("#monto_reprogramado").text(dataRecord.monto_reprogramado);
+
+		$("#nro_factura").val('');
+		$("#fecha_factura").val(fp);
+		$("#monto_factura").val(dataRecord.monto_reprogramado);
 		
 		$('#myModal').modal('show');
 	}
@@ -189,6 +194,8 @@ $("#edit").click(function() {
 		$("#nro_factura").val(dataRecord.nro_factura);
 		var ff = $.jqx.dataFormat.formatdate(dataRecord.fecha_factura, 'dd-MM-yyyy');
 		$("#fecha_factura").val(ff);
+		var frc = $.jqx.dataFormat.formatdate(dataRecord.fecha_recepcion_cliente, 'dd-MM-yyyy');
+		$("#fecha_recepcion_cliente").val(frc);
 		$("#monto_factura").val(dataRecord.monto_factura);
 		
 		$('#myModal').modal('show');
@@ -241,7 +248,7 @@ $("#testForm").submit(function() {
 		url:'/facturas/save/',
 		type:'POST',
 		datatype: 'json',
-		data:{id:$("#id").val(),planpago_id:$("#planpago_id").val(),nro_factura:$("#nro_factura").val(),fecha_factura:$("#fecha_factura").val(),monto_factura:$("#monto_factura").val()},
+		data:{id:$("#id").val(),planpago_id:$("#planpago_id").val(),nro_factura:$("#nro_factura").val(),fecha_factura:$("#fecha_factura").val(),fecha_recepcion_cliente:$("#fecha_recepcion_cliente").val(),monto_factura:$("#monto_factura").val()},
 		success: function(data) { cargar(); cargar2(); 
 			$("#divMsjeExito").show();
 			$("#divMsjeExito").addClass('alert alert-success alert-dismissable');
@@ -253,7 +260,7 @@ $("#testForm").submit(function() {
             return false; // ajax used, block the normal submit
 });
 
-$("#fecha_factura").datepicker({
+$("#fecha_factura, #fecha_recepcion_cliente").datepicker({
 	autoclose:true,
 });
 

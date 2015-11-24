@@ -95,6 +95,7 @@ class FacturasController extends ControllerBase
                 'diferencia_dias' => $v->diferencia_dias,
                 'planpagofactura_id' => $v->planpagofactura_id,
                 'fecha_factura' => $v->fecha_factura.' 00:00:00',
+                'fecha_recepcion_cliente' => $v->fecha_recepcion_cliente.' 00:00:00',
                 'monto_factura' => $v->monto_factura,
                 'nro_factura' => $v->nro_factura,
                 'fecha_reg' => $v->fecha_reg,
@@ -110,6 +111,7 @@ class FacturasController extends ControllerBase
             if ($_POST['id']>0) {
                 $resul = Planpagofacturas::findFirstById($_POST['id']);
                 $resul->fecha_factura = date("Y-m-d",strtotime($_POST['fecha_factura']));
+                $resul->fecha_recepcion_cliente = date("Y-m-d",strtotime($_POST['fecha_recepcion_cliente']));
                 $resul->monto_factura = $_POST['monto_factura'];
                 $resul->nro_factura = $_POST['nro_factura'];
                 if ($resul->save()) {
@@ -122,6 +124,7 @@ class FacturasController extends ControllerBase
                 $resul = new Planpagofacturas();
                 $resul->planpago_id = $_POST['planpago_id'];
                 $resul->fecha_factura = date("Y-m-d",strtotime($_POST['fecha_factura']));
+                $resul->fecha_recepcion_cliente = date("Y-m-d",strtotime($_POST['fecha_recepcion_cliente']));
                 $resul->monto_factura = $_POST['monto_factura'];
                 $resul->nro_factura = $_POST['nro_factura'];
                 $resul->fecha_reg = date("Y-m-d H:i:s");
@@ -129,6 +132,8 @@ class FacturasController extends ControllerBase
                 $resul->estado = 0;
                 $resul->baja_logica = 1;
                 if ($resul->save()) {
+                    // $model = new Planpagofacturas();
+                    // $resul2 = $model->getdatoscontrato($resul->id);
                     $msm = 'Exito: Se guardo correctamente';
                 }else{
                     $msm = 'Error: No se guardo el registro';

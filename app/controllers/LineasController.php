@@ -66,7 +66,7 @@ public function saveAction()
     if (isset($_POST['id'])) {
         if ($_POST['id']>0) {
             $resul = Lineas::findFirstById($this->request->getPost('id'));
-            $resul->estacion = $this->request->getPost('linea');
+            $resul->linea= $this->request->getPost('linea');
             if ($resul->save()) {
                 $msm ='Exito: Se guardo correctamente';
             }else{
@@ -88,6 +88,7 @@ public function saveAction()
     $this->view->disable();
     echo $msm;
 }
+
 
 public function deleteAction(){
     $resul = Lineas::findFirstById($this->request->getPost('id'));

@@ -124,7 +124,7 @@ $("#testForm").submit(function() {
             	url:'/grupos/save/',
             	type:'POST',
             	datatype: 'json',
-            	data:{id:$("#id").val(),grupo:$("#grupo").val(),sigla:$("#sigla").val(),sigla:$("#descripcion").val()},
+            	data:{id:$("#id").val(),grupo:$("#grupo").val(),sigla:$("#sigla").val(),descripcion:$("#descripcion").val()},
 				success: function(data) { cargar(); 
 					$("#divMsjeExito").show();
                     $("#divMsjeExito").addClass('alert alert-info alert-dismissable');

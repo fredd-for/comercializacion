@@ -18,7 +18,9 @@ function cargar(){
 			{ name: 'responsable', type: 'string' },
 			{ name: 'responsable_id', type: 'number' },
 			{ name: 'estado', type: 'number' },
-			{ name: 'estado_text', type: 'string' }
+			{ name: 'estado_text', type: 'string' },
+			{ name: 'tipo_pago', type: 'number' },
+			{ name: 'tipo_cobro_mora', type: 'number' },
 
 			],
 			url: '/contratos/list',
@@ -81,7 +83,9 @@ function cargar(){
 			{ text: 'Dias Tolerancia', datafield: 'dias_tolerancia', filtertype: 'input',width: '8%' },
 			{ text: '% Mora', datafield: 'porcentaje_mora', filtertype: 'input',width: '8%' },
 			{ text: 'Estado', datafield: 'estado_text', filtertype: 'input',width: '9%' },
-			{ text: 'Nro Productos', datafield: 'num_productos', filtertype: 'input',width: '5%' }			
+			{ text: 'Nro Productos', datafield: 'num_productos', filtertype: 'input',width: '5%' },
+			{ text: 'Tipo Pago', datafield: 'tipo_pago', filtertype: 'input',width: '10%' },
+			{ text: 'Tipo Cobro Mora', datafield: 'tipo_cobro_mora', filtertype: 'input',width: '10%' }			
 			],
 		// groups: ['razon_social']
 	});
@@ -245,6 +249,8 @@ $("#edit_contrato").click(function(){
  			$('#cliente_id').trigger("chosen:updated");
  			$("#nit").val(dataRecord.nit);
  			$("#responsable_id").val(dataRecord.responsable_id);
+ 			$("#tipo_pago_"+dataRecord.tipo_pago).prop("checked", true);
+ 			$("#tipo_cobro_mora_"+dataRecord.tipo_pago).prop("checked", true);
  			$('#myModal_contrato').modal('show');
  		}else{
  			bootbox.alert("<strong>¡Mensaje!</strong> No puede editar contrato por que ha finalizado.");		
@@ -336,11 +342,13 @@ $("#delete_contrato").click(function(){
 guardar 
  */
 $("#testForm_contrato").submit(function() {
+	var tipo_pago = $('input:radio[name=tipo_pago]:checked').val();
+	var tipo_cobro_mora = $('input:radio[name=tipo_cobro_mora]:checked').val()
 	var v=$.ajax({
             	url:'/contratos/savecontrato/',
             	type:'POST',
             	datatype: 'json',
-            	data:{contrato_id:$("#contrato_id").val(),solicitud_id:$("#solicitud_id").val(),cliente_id:$("#cliente_id").val(),contrato:$("#contrato").val(),fecha_contrato:$("#fecha_contrato").val(),arrendador:$("#arrendador").val(),arrendador_rep_legal:$("#arrendador_rep_legal").val(),arrendador_cargo:$("#arrendador_cargo").val(),descripcion:$("#descripcion").val(),dias_tolerancia:$("#dias_tolerancia").val(),porcentaje_mora:$("#porcentaje_mora").val(),responsable_id:$("#responsable_id").val()},
+            	data:{contrato_id:$("#contrato_id").val(),solicitud_id:$("#solicitud_id").val(),cliente_id:$("#cliente_id").val(),contrato:$("#contrato").val(),fecha_contrato:$("#fecha_contrato").val(),arrendador:$("#arrendador").val(),arrendador_rep_legal:$("#arrendador_rep_legal").val(),arrendador_cargo:$("#arrendador_cargo").val(),descripcion:$("#descripcion").val(),dias_tolerancia:$("#dias_tolerancia").val(),porcentaje_mora:$("#porcentaje_mora").val(),responsable_id:$("#responsable_id").val(),tipo_pago:tipo_pago,tipo_cobro_mora:tipo_cobro_mora},
 				success: function(data) { 
 						cargar();
 						$("#divMsjeExito").show();

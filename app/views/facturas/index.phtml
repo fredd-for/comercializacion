@@ -28,7 +28,7 @@
 							</div>
 						</div>
 					</div>
-					<?php if ($user->nivel==4) { ?>
+					<?php // if ($user->nivel==4) { ?>
 					<div class="row">
 						<div class="col-md-12">
 							<div class="pull-right">
@@ -36,7 +36,7 @@
 							</div>
 						</div>
 					</div>
-					<?php } ?>
+					<?php //} ?>
 					
 					<div class="row">
 						<div class="col-md-12">
@@ -47,14 +47,15 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="pull-left">
-								<h4>Lista de Facturas Realizadas</h4>
+								<strong>Lista de Facturas Realizadas</strong>
+								<!-- <h5></h5> -->
 							</div>
-							<?php if ($user->nivel==4) { ?>
+							<?php // if ($user->nivel==4) { ?>
 								<div class="pull-right">
 								<button class="btn btn-sm btn-warning" type="button" id="edit"><i class="fa fa-pencil fa-fw"></i> Editar</button>
 								<button class="btn btn-sm btn-danger" type="button" id="delete"><i class="fa fa-trash-o fa-fw"></i> Eliminar</button>
 							</div>	
-							<?php } ?>
+							<?php // } ?>
 							
 						</div>
 					</div>
@@ -135,6 +136,12 @@
 				<label class="col-md-4 control-label"><strong>Fecha Factura:</strong></label>
 					<div class="col-md-8">
 						<input type="text" id="fecha_factura" name="fecha_factura" class="form-control" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" required/>
+					</div>
+				</div>
+				<div class="form-group">
+				<label class="col-md-4 control-label"><strong>Fecha Entrega Factura:</strong></label>
+					<div class="col-md-8">
+						<input type="text" id="fecha_recepcion_cliente" name="fecha_recepcion_cliente" class="form-control" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy"/>
 					</div>
 				</div>
 				<div class="form-group">

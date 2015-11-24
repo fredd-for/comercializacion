@@ -74,9 +74,9 @@ cargar();
 			]
 			//groups: ['grupo']
 		});
-		var localizationobj = {};
-            localizationobj.currencysymbol = "Bs ";
-            $("#jqxgrid").jqxGrid('localizestrings', localizationobj);
+		// var localizationobj = {};
+  //           localizationobj.currencysymbol = "Bs ";
+  //           $("#jqxgrid").jqxGrid('localizestrings', localizationobj);
  		//$("#jqxgrid").jqxGrid('expandgroup',4);
 }
 

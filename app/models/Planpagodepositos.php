@@ -29,12 +29,13 @@ class Planpagodepositos extends \Phalcon\Mvc\Model
 
 	public function getdatosverificar($planpago_id,$tipo_deposito)
 	{
-		$sql="SELECT pp.*,cp.total, cp.nro_dias,co.dias_tolerancia,co.porcentaje_mora,MAX(d.fecha_deposito) as fecha,SUM(d.monto_deposito) as deposito
+		$sql="SELECT pp.*,cp.total, cp.nro_dias,co.dias_tolerancia,co.porcentaje_mora,co.tipo_cobro_mora,MAX(d.fecha_deposito) as fecha,SUM(d.monto_deposito) as deposito,MAX(ppf.fecha_factura) as fecha_factura,MAX(ppf.fecha_recepcion_cliente) as fecha_recepcion_cliente,SUM(ppf.monto_factura) as monto_factura
 		FROM planpagos pp
 		INNER JOIN contratosproductos cp ON pp.contratoproducto_id = cp.id
 		INNER JOIN contratos co ON cp.contrato_id = co.id
-		INNER JOIN planpagodepositos d ON pp.id=d.planpago_id AND d.baja_logica = 1 AND d.tipo_deposito = '$tipo_deposito'
-		WHERE pp.id = '$planpago_id' ";
+		LEFT JOIN planpagodepositos d ON pp.id=d.planpago_id AND d.baja_logica = 1 AND d.tipo_deposito = '1'
+		LEFT JOIN planpagofacturas ppf ON pp.id=ppf.planpago_id AND ppf.baja_logica = 1 
+		WHERE pp.id = '$planpago_id'";
 		$this->_db = new Planpagodepositos();
 		return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));
 	}

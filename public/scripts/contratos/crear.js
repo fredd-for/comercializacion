@@ -369,12 +369,12 @@ $("#quitar").click(function() {
 
  });
 
-$("#testForm").submit(function(){
+$("#testForm").submit(function(){	
 	var v=$.ajax({
 		url:'/contratos/savecontratosproductos/',
 		type:'POST',
 		datatype: 'json',
-		data:{id:$("#id").val(),contrato_id:$("#contrato_id").val(),producto_id:$("#producto_id").val(),precio_unitario:$("#precio_unitario").val(),tiempo:$("#tiempo").val(),fecha_inicio:$("#fecha_inicio").val(),fecha_fin:$("#fecha_fin").val(),cantidad:$("#cantidad").val(),total:$("#total").val()},
+		data:{id:$("#id").val(),contrato_id:$("#contrato_id").val(),producto_id:$("#producto_id").val(),precio_unitario:$("#precio_unitario").val(),tiempo:$("#tiempo").val(),fecha_inicio:$("#fecha_inicio").val(),fecha_fin:$("#fecha_fin").val(),cantidad:$("#cantidad").val(),total:$("#total").val(),tipo_pago:$("#tipo_pago").val()},
 		success: function(data) { 
 			cargar2(); 
 			cargar();
@@ -468,14 +468,13 @@ function lista_pp(contratoproducto_id){
 
 
 function calculoCosto(){
-	//alert('calcular');
+	var tipo_pago = $("#tipo_pago").val();
 	var fecha_inicio = $("#fecha_inicio").val();
 	var fecha_fin = $("#fecha_fin").val();
 	var hora_inicio = $("#hora_inicio").val();
 	var hora_fin = $("#hora_fin").val();
 	var cantidad = $("#cantidad").val();
 	var tiempo = $("#tiempo").val();
-	//alert (tiempo);
 	var precio_unitario = $("#precio_unitario").val();
 
 	if (fecha_inicio!='' && fecha_fin!='' && hora_inicio!='' && hora_fin!='' && cantidad>0 && tiempo!='' && precio_unitario!='') {
@@ -483,7 +482,7 @@ function calculoCosto(){
 		url:'/contratos/calculocosto/',
 		type:'POST',
 		datatype: 'json',
-		data:{fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,hora_inicio:hora_inicio,hora_fin:hora_fin,cantidad:cantidad,tiempo:tiempo,precio_unitario:precio_unitario},
+		data:{fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,hora_inicio:hora_inicio,hora_fin:hora_fin,cantidad:cantidad,tiempo:tiempo,precio_unitario:precio_unitario,tipo_pago:tipo_pago},
 		success: function(data) { 
 			//alert(data);
 			$("#total").val(data);	

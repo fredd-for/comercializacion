@@ -70,8 +70,8 @@
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
-					<div class="col-md-12">
-						<h5 align="center"><?php echo $empresa->empresa ?></h5>
+					<div class="col-md-12 center-block">
+					<strong><?php echo $empresa->empresa ?></strong>
 						<input type="hidden" name="arrendador" id="arrendador" value="<?php echo $empresa->empresa ?>" >
 					</div>
 				</div>
@@ -92,7 +92,7 @@
 				<hr>
 				<div class="form-group">
 					<div class="col-md-12">
-						<h5 align="center">CLIENTE / EMPRESA</h5>
+						<strong>CLIENTE / EMPRESA</strong>
 					</div>
 				</div>
 				<div class="form-group">
@@ -124,9 +124,15 @@
 				</div>
 				<div class="form-group">
 					<label class="col-md-4 control-label">Nro Contrato</label>
-					<div class="col-md-8">
+					<div class="col-md-2">
 						<input type="text" name="contrato" id="contrato" class="form-control" placeholder="000/2015" required>
 					</div>
+
+					<label class="col-md-3 control-label">Fecha Contrato</label>
+					<div class="col-md-3">
+						<input type="text" id="fecha_contrato" name="fecha_contrato" class="form-control" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" required/>
+					</div>
+
 				</div>
 				<div class="form-group" >
 					<label class="col-md-4 control-label">Descripción</label>
@@ -134,10 +140,37 @@
 						<textarea name="descripcion" id="descripcion" class="form-control"></textarea>
 					</div>
 				</div>
+				<hr>
+				<strong>Parametros de Cobro</strong>
 				<div class="form-group" >
-					<label class="col-md-4 control-label">Fecha Contrato</label>
+					<div class="col-md-4">
+						<div class="radio">
+							<label>
+								<input type="radio" value="1" id="tipo_pago_1" name="tipo_pago" checked="checked">Plan Pagos Mensual
+							</label>
+						</div>
+						<div class="radio">
+							<label>
+								<input type="radio" value="2" id="tipo_pago_2" name="tipo_pago" >Plan Pagos Mes Cumplido
+							</label>
+						</div>
+					</div>
 					<div class="col-md-8">
-						<input type="text" id="fecha_contrato" name="fecha_contrato" class="form-control" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" required/>
+						<div class="radio">
+							<label>
+								<input type="radio" value="1" id="tipo_cobro_mora_1" name="tipo_cobro_mora" checked="checked">Cobro de mora según fecha programada
+							</label>
+						</div>
+						<div class="radio">
+							<label>
+								<input type="radio" value="2" id="tipo_cobro_mora_2" name="tipo_cobro_mora">Cobro de mora según fecha de factura
+							</label>
+						</div>
+						<div class="radio">
+							<label>
+								<input type="radio" value="3" id="tipo_cobro_mora_3" name="tipo_cobro_mora">Cobro de mora según fecha recepción de factura
+							</label>
+						</div>
 					</div>
 				</div>
 				<div class="form-group" >

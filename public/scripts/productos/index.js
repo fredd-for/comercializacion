@@ -98,12 +98,6 @@ $(document).ready(function (){
 					]
 				});
 
-			var localizationobj = {};
-            localizationobj.currencysymbol = "Bs ";
-            $("#jqxgrid").jqxGrid('localizestrings', localizationobj);
-
-
-
 $("#jqxgrid").bind("bindingcomplete", function(event) {
 	var visibleRows = $('#jqxgrid').jqxGrid('getrows');
 	var count = visibleRows.length;
@@ -125,6 +119,7 @@ function ordenar (campo,orden) {
 
 
 // }
+
 
  
 /*

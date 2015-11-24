@@ -51,12 +51,19 @@ return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($s
 	public function listacontrolpago($contratoproducto_id)
 	{
 		$sql="SELECT pp.*, 
-			(SELECT SUM(monto_factura)
+		(SELECT SUM(monto_factura)
 			FROM planpagofacturas
 			WHERE planpago_id=pp.id and baja_logica = 1) as factura_total,
+		(SELECT fecha_factura
+			FROM planpagofacturas
+			WHERE planpago_id=pp.id and baja_logica = 1 ORDER BY fecha_factura DESC LIMIT 1) as fecha_factura,
+	(SELECT fecha_recepcion_cliente
+			FROM planpagofacturas
+				WHERE planpago_id=pp.id and baja_logica = 1 ORDER BY fecha_recepcion_cliente DESC LIMIT 1) as fecha_recepcion_cliente,
 			(SELECT SUM(monto_deposito)
 			FROM planpagodepositos 
-			WHERE planpago_id=pp.id and baja_logica = 1 AND tipo_deposito =1) as deposito_total,(SELECT SUM(monto_deposito)
+			WHERE planpago_id=pp.id and baja_logica = 1 AND tipo_deposito =1) as deposito_total,
+			(SELECT SUM(monto_deposito)
 			FROM planpagodepositos 
 			WHERE planpago_id=pp.id and baja_logica = 1 AND tipo_deposito =2) as mora_total
 			FROM planpagos pp
