@@ -56,6 +56,7 @@ class EstacionesController extends ControllerBase
                 )
             );
         $this->view->setVar('linea',$linea);
+
     }
 
     public function listAction()

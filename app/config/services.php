@@ -66,8 +66,8 @@ $di->set('db', function () use ($config) {
 });
 $di->set('sigec', function () {
     return new \Phalcon\Db\Adapter\Pdo\Mysql(array(
-        'host' => '192.168.100.115',
-        'username' => 'sigecc',
+        'host' => '192.168.10.129',
+        'username' => 'sigec',
         'password' => 'sistemas4-',
         'dbname' => 'dbsigec'
     ));

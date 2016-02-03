@@ -1,5 +1,7 @@
 <?php
 
+require_once('../app/libs/nusoap/nusoap.php');
+
 class LoginController extends \Phalcon\Mvc\Controller {
 
     //login  
@@ -73,4 +75,5 @@ class LoginController extends \Phalcon\Mvc\Controller {
         $this->response->redirect('/login');
     }
 
+    
 }
