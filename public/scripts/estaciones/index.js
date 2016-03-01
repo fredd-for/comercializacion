@@ -15,6 +15,32 @@ $(document).ready(function (){
 		};
 		var dataAdapter = new $.jqx.dataAdapter(source);
 
+		// var FilterLinea = function (valor) {
+  //       	$("#jqxgrid").jqxGrid('clearfilters');
+  //       	var filtergroup = new $.jqx.filter();
+  //       	var filter_or_operator = 1;
+  //       	var filtervalue = 1;
+  //       	var filtercondition = 'equal';
+  //       	var filter = filtergroup.createfilter('numericfilter', filtervalue, filtercondition);
+  //       	filtergroup.addfilter(filter_or_operator, filter);
+	 // 	// return filtergroup;
+	 // 	$("#jqxgrid").jqxGrid('addfilter', 'agrupador', filtergroup);
+  //             // apply the filters.
+  //             $("#jqxgrid").jqxGrid('applyfilters');
+  //         }
+
+          var FilterLinea = function () {
+                var filtergroup = new $.jqx.filter();
+
+                var filter_or_operator = 1;
+                var filtervalue = 'AMARILLO';
+                var filtercondition = 'equal';
+                var filter = filtergroup.createfilter('stringfilter', filtervalue, filtercondition);
+
+                filtergroup.addfilter(filter_or_operator, filter);
+                return filtergroup;
+            }();
+
 		$("#jqxgrid").jqxGrid({
 
 			width: '100%',
@@ -25,8 +51,7 @@ $(document).ready(function (){
 			pageable: true,
 			pagerMode: 'advanced',
 			theme: 'custom',
-			//scrollmode: 'deferred',
-			//showstatusbar: true,
+			
 			showfilterrow: true,
 			filterable: true,
 			autorowheight: true,
@@ -40,7 +65,7 @@ $(document).ready(function (){
 					return "<div style='margin:4px;'>" + (value + 1) + "</div>";
 				}
 			},
-			{ text: 'Linea', datafield: 'linea', filtertype: 'input',width: '27%' },
+			{ text: 'Linea', datafield: 'linea',filtertype: 'checkedlist',width: '27%',filter:FilterLinea },
 			{ text: 'Estacion', datafield: 'estacion', filtertype: 'input',width: '70%' }
 			]
 		});

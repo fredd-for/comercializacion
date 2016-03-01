@@ -6,7 +6,7 @@ use Phalcon\Mvc\Model\Resultset\Simple as Resultset;
 class Facturas extends \Phalcon\Mvc\Model
 {
 	 private $_db;
-	public function lista()
+	public function lista($where1,$group)
 	{
 		$sql = "SELECT cl.razon_social,cl.correo,cl.representante_legal,cl.correo_representante_legal,cl.nombre_ref,cl.correo_ref,cl.nit,g.grupo,l.linea,e.estacion,c.contrato,p.producto,
 		pp.*,DATEDIFF(CURRENT_DATE(),pp.fecha_programado) AS diferencia_dias,ppf.nro_factura
@@ -19,8 +19,8 @@ class Facturas extends \Phalcon\Mvc\Model
 		INNER JOIN grupos g ON p.grupo_id = g.id
 		INNER JOIN estaciones e ON p.estacion_id = e.id
 		INNER JOIN lineas l ON e.linea_id = l.id
-		WHERE planpago_id IS NULL AND DATEDIFF(CURRENT_DATE(),pp.fecha_programado) >='-10' AND pp.baja_logica =1
-		ORDER BY c.contrato DESC";
+		WHERE planpago_id IS NULL AND DATEDIFF(CURRENT_DATE(),pp.fecha_programado) >='-10' AND pp.baja_logica =1 ".$where1."
+		ORDER BY c.contrato DESC ".$group;
 		$this->_db = new Facturas();
 		return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));
 	}

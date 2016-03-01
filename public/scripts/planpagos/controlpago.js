@@ -106,6 +106,7 @@ $(document).ready(function (){
                             }
                       }]                  
             },
+            { text: 'Nro Factura', datafield: 'nro_factura', filtertype: 'input',width: '10%',cellclassname: cellclass,hidden: false },
 			{ text: 'Fecha Factura', datafield: 'fecha_factura', filtertype: 'input',width: '10%', cellsalign: 'center',align:'center',cellclassname: cellclass },
 			{ text: 'Fecha Recep.Cliente', datafield: 'fecha_recepcion_cliente', filtertype: 'input',width: '10%', cellsalign: 'center',align:'center',cellclassname: cellclass ,hidden: true},
 			{ text: 'Monto Factura', datafield: 'monto_factura', filtertype: 'input',width: '10%', cellsformat: 'c2',cellsalign: 'right',align:'center',cellclassname: cellclass,aggregates: [{ '<b>Bs.</b>': 
@@ -115,7 +116,7 @@ $(document).ready(function (){
                             }
                       }]
                   },
-			{ text: 'Nro Deposito', datafield: 'nro_deposito', filtertype: 'input',width: '8%',cellclassname:cellclassdeposito,hidden: true },
+			{ text: 'Nro Deposito', datafield: 'nro_deposito', filtertype: 'input',width: '10%',cellclassname:cellclassdeposito,hidden: true },
 			{ text: 'Fecha Deposito', datafield: 'fecha_deposito', filtertype: 'input',width: '10%', cellsalign: 'center',align:'center',cellclassname:cellclassdeposito },
 			{ text: 'Monto Deposito', datafield: 'monto_deposito', filtertype: 'input',width: '12%', cellsformat: 'c2',cellsalign: 'right',align:'center',cellclassname:cellclassdeposito,
 				aggregates: [{ '<b>Bs.</b>': 
@@ -125,8 +126,8 @@ $(document).ready(function (){
 				}
 				}]
 			},
-			{ text: 'Dias Atraso', datafield: 'dias_atraso', filtertype: 'input',width: '8%',align:'center',cellclassname:cellclassmora },
-			{ text: 'Mora', datafield: 'mora', filtertype: 'input',width: '8%' ,cellsalign:'right',cellsformat: 'c2',cellclassname:cellclassmora,
+			{ text: 'Dias Atraso', datafield: 'dias_atraso', filtertype: 'input',width: '10%',align:'center',cellclassname:cellclassmora },
+			{ text: 'Mora', datafield: 'mora', filtertype: 'input',width: '12%' ,cellsalign:'right',cellsformat: 'c2',cellclassname:cellclassmora,
 				aggregates: [{ '<b>Bs.</b>': 
 				function (aggregatedValue, currentValue, column, record) {
 					var total = aggregatedValue + record['mora'];
@@ -152,6 +153,7 @@ $(document).ready(function (){
 
 var listSource =[	{ label: 'Fecha Programado', value: 'fecha_programado', checked: true }, 
 					{ label: 'Monto Programado', value: 'monto_reprogramado_div', checked: true },
+					{ label: 'Nro Factura', value: 'nro_factura', checked: true },
 					{ label: 'Fecha Factura', value: 'fecha_factura', checked: true },
 					{ label: 'Fecha Recep.Cliente', value: 'fecha_recepcion_cliente', checked: false },
 					{ label: 'Monto Factura', value: 'monto_factura', checked: true },
@@ -222,9 +224,21 @@ function garantia(){
 
 $("#dep_garantia, #dep_derechollave, #dev_garantia").click(function() {
 	// alert($(this).attr('tipo'));
+	var titulo = "";
+	
+	if ($(this).attr('tipo')==1) {
+		titulo = "Adicionar Deposito de Garantia";
+	}else if($(this).attr('tipo')==2) {
+		titulo = "Adicionar Deposito Derecho de Llave";
+	}else if($(this).attr('tipo')==3) {
+		titulo = "Devolución Garantia";
+	}
 	$('#tipo').val($(this).attr('tipo'));
 	$('#garantia_id').val('');
-	$('#titulo_derechollave').text('Adicionar Garantia');
+	$("#fecha_deposito_derechollave").val("");
+	$("#nro_deposito_derechollave").val("");
+	$("#monto_deposito_derechollave").val("");
+	$('#titulo_derechollave').text(titulo);
 	$('#myModal_derechollave').modal('show');
 });
 
@@ -396,6 +410,7 @@ $("#reg_deposito").click(function() {
  		var fp = $.jqx.dataFormat.formatdate(dataRecord.fecha_programado, 'dd-MM-yyyy');
  		$("#fecha_deposito").val(fp);
  		$("#monto_deposito").val(dataRecord.monto_reprogramado);
+ 		$("#nro_deposito").val("");
  		$('#myModal_deposito').modal('show');
  	}
  	else
@@ -416,6 +431,7 @@ $("#reg_deposito_mora").click(function() {
  		$("#planpago_id").val(dataRecord.id);
  		$("#titulo_deposito").text("Registrar Deposito Mora");
  		$("#tipo_deposito").val(2);
+ 		$("#nro_deposito").val("");
  		$('#myModal_deposito').modal('show');
  	}
  	else

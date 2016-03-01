@@ -60,7 +60,7 @@ while ($f = mysql_fetch_assoc($resul)) {
 			$concopia_email = '';
 
 			$remitente = utf8_decode("MI TELEFERICO");
-			$remitente_correo = "rrhh@miteleferico.bo";
+			$remitente_correo = "sistemas@miteleferico.bo";
 			$mail = new PHPMailer();
 			$mail->IsSMTP(); 	
 			$mail->SMTPAuth = true;
@@ -80,24 +80,24 @@ while ($f = mysql_fetch_assoc($resul)) {
 				$concopia_email.=$f['correo_ref'].',';
 			}
 		$mail->AddCC($f['responsable_email'],$f['responsable']); //Responsable del contrato
-		$concopia.=$f['responsable'].',';
-		$concopia_email.=$f['responsable_email'].',';
-		$mail->AddCC($f['administrador_email'],$f['administrador']); //Administrador del sistema
-		$concopia.=$f['administrador'];
-		$concopia_email.=$f['administrador_email'];
+		$concopia.=$f['responsable'];
+		$concopia_email.=$f['responsable_email'];
+		// $mail->AddCC($f['administrador_email'],$f['administrador']); //Administrador del sistema
+		// $concopia.=$f['administrador'];
+		// $concopia_email.=$f['administrador_email'];
 		$mail->IsHTML(true);
 		if(!$mail->Send()) {
-			$sql = "INSERT INTO envioscorreos VALUES ('','".$f['id']."','".$remitente."','".$remitente_correo."','".$f['razon_social']."','".$f['correo']."','".$motivo."','".$html."',0,'".$f['fecha_programado']."','".date("Y-m-d")."','".$f['diferencia']."',1,'".$concopia."','".$concopia_email."')";
+			$sql = "INSERT INTO envioscorreos VALUES ('','".$f['id']."','".$remitente."','".$remitente_correo."','".$f['razon_social']."','".$f['correo']."','".$motivo."','".$html."',0,'".$f['fecha_programado']."','".date("Y-m-d H:i:s")."','".$f['diferencia']."',1,'".$concopia."','".$concopia_email."')";
 			$sms = "<strong>Error: </strong>El correo electronico no existe.";
 		} else{
-			$sql = "INSERT INTO envioscorreos VALUES ('','".$f['id']."','".$remitente."','".$remitente_correo."','".$f['razon_social']."','".$f['correo']."','".$motivo."','".$html."',1,'".$f['fecha_programado']."','".date("Y-m-d")."','".$f['diferencia']."',1,'".$concopia."','".$concopia_email."')";
+			$sql = "INSERT INTO envioscorreos VALUES ('','".$f['id']."','".$remitente."','".$remitente_correo."','".$f['razon_social']."','".$f['correo']."','".$motivo."','".$html."',1,'".$f['fecha_programado']."','".date("Y-m-d H:i:s")."','".$f['diferencia']."',1,'".$concopia."','".$concopia_email."')";
 			$sms = "<strong>Exito: </strong>Se envio correctamente. ";
 		}
 		$resul2 = mysql_query($sql,$link);
 		/*
 		end notificacion
 		 */
-		
+		$html .='<hr>';
 		/*
 		Notificacion GAF
 		 */
@@ -123,7 +123,7 @@ while ($f = mysql_fetch_assoc($resul)) {
 					$concopia_email = '';
 
 					$remitente = utf8_decode("MI TELEFERICO");
-					$remitente_correo = "rrhh@miteleferico.bo";
+					$remitente_correo = "sistemas@miteleferico.bo";
 					$mail = new PHPMailer();
 					$mail->IsSMTP(); 	
 					$mail->SMTPAuth = true;
@@ -142,17 +142,18 @@ while ($f = mysql_fetch_assoc($resul)) {
 					}
 
 		$mail->AddCC($f['responsable_email'],$f['responsable']); //Responsable del contrato
-		$concopia.=$f['responsable'].',';
-		$concopia_email.=$f['responsable_email'].',';
-		$mail->AddCC($f['administrador_email'],$f['administrador']); //Administrador del sistema
-		$concopia.=$f['administrador'];
-		$concopia_email.=$f['administrador_email'];
+		$concopia.=$f['responsable'];
+		$concopia_email.=$f['responsable_email'];
+		// $mail->AddCC($f['administrador_email'],$f['administrador']); //Administrador del sistema
+		// $concopia.=$f['administrador'];
+		// $concopia_email.=$f['administrador_email'];
 		$mail->IsHTML(true);
 		if(!$mail->Send()) {
 			$sms = "<strong>Error: </strong>El correo electronico no existe.";
 		} else{
 			$sms = "<strong>Exito: </strong>Se envio correctamente. ";
-		}	
+		}
+		sleep(5);	
 	}
 		
 		/*

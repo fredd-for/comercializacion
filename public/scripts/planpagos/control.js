@@ -5,6 +5,10 @@ Adicionar Derecho de llave
  */
 $("#add_derechollave").click(function() {
 	$('#titulo_derechollave').text('Adicionar Derecho de LLave');
+	$("#fecha_deposito_derechollave").val("");
+	$("#nro_deposito_derechollave").val($("");
+	$("#monto_deposito_derechollave").val("");
+
 	$('#myModal_derechollave').modal('show');
 });
 
@@ -47,7 +51,11 @@ $("#testForm_derechollave").submit(function(){
 Adicionar Garantia
  */
 $("#add_garantia").click(function() {
+	alert("hola");
 	$('#titulo_garantia').text('Adicionar Garantia');
+	$("#fecha_deposito_garantia").val("");
+	$("#nro_deposito_garantia").val("");
+	$("#monto_deposito_garantia").val("");
 	$('#myModal_garantia').modal('show');
 });
 

@@ -1,3 +1,8 @@
+ <script type="text/javascript">
+      $(document).ready(function() {
+        $('.tree').treegrid();
+      });
+    </script>
 <div class="row">
     <div class="col-sm-12">
         <div class="panel">
@@ -33,7 +38,7 @@
                                         <div class="pull-right"><span class="badge animated rubberBand">Productos: <?php echo $productossinalquilar ?></span></div>
                                     </div>
                                     <div class="tiles-footer">
-                                        Productos para Alquilar
+                                        TOTAL PRODUCTOS
                                     </div>
                                 </a>
                             </div>
@@ -95,6 +100,104 @@
 
     </div>
 </div>
+<!-- reloj de cumplimieto de metas -->
+<div class="block">
+<div class="row">
+
+    <div class="col-lg-3">
+        <form class="form-horizontal" id="testForm" data-toggle="validator" action="" method="post" />
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Gestión</label>
+                    <div class="col-md-8">
+                      <?php echo $gestiones ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Mes</label>
+                    <div class="col-md-8">
+                        <?php echo $meses; ?>
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label class="col-md-4 control-label">Resp. Comercial</label>
+                    <div class="col-md-8">
+                        <?php echo $responsable ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Recaudación</label>
+                    <div class="col-md-8">
+                        <?php echo $recaudacion ?>
+                    </div>
+                </div>
+            </div>
+                  </form>
+    </div>
+    <div class="col-lg-9">
+        <div class="row">
+            <div class="col-md-4">
+                <div id="gaugeValue1" style="position: absolute; top: 190px; left: 100px; font-family: Sans-Serif; text-align: center; font-size: 17px; width: 70px;"></div>
+                <div id="gaugeContainer1"></div>
+            </div>
+            <div class="col-md-4">
+                <div id="gaugeValue2" style="position: absolute; top: 190px; left: 100px; font-family: Sans-Serif; text-align: center; font-size: 17px; width: 70px;"></div>
+                <div id="gaugeContainer2"></div>
+            </div>
+            <div class="col-md-4">
+                <div id="gaugeValue3" style="position: absolute; top: 190px; left: 100px; font-family: Sans-Serif; text-align: center; font-size: 17px; width: 70px;"></div>
+                <div id="gaugeContainer3"></div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+<!-- fin reloj -->
+
+<!-- reporte por produtos -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="block">
+            <div class="table-responsive">
+                <table class="tree table table-vcenter table-striped table-condensed">
+                    <?php echo $tabla ?>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <!-- <div id="jqxgrid" style="height: 350px; width: 100%;" ></div> -->
+        <div class="block">
+            <div class="table-responsive">
+                
+                
+                <table class="table table-vcenter table-striped table-condensed">
+                    <thead>
+                        <tr>
+                            <th colspan="6" class="text-center">CONTRATOS CON MAYOR RECAUDACIÓN</th>
+                        </tr>
+                        <tr>
+                            <!--     <th class="text-center"><i class="gi gi-user"></i></th> -->
+                            <th>Razón Social</th>
+                            <th>Contrato</th>
+                            <th>Total Bs.</th>
+                            <th>Deposito Bs.</th>
+                            <th>Por Cobrar Bs.</th>
+                            <th>Mora Bs.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php echo $tablacontratos ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin reporte por producots -->
+
  <div id="modal-large" class="modal" tabindex="-1" role="dialog" aria-hidden="true"   >
         <div class="modal-dialog modal-lg">
         <table id="datatable">     
@@ -110,11 +213,6 @@
             <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
         </div>
     </div>
-    <!-- <div class="col-sm-6">
-          <div class="widget">
-            <div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-        </div>      
-    </div> -->
 </div>
 <div class="row">
     <div class="col-sm-6 ">
@@ -184,4 +282,6 @@
 </div>
 </div>
 <!-- end  modal -->
+
+
 

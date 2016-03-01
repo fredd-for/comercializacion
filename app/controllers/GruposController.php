@@ -44,15 +44,35 @@ class GruposController extends ControllerBase
         ->addJs('/assets/js/pages/formsValidation.js')
         ;
 
+        $espacios = $this->tag->select(
+                array(
+                    'espacio_id',
+                    Espacios::find(array('baja_logica=1', 'order' => 'id ASC')),
+                    'using' => array('id', "espacio"),
+                    'useEmpty' => true,
+                    'emptyText' => '(Selecionar)',
+                    'emptyValue' => '',
+                    'class' => 'form-control',
+                    'required' => 'required',
+                    'title' => 'Campo requerido'
+                )
+        );
+        $this->view->setVar('espacios',$espacios);
+
+
     }
 
     public function listAction()
     {
-      $resul = Grupos::find(array('baja_logica=1','order'=>'id ASC'));
+      // $resul = Grupos::find(array('baja_logica=1','order'=>'id ASC'));
+      $model = new Grupos();
+      $resul = $model->lista();
       $this->view->disable();
       foreach ($resul as $v) {
         $customers[] = array(
             'id' => $v->id,
+            'espacio_id' => $v->espacio_id,
+            'espacio' => $v->espacio,
             'grupo' => $v->grupo,
             'sigla' => $v->sigla,
             'descripcion' => $v->descripcion,
@@ -67,6 +87,7 @@ public function saveAction()
     if (isset($_POST['id'])) {
         if ($_POST['id']>0) {
             $resul = Grupos::findFirstById($this->request->getPost('id'));
+            $resul->espacio_id= $this->request->getPost('espacio_id');
             $resul->grupo= $this->request->getPost('grupo');
             $resul->sigla = $this->request->getPost('sigla');
             $resul->descripcion = $this->request->getPost('descripcion');
@@ -78,6 +99,7 @@ public function saveAction()
         }
         else{
             $resul = new Grupos();
+            $resul->espacio_id= $this->request->getPost('espacio_id');
             $resul->grupo= $this->request->getPost('grupo');
             $resul->sigla = $this->request->getPost('sigla');
             $resul->descripcion = $this->request->getPost('descripcion');

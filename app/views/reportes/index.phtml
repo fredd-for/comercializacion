@@ -1,0 +1,104 @@
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel">
+			<ul class="breadcrumb breadcrumb-top">
+				<li><a href="/">Inicio</a></li>
+				<li class="active">Reporte Recaudaciones</li>
+			</ul>
+			<div class="panel-heading">
+				<h4>Reporte de recaudaciones por meses</h4>
+				<div class="options">
+					<ul class="nav nav-tabs">
+						<li class="active"><a data-toggle="tab" href="#domshortcuttiles"><i class="fa fa-users"></i></a></li>
+						<li><a data-toggle="tab" href="#codeshortcuttiles"><i class="fa fa-code"></i></a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div class="tab-content">
+					<div class="row">
+						<div class="col-md-12">
+							<?php  echo $this->flashSession->output(); ?>
+							<div id="divMsjeExito" class="msjs-alert" hidden="hidden">
+								<button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
+								<h5>
+									<i class="fa fa-check-circle"></i>
+									<!-- &Eacute;xito! -->
+									<a class="alert-link" href="javascript:void(0)" id="aMsjeExito"></a>
+								</h5>
+								
+							</div>
+						</div>
+					</div>
+					
+					<div class="row">
+						<form class="form-horizontal" id="testForm" data-toggle="validator"/>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label class="col-md-3 control-label">Linea:</label>
+								<div class="col-md-9">
+									<?php echo $linea ?>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label class="col-md-3 control-label">Grupo:</label>
+								<div class="col-md-9">
+									<?php echo $grupo ?>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="input-daterange" data-date-format="dd-mm-yyyy">
+							<div class="col-md-4">
+								<div class="form-group">
+									<label class="col-md-3 control-label">Fechas:</label>
+									<div class="col-md-4">
+										<input type="text" id="f_inicio" name="f_inicio" class="form-control input-datepicker-close" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" required/>
+									</div>
+									<div class="col-md-1">
+										a
+									</div>
+									<div class="col-md-4">
+										<input type="text" id="f_fin" name="f_fin" class="form-control input-datepicker-close" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" required/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<button type="submit" class="btn btn-primary" id="Save">Filtrar</button>
+						</div>
+					</form>
+					
+				</div>
+				<div class="block">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="pull-left">
+								<h3>IMPORTES PROYECTOS</h3>
+								<span>Recaudaciones</span>                
+							</div>
+							<div class="pull-right">
+								<a href="javascript:void(0)" class="btn btn-sm btn-success" id="reporte"><i class="fa fa-download"></i> Reporte</a>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="table-responsive">
+							<div id="contenido_tabla">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<style type="text/css">
+	.datepicker{
+		z-index:1151 !important;
+	}
+</style>

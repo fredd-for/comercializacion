@@ -58,7 +58,7 @@ cargar();
 					return "<div style='margin:4px;'>" + (value + 1) + "</div>";
 				}
 			},
-			// { text: 'Grupo', datafield: 'grupo', filtertype: 'checkedlist',width: '8%', rendered: tooltiprenderer },
+			{ text: 'Grupo', datafield: 'grupo', filtertype: 'checkedlist',width: '8%',hidden:true},
 			{ text: 'Linea', datafield: 'linea', filtertype: 'checkedlist',width: '7%' },
 			{ text: 'Estación', datafield: 'estacion', filtertype: 'checkedlist',width: '10%' },
 			{ text: 'Cliente / Razón Social', datafield: 'razon_social', filtertype: 'input',width: '10%' },
@@ -98,6 +98,11 @@ $("#control_pagos").click(function() {
 
 });
 
+
+$("#btnExportarExcel").click(function () {
+	// alert("hoal");
+	exportarReporte(1);
+});
 
 
 })

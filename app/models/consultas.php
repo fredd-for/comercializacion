@@ -132,6 +132,94 @@ SQl para obtener los el monto por contrato agrupado por Responsables
     GROUP BY c.cliente_id";
     $db = new Consultas();
     return new Resultset(null, $db, $db->getReadConnection()->query($sql));
-} 
+    } 
+
+    public function totaldepositomes($linea_id='',$grupo_id='',$mesanio='')
+    {
+      $fi=$mesanio.'-01';
+      $ff=$mesanio.'-31';
+      
+      $sql = "SELECT COALESCE(SUM(ppd.monto_deposito) ,0) as total
+      FROM planpagodepositos ppd
+      INNER JOIN planpagos pp ON ppd.planpago_id = pp.id AND pp.baja_logica=1
+      INNER JOIN productos p ON pp.producto_id = p.id
+      INNER JOIN grupos g ON p.grupo_id = g.id
+      INNER JOIN estaciones e ON p.estacion_id = e.id
+      INNER JOIN lineas l ON e.linea_id = l.id
+      WHERE ppd.baja_logica =1 AND ppd.fecha_deposito BETWEEN '".$fi."' AND '".$ff."' AND l.id='$linea_id' AND g.id = '$grupo_id'";
+      $db = new Consultas();
+      return new Resultset(null, $db, $db->getReadConnection()->query($sql));  
+    }
+
+    public function montoMesActual($gestion,$mes,$responsable_id)
+    {
+        $where = '';
+        if ($responsable_id!=0) {
+            $where = 'AND c.responsable_id='.$responsable_id;
+        }
+        $sql = "SELECT COALESCE(SUM(pp.monto_programado),0) as monto_programado,COALESCE(SUM(ppd.monto_deposito),0) as monto_deposito
+        FROM planpagos pp
+        LEFT JOIN planpagodepositos ppd ON pp.id = ppd.planpago_id AND ppd.baja_logica = 1
+        INNER JOIN contratos c ON pp.contrato_id=c.id ".$where." AND YEAR(c.fecha_contrato)='".$gestion."'
+        WHERE  YEAR(pp.fecha_programado)='".$gestion."' AND MONTH(pp.fecha_programado)='".$mes."' AND pp.baja_logica = 1";
+        $db = new Consultas();
+        return new Resultset(null, $db, $db->getReadConnection()->query($sql));         
+    }
+
+
+    public function montoMesAcumulado($gestion,$mes,$responsable_id)
+    {
+        $where = '';
+        if ($responsable_id!=0) {
+            $where = 'AND c.responsable_id='.$responsable_id;
+        }
+        $sql = "SELECT COALESCE(SUM(pp.monto_programado),0) as monto_programado,COALESCE(SUM(ppd.monto_deposito),0) as monto_deposito
+        FROM planpagos pp
+        LEFT JOIN planpagodepositos ppd ON pp.id = ppd.planpago_id AND ppd.baja_logica = 1
+        INNER JOIN contratos c ON pp.contrato_id=c.id ".$where." AND YEAR(c.fecha_contrato)='".$gestion."'
+        WHERE  YEAR(fecha_programado) ='".$gestion."' AND MONTH(fecha_programado)<='".$mes."' AND pp.baja_logica = 1";
+        $db = new Consultas();
+        return new Resultset(null, $db, $db->getReadConnection()->query($sql));         
+    }
+
+    public function metaMesActual($gestion,$mes,$responsable_id)
+    {
+        $where = '';
+        if ($responsable_id!=0) {
+            $where = 'AND usuario_id='.$responsable_id;
+        }
+        $sql = "SELECT COALESCE(SUM(meta),0) as meta
+        FROM metas
+        WHERE baja_logica = 1 ".$where." AND gestion = '".$gestion."' AND mes = '".$mes."'";
+        $db = new Consultas();
+        return new Resultset(null, $db, $db->getReadConnection()->query($sql));         
+    }
+
+    public function metaMesAcumulado($gestion,$mes,$responsable_id)
+    {
+        $where = '';
+        if ($responsable_id!=0) {
+            $where = 'AND usuario_id='.$responsable_id;
+        }
+        $sql = "SELECT COALESCE(SUM(meta),0) as meta
+        FROM metas
+        WHERE baja_logica = 1 ".$where." AND gestion = '".$gestion."' AND mes <= '".$mes."'";
+        $db = new Consultas();
+        return new Resultset(null, $db, $db->getReadConnection()->query($sql));         
+    }
+
+    public function metaAnual($gestion,$responsable_id)
+    {
+        $where = '';
+        if ($responsable_id!=0) {
+            $where = 'AND usuario_id='.$responsable_id;
+        }
+        $sql = "SELECT COALESCE(SUM(meta),0) as meta
+        FROM metas
+        WHERE baja_logica = 1 ".$where." AND gestion = '".$gestion."'";
+        $db = new Consultas();
+        return new Resultset(null, $db, $db->getReadConnection()->query($sql));         
+    }
+
 
 }

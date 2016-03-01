@@ -28,7 +28,7 @@ class ControllerRrhh extends Controller {
             $user_id = $auth['id'];
             $this->_user = usuarios::findFirst("id = '$user_id'");
             //Prepend the application name to the title
-            $this->tag->setTitle('Sistema de Contrataciones');
+            $this->tag->setTitle('Sistema de Comercialización');
           
           
             //menu

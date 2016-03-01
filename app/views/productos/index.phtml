@@ -42,12 +42,17 @@
                 				<button class="btn btn-sm btn-danger" type="button" id="delete"><i class="fa fa-trash-o fa-fw"></i> Eliminar</button>
 							</div>
 							<!-- <div class="pull-right">
-								<a href="/productos/reporte" class="btn btn-sm btn-primary"><i class="fa fa-download"></i> Reporte</a>
+								<a href="/productos/reporte" class="btn btn-sm btn-success"><i class="fa fa-download"></i> Excel</a>
 							</div> -->
+							<div class="pull-right">
+								<button class="btn btn-sm btn-success" type="button" id="btnExportarExcel" accesskey="i"><i class="fa fa-download"></i> Exportar Excel</button>
+							</div>	
 						</div>
 					</div>
 					<?php } ?>
 					<input id="opcion" name="opcion" type="hidden" value="<?php echo $opcion ?>"/>
+					<input id="grupo_id_filtro" name="grupo_id_filtro" type="hidden" value="<?php echo $grupo_f ?>"/>
+					<input id="linea_id_filtro" name="linea_id_filtro" type="hidden" value="<?php echo $linea_f ?>"/>
 					<div class="row">
 						<div class="col-md-12">
 							<div id="jqxgrid" style="height: 600px; width: 100%;" ></div>
@@ -65,7 +70,7 @@
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form class="form-horizontal" id="testForm" data-toggle="validator"/>
+			<form class="form-horizontal" id="testForm"/>
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 				<h4 class="modal-title" id="titulo">Editar</h4>
@@ -74,13 +79,16 @@
 				<input id="id" name="id" type="hidden" />
 
 				<div class="form-group">
-					<label class="col-md-3 control-label">Linea:</label>
+					<label class="col-md-3 control-label">Linea<span class="text-danger">*</span></label>
 					<div class="col-md-9">
-						<?php echo $linea ?>
+
+						<?php  echo $linea ?>
 					</div>
 				</div>
+
+
 				<div class="form-group">
-					<label class="col-md-3 control-label">Estación:</label>
+					<label class="col-md-3 control-label">Estación<span class="text-danger">*</span></label>
 					<div class="col-md-9">
 						<select id="estacion_id" name="estacion_id" class="form-control">
 							
@@ -88,13 +96,31 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-3 control-label">Grupo:</label>
+					<label class="col-md-3 control-label">Grupo<span class="text-danger">*</span></label>
 					<div class="col-md-9">
-						<?php echo $grupo ?>
+					<select class="selectpicker form-control" name="grupo_id" id="grupo_id">
+							<?php 
+							$espacio = "";
+							$sw=0;
+							foreach ($grupo1 as $g) { ?>
+								<?php if ($sw!=0 && $espacio != $g->espacio_id) { ?>
+								</optgroup>
+								<?php } ?>
+								<?php if ($espacio != $g->espacio_id) { ?>
+								<optgroup label="<?php echo $g->espacio ?>">
+								<?php 
+								$espacio = $g->espacio_id;
+								$sw=1;
+								} ?>
+								<option value="<?php echo $g->id ?>"><?php echo $g->grupo ?></option>
+							<?php } ?>
+							</optgroup>
+						</select>
+						<?php // echo $grupo ?>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-3 control-label">Producto:</label>
+					<label class="col-md-3 control-label">Producto<span class="text-danger">*</span></label>
 					<div class="col-md-9">
 						<input type="text" name="producto" id="producto" class="form-control" required>
 					</div>
@@ -112,21 +138,21 @@
 					</div>
 				</div>
 				<div class="form-group" >
-					<label class="col-md-3 control-label">Cantidad</label>
+					<label class="col-md-3 control-label">Cantidad<span class="text-danger">*</span></label>
 					<div class="col-md-9">
 						<input type="number" name="cantidad" id="cantidad" value="1" class="form-control" required>
 					</div>
 				</div>
 				<div class="form-group" >
-					<label class="col-md-3 control-label">Tiempo</label>
+					<label class="col-md-3 control-label">Tiempo<span class="text-danger">*</span></label>
 					<div class="col-md-9">
 						<?php echo $tiempo ?>
 					</div>
 				</div>
 				<div class="form-group" >
-					<label class="col-md-3 control-label">Precio Bs. <span id='tiempo_text'></span></label>
+					<label class="col-md-3 control-label">Precio Unitario Ref. Bs. <span id='tiempo_text'></span><span class="text-danger">*</span></label>
 					<div class="col-md-9">
-						<input type="number" name="precio_unitario" id="precio_unitario" class="form-control" required title="campo obligatorio">
+						<input type="text" name="precio_unitario" id="precio_unitario" class="form-control" title="campo obligatorio" required placeholder="">
 					</div>
 				</div>
 			</div>

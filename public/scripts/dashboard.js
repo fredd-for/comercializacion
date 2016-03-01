@@ -1,4 +1,171 @@
     $(function () {
+$('.tree').treegrid();
+
+ datosreloj();
+
+$("#gestion, #mes, #responsable_id, #recaudacion").change(function() {
+    datosreloj();
+    
+});
+
+function datosreloj() {
+    var v = $.ajax({
+        url: '/dasboard/porcentajemetas/',
+        type: 'POST',
+        datatype: 'json',
+        data: {gestion: $("#gestion").val(),mes:$("#mes").val(),responsable_id:$("#responsable_id").val(),recaudacion:$("#recaudacion").val()},
+        success: function(data) {
+            var row = jQuery.parseJSON(data);
+            mensual(row.porcentajeAvanceMes);
+            acumulado(row.porcentajeAvanceAcumulado);
+            anual(row.porcentajeAvanceAnual);
+            // alert(row.porcentajeAvanceMes);
+            //alert(row.porcentajeAvanceAcumulado);
+            // alert(row.porcentajeAvanceAnual);
+        }, 
+        error: function() {
+            alert('Se ha producido un error Inesperado');
+        }
+    });
+}
+
+$('#gaugeContainer1').jqxGauge({
+        ranges: [
+        { startValue: 0, endValue: 40, style: { fill: '#e02629', stroke: '#e02629' }, endWidth: 10, startWidth: 1 },
+        { startValue: 40, endValue: 80, style: { fill: '#fbd109', stroke: '#fbd109' }, endWidth: 15, startWidth: 10 },
+        { startValue: 80, endValue: 100, style: { fill: '#4bb648', stroke: '#4bb648' }, endWidth: 20, startWidth: 15 }
+        ],
+        ticksMinor: { interval: 5, size: '5%' },
+        ticksMajor: { interval: 10, size: '9%' },
+        value: 0,
+        colorScheme: 'scheme05',
+        animationDuration: 1200,
+        caption: { offset: [0, -25], value: 'Avance del Mes', position: 'bottom' }
+    });
+
+    $('#gaugeContainer1').on('valueChanging', function (e) {
+        var value = e.args.value.toFixed(1);
+        $('#gaugeValue1').text(value + ' % ');
+    });
+
+     // $('#gaugeContainer1').jqxGauge('border', { visible: false });
+
+function mensual(valor) {
+    $('#gaugeContainer1').jqxGauge('value', valor);    
+}
+
+$('#gaugeContainer2').jqxGauge({
+        ranges: [
+        { startValue: 0, endValue: 40, style: { fill: '#e02629', stroke: '#e02629' }, endWidth: 10, startWidth: 1 },
+        { startValue: 40, endValue: 80, style: { fill: '#fbd109', stroke: '#fbd109' }, endWidth: 15, startWidth: 10 },
+        { startValue: 80, endValue: 100, style: { fill: '#4bb648', stroke: '#4bb648' }, endWidth: 20, startWidth: 15 }
+        ],
+        ticksMinor: { interval: 5, size: '5%' },
+        ticksMajor: { interval: 10, size: '9%' },
+        value: 0,
+        // width: '40%',
+  //       height: '80%',
+        colorScheme: 'scheme05',
+        animationDuration: 1200,
+        caption: { offset: [0, -25], value: 'Avance Acumulado', position: 'bottom' }
+    });
+    $('#gaugeContainer2').on('valueChanging', function (e) {
+        var value = e.args.value.toFixed(1);
+        $('#gaugeValue2').text(value + ' %');
+    });
+
+function acumulado(valor) {
+    $('#gaugeContainer2').jqxGauge('value', valor);
+}
+
+    $('#gaugeContainer3').jqxGauge({
+        ranges: [
+        { startValue: 0, endValue: 40, style: { fill: '#e02629', stroke: '#e02629' }, endWidth: 10, startWidth: 1 },
+        { startValue: 40, endValue: 80, style: { fill: '#fbd109', stroke: '#fbd109' }, endWidth: 15, startWidth: 10 },
+        { startValue: 80, endValue: 100, style: { fill: '#4bb648', stroke: '#4bb648' }, endWidth: 20, startWidth: 15 }
+        ],
+        ticksMinor: { interval: 5, size: '5%' },
+        ticksMajor: { interval: 10, size: '9%' },
+        value: 0,
+        colorScheme: 'scheme05',
+        animationDuration: 1200,
+        caption: { offset: [0, -25], value: 'Avance Anual', position: 'bottom' }
+    });
+
+    $('#gaugeContainer3').on('valueChanging', function (e) {
+        var value = e.args.value.toFixed(1);
+        $('#gaugeValue3').text(value + ' %');
+    });
+function anual(valor) {
+    $('#gaugeContainer3').jqxGauge('value', valor);
+}
+
+    
+
+
+
+
+
+    
+ // var source =
+ //        {
+ //            datatype: "json",
+ //            datafields: [
+ //            { name: 'id',type: 'number'},
+ //            { name: 'razon_social_href',type: 'string'},
+ //            { name: 'contrato',type: 'string'},
+ //            { name: 'total',type: 'number'},
+ //            { name: 'deposito',type: 'number'},
+ //            { name: 'cobrar',type: 'number'},
+ //            { name: 'mora',type: 'number'},
+ //            { name: 'foto'},
+ //            ],
+ //            url: '/clientes/dashboard',
+ //            cache: false
+ //        };
+ //        var dataAdapter = new $.jqx.dataAdapter(source);
+        
+
+ //        $("#jqxgrid").jqxGrid({
+ //            width: '100%',
+ //            height: '350',
+ //            source: dataAdapter,
+ //            sortable: true,
+ //            altRows: true,
+ //            columnsresize: true,
+ //            pageable: true,
+ //            pagerMode: 'advanced',
+ //            theme: 'custom',
+ //            //scrollmode: 'deferred',
+ //            // showstatusbar: true,
+ //            showfilterrow: true,
+ //            filterable: true,
+ //            autorowheight: true,
+ //            keyboardnavigation: false,
+ //            scrollfeedback: function (row)
+ //            {
+ //                return '<table style="height: 80px;"><tr><td><img src="' + row.foto + '"  height="90"/></td></tr><tr><td>' + row.producto + '</td></tr></table>';
+ //            },
+ //             ready: function () {
+ //                    $("#jqxgrid").jqxGrid('sortby', 'total', 'desc');
+ //                },
+ //            columns: [
+ //            {text: '#', datafield: 'foto', width: 80, cellsrenderer: function (row, column, value) {
+ //                return '<img style="margin-left: 5px;" height="40" width="100%" src="' + value + '" />';
+ //                }
+ //            },
+ //            { text: 'Razón Social', columngroup: 'cliente',datafield: 'razon_social_href', filtertype: 'input',width: '20%'},
+ //            { text: 'Contrato', columngroup: 'cliente',datafield: 'contrato', filtertype: 'input',width: '10%'},
+ //            { text: 'Total', columngroup: 'cliente',datafield: 'total', filtertype: 'number',width: '15%',cellsformat: "c2", cellsalign: 'right'},
+ //            { text: 'Deposito', columngroup: 'cliente',datafield: 'deposito', filtertype: 'input',width: '15%',cellsformat: "c2", cellsalign: 'right'},
+ //            { text: 'Por Cobrar', columngroup: 'cliente',datafield: 'cobrar', filtertype: 'input',width: '15%' ,cellsformat: "c2", cellsalign: 'right'},
+ //            { text: 'Mora', columngroup: 'cliente',datafield: 'mora', filtertype: 'input',width: '15%',cellsformat: "c2", cellsalign: 'right'},
+ //            ],
+ //            columngroups: [
+ //            { text: 'CLIENTES CON CONTRATOS CON MAYOR RECAUDACION', align: 'center', name: 'cliente' },
+ //            ]
+ //        });
+
 
         var options = {
             chart: {
@@ -137,129 +304,6 @@ var options = {
     });
 
 
-// Create the chart
-    // $('#container3').highcharts({
-    //     chart: {
-    //         type: 'pie'
-    //     },
-    //     title: {
-    //         text: 'Recaudaciones en Bs. de Ene, 2015 a Dic, 2015'
-    //     },
-    //     subtitle: {
-    //         text: 'Haga clic en las rebanadas para ver los clientes con mayor recaudación'
-    //     },
-    //     plotOptions: {
-    //         series: {
-    //             dataLabels: {
-    //                 enabled: true,
-    //                 format: '{point.name}: {point.y:.1f}%'
-    //             }
-    //         }
-    //     },
-
-    //     tooltip: {
-    //         headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-    //         pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
-    //     },
-    //     series: [{
-    //         name: "Brands",
-    //         colorByPoint: true,
-    //         data: [{
-    //             name: "Microsoft Internet Explorercc",
-    //             y: 56.33,
-    //             drilldown: "Microsoft Internet Explorerxx"
-    //         }, {
-    //             name: "Chrome",
-    //             y: 24.03,
-    //             drilldown: "Chrome"
-    //         }, {
-    //             name: "Firefox",
-    //             y: 10.38,
-    //             drilldown: "Firefox"
-    //         }, {
-    //             name: "Safari",
-    //             y: 4.77,
-    //             drilldown: "Safari"
-    //         }, {
-    //             name: "Opera",
-    //             y: 0.91,
-    //             drilldown: "Opera"
-    //         }, {
-    //             name: "Proprietary or Undetectable",
-    //             y: 0.2,
-    //             drilldown: null
-    //         }]
-    //     }],
-    //     drilldown: {
-    //         series: [{
-    //             name: "Microsoft Internet Explorer",
-    //             id: "Microsoft Internet Explorer",
-    //             data: [
-    //                 ["v11.0", 24.13],
-    //                 ["v8.0", 17.2],
-    //                 ["v9.0", 8.11],
-    //                 ["v10.0", 5.33],
-    //                 ["v6.0", 1.06],
-    //                 ["v7.0", 0.5]
-    //             ]
-    //         }, {
-    //             name: "Chrome",
-    //             id: "Chrome",
-    //             data: [
-    //                 ["v40.0", 5],
-    //                 ["v41.0", 4.32],
-    //                 ["v42.0", 3.68],
-    //                 ["v39.0", 2.96],
-    //                 ["v36.0", 2.53],
-    //                 ["v43.0", 1.45],
-    //                 ["v31.0", 1.24],
-    //                 ["v35.0", 0.85],
-    //                 ["v38.0", 0.6],
-    //                 ["v32.0", 0.55],
-    //                 ["v37.0", 0.38],
-    //                 ["v33.0", 0.19],
-    //                 ["v34.0", 0.14],
-    //                 ["v30.0", 0.14]
-    //             ]
-    //         }, {
-    //             name: "Firefox",
-    //             id: "Firefox",
-    //             data: [
-    //                 ["v35", 2.76],
-    //                 ["v36", 2.32],
-    //                 ["v37", 2.31],
-    //                 ["v34", 1.27],
-    //                 ["v38", 1.02],
-    //                 ["v31", 0.33],
-    //                 ["v33", 0.22],
-    //                 ["v32", 0.15]
-    //             ]
-    //         }, {
-    //             name: "Safari",
-    //             id: "Safari",
-    //             data: [
-    //                 ["v8.0", 2.56],
-    //                 ["v7.1", 0.77],
-    //                 ["v5.1", 0.42],
-    //                 ["v5.0", 0.3],
-    //                 ["v6.1", 0.29],
-    //                 ["v7.0", 0.26],
-    //                 ["v6.2", 0.17]
-    //             ]
-    //         }, {
-    //             name: "Opera",
-    //             id: "Opera",
-    //             data: [
-    //                 ["v12.x", 0.34],
-    //                 ["v28", 0.24],
-    //                 ["v27", 0.17],
-    //                 ["v29", 0.16]
-    //             ]
-    //         }]
-    //     }
-    // });
-
-
     var options2 = {
         chart: {
             renderTo: 'container3',
@@ -379,6 +423,8 @@ var options = {
 
 
     }
+
+
 
 });
 

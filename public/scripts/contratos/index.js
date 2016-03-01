@@ -1,7 +1,7 @@
 
 $(document).ready(function (){
-cargar();
-function cargar(){
+// cargar();
+// function cargar(){
 	var source =
 		{
 			datatype: "json",
@@ -101,6 +101,7 @@ var dataFields = [
 			{ name: 'linea',type: 'string'},
 			{ name: 'estacion',type: 'string'},
 			{ name: 'producto',type: 'string'},
+			{ name: 'codigo',type: 'string'},
 			{ name: 'contrato',type: 'string'},
 			{ name: 'fecha_contrato',type:'date'},
 			{ name: 'fecha_inicio',type:'date'},
@@ -172,19 +173,20 @@ $("#jqxgrid").on('rowselect', function (event) {
 					return "<div style='margin:4px;'>" + (value + 1) + "</div>";
 				}
 			},
-			{ text: 'Grupo', datafield: 'grupo', filtertype: 'checkedlist',width: '7%', rendered: tooltiprenderer },
+			{ text: 'Grupo', datafield: 'grupo', filtertype: 'checkedlist',width: '8%', rendered: tooltiprenderer },
 			{ text: 'Linea', datafield: 'linea', filtertype: 'checkedlist',width: '10%' },
 			{ text: 'Estación', datafield: 'estacion', filtertype: 'checkedlist',width: '10%' },
 			// { text: 'Cliente / Razón Social', datafield: 'razon_social', filtertype: 'input',width: '10%' },
 			// { text: 'Contrato', datafield: 'contrato', filtertype: 'input',width: '5%' },
 			// { text: 'Fecha Contrato ', datafield: 'fecha_contrato', filtertype: 'range', width: '7%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
-			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '10%' },
+			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '15%' },
+			{ text: 'Codigo', datafield: 'codigo', filtertype: 'input',width: '10%' },
 			{ text: 'Fecha Inicio', datafield: 'fecha_inicio', filtertype: 'range', width: '8%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
 			{ text: 'Fecha Final', datafield: 'fecha_fin', filtertype: 'range', width: '8%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
-			{ text: 'Total Bs.', datafield: 'total', filtertype: 'number', width: '9%',cellsformat: "c2", cellsalign: 'right'},
-	        { text: 'Deposito Bs.', datafield: 'deposito', filtertype: 'number', width: '9%',cellsformat: "c2", cellsalign: 'right'},
-			{ text: 'Por Cobrar Bs.', datafield: 'cobrar', filtertype: 'number',width: '9%',cellsformat: "c2", cellsalign: 'right' },
- 			{ text: 'Mora Bs.', datafield: 'mora', filtertype: 'number', width: '9%',cellsformat: "c2", cellsalign: 'right'},
+			{ text: 'Total Bs.', datafield: 'total', filtertype: 'number', width: '10%',cellsformat: "c2", cellsalign: 'right'},
+	  //       { text: 'Deposito Bs.', datafield: 'deposito', filtertype: 'number', width: '9%',cellsformat: "c2", cellsalign: 'right'},
+			// { text: 'Por Cobrar Bs.', datafield: 'cobrar', filtertype: 'number',width: '9%',cellsformat: "c2", cellsalign: 'right' },
+ 			{ text: 'Mora Bs.', datafield: 'mora', filtertype: 'number', width: '10%',cellsformat: "c2", cellsalign: 'right'},
  			{ text: 'Estado', datafield: 'estado', filtertype: 'input',width: '8%' },
 			],
 			// groups: ['razon_social','contrato']
@@ -193,7 +195,7 @@ $("#jqxgrid").on('rowselect', function (event) {
 			var localizationobj = {};
             localizationobj.currencysymbol = "Bs ";
             $("#jqxgrid_productos").jqxGrid('localizestrings', localizationobj);
-}
+// }
 
 /* ************************************************************* */	
 
@@ -237,6 +239,7 @@ $("#edit_contrato").click(function(){
  	{
  		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
  		if (dataRecord.estado==1) {
+ 			// alert(dataRecord.dias_tolerancia);
  			$("#contrato_id").val(dataRecord.id);
  			$("#titulo_contrato").text("Editar Contrato");
  			$("#rs").val(dataRecord.razon_social);
@@ -249,8 +252,10 @@ $("#edit_contrato").click(function(){
  			$('#cliente_id').trigger("chosen:updated");
  			$("#nit").val(dataRecord.nit);
  			$("#responsable_id").val(dataRecord.responsable_id);
+ 			$("#dias_tolerancia").val(dataRecord.dias_tolerancia);
+ 			$("#porcentaje_mora").val(dataRecord.porcentaje_mora);
  			$("#tipo_pago_"+dataRecord.tipo_pago).prop("checked", true);
- 			$("#tipo_cobro_mora_"+dataRecord.tipo_pago).prop("checked", true);
+ 			$("#tipo_cobro_mora_"+dataRecord.tipo_cobro_mora).prop("checked", true);
  			$('#myModal_contrato').modal('show');
  		}else{
  			bootbox.alert("<strong>¡Mensaje!</strong> No puede editar contrato por que ha finalizado.");		
@@ -317,7 +322,8 @@ $("#delete_contrato").click(function(){
                         datatype: 'json',
                         data: {id: dataRecord.id},
                         success: function(data) {
-                            cargar(); //alert('Guardado Correctamente'); 
+                            // cargar(); //alert('Guardado Correctamente'); 
+                            $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
                             $("#divMsjeExito").show();
                     		$("#divMsjeExito").addClass('alert alert-warning alert-dismissable');
                     		$("#aMsjeExito").html(data); 
@@ -350,10 +356,14 @@ $("#testForm_contrato").submit(function() {
             	datatype: 'json',
             	data:{contrato_id:$("#contrato_id").val(),solicitud_id:$("#solicitud_id").val(),cliente_id:$("#cliente_id").val(),contrato:$("#contrato").val(),fecha_contrato:$("#fecha_contrato").val(),arrendador:$("#arrendador").val(),arrendador_rep_legal:$("#arrendador_rep_legal").val(),arrendador_cargo:$("#arrendador_cargo").val(),descripcion:$("#descripcion").val(),dias_tolerancia:$("#dias_tolerancia").val(),porcentaje_mora:$("#porcentaje_mora").val(),responsable_id:$("#responsable_id").val(),tipo_pago:tipo_pago,tipo_cobro_mora:tipo_cobro_mora},
 				success: function(data) { 
-						cargar();
-						$("#divMsjeExito").show();
-                    	$("#divMsjeExito").addClass('alert alert-info alert-dismissable');
-                    	$("#aMsjeExito").html(data); 
+						// cargar();
+						// $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
+						 var v = $.parseJSON(data);
+						 // alert("opcion1"+v.contrato_id);
+						window.location.href = "/contratos/crear/"+v.contrato_id;
+						// $("#divMsjeExito").show();
+      //               	$("#divMsjeExito").addClass('alert alert-info alert-dismissable');
+      //               	$("#aMsjeExito").html(data); 
 					
 				}, //mostramos el error
 			error: function() { alert('Se ha producido un error Inesperado'); }

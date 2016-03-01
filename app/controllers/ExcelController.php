@@ -435,7 +435,7 @@ class ExcelController extends Controller {
          * 
          */
         // Rename worksheet
-        $objPHPExcel->getActiveSheet()->setTitle('SISTEMA CONTRATACIONES');
+        $objPHPExcel->getActiveSheet()->setTitle('SISTEMA COMERCIALIZACIÓN');
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)

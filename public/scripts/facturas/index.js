@@ -1,7 +1,7 @@
 
 $(document).ready(function (){
-cargar();	
-	function cargar(){	
+// cargar();	
+	// function cargar(){	
 		var source =
 		{
 			datatype: "json",
@@ -33,7 +33,7 @@ cargar();
             altRows: true,
             columnsresize: true,
             theme: 'custom',
-            showstatusbar: true,
+            // showstatusbar: true,
             showfilterrow: true,
             filterable: true,
             autorowheight: true,
@@ -61,14 +61,13 @@ cargar();
 			],
 			//groups: ['razon_social','contrato']
 		});
+ 		
+// }
 
- 		//$("#jqxgrid").jqxGrid('expandgroup',4);
-}
 
-
-cargar2();	
-	function cargar2(){	
-		var source =
+// cargar2();	
+// 	function cargar2(){	
+		var source2 =
 		{
 			datatype: "json",
 			datafields: [
@@ -92,19 +91,19 @@ cargar2();
 			url: '/facturas/listfacturas/',
 			cache: false
 		};
-		var dataAdapter = new $.jqx.dataAdapter(source);
+		var dataAdapter2 = new $.jqx.dataAdapter(source2);
 		var tooltiprenderer = function (element) {
                 $(element).jqxTooltip({position: 'mouse', content: $(element).text() });
         };
 		$("#jqxgrid_facturas").jqxGrid({
 
 			width: '100%',
-            source: dataAdapter,                
+            source: dataAdapter2,                
             sortable: true,
             altRows: true,
             columnsresize: true,
             theme: 'custom',
-            showstatusbar: true,
+            // showstatusbar: true,
             showfilterrow: true,
             filterable: true,
             autorowheight: true,
@@ -137,7 +136,7 @@ cargar2();
 		});
 
  		//$("#jqxgrid").jqxGrid('expandgroup',4);
-}
+// }
 
 /*
 Facturar
@@ -153,10 +152,12 @@ $("#facturar").click(function() {
 		$("#linea").text(dataRecord.linea);
 		$("#estacion").text(dataRecord.estacion);
 		$("#razon_social").text(dataRecord.razon_social);
+		$("#nit").text(dataRecord.nit);
 		$("#contrato").text(dataRecord.contrato);
 		$("#producto").text(dataRecord.producto);
 		var fp = $.jqx.dataFormat.formatdate(dataRecord.fecha_programado, 'dd-MM-yyyy');
 		$("#fecha_programado").text(fp);
+		$("#fecha_recepcion_cliente").val("");
 		$("#monto_reprogramado").text(dataRecord.monto_reprogramado);
 
 		$("#nro_factura").val('');
@@ -186,6 +187,7 @@ $("#edit").click(function() {
 		$("#linea").text(dataRecord.linea);
 		$("#estacion").text(dataRecord.estacion);
 		$("#razon_social").text(dataRecord.razon_social);
+		$("#nit").text(dataRecord.nit);
 		$("#contrato").text(dataRecord.contrato);
 		$("#producto").text(dataRecord.producto);
 		var fp = $.jqx.dataFormat.formatdate(dataRecord.fecha_programado, 'dd-MM-yyyy');
@@ -194,6 +196,7 @@ $("#edit").click(function() {
 		$("#nro_factura").val(dataRecord.nro_factura);
 		var ff = $.jqx.dataFormat.formatdate(dataRecord.fecha_factura, 'dd-MM-yyyy');
 		$("#fecha_factura").val(ff);
+		// alert(dataRecord.fecha_recepcion_cliente);
 		var frc = $.jqx.dataFormat.formatdate(dataRecord.fecha_recepcion_cliente, 'dd-MM-yyyy');
 		$("#fecha_recepcion_cliente").val(frc);
 		$("#monto_factura").val(dataRecord.monto_factura);
@@ -224,7 +227,8 @@ $("#delete").click(function() {
  					datatype: 'json',
  					data: {id: dataRecord.planpagofactura_id},
  					success: function(data) {
-                            cargar(); cargar2();
+                            // cargar(); cargar2();
+                            $("#jqxgrid_facturas").jqxGrid('updatebounddata', 'cells');
                             $("#divMsjeExito").show();
                             $("#divMsjeExito").addClass('alert alert-warning alert-dismissable');
                             $("#aMsjeExito").html(data); 
@@ -249,7 +253,10 @@ $("#testForm").submit(function() {
 		type:'POST',
 		datatype: 'json',
 		data:{id:$("#id").val(),planpago_id:$("#planpago_id").val(),nro_factura:$("#nro_factura").val(),fecha_factura:$("#fecha_factura").val(),fecha_recepcion_cliente:$("#fecha_recepcion_cliente").val(),monto_factura:$("#monto_factura").val()},
-		success: function(data) { cargar(); cargar2(); 
+		success: function(data) { 
+			// cargar(); cargar2(); 
+			$("#jqxgrid").jqxGrid('updatebounddata', 'cells');
+			$("#jqxgrid_facturas").jqxGrid('updatebounddata', 'cells');
 			$("#divMsjeExito").show();
 			$("#divMsjeExito").addClass('alert alert-success alert-dismissable');
 			$("#aMsjeExito").html(data); 
@@ -262,6 +269,11 @@ $("#testForm").submit(function() {
 
 $("#fecha_factura, #fecha_recepcion_cliente").datepicker({
 	autoclose:true,
+});
+
+$("#btnExportarExcel").click(function () {
+	// alert("hoal");
+	exportarReporte(1);
 });
 
 })

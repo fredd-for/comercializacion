@@ -6,6 +6,8 @@ $(document).ready(function (){
 			datatype: "json",
 			datafields: [
 			{ name: 'id',type: 'number'},
+			{ name: 'espacio_id',type: 'number'},
+			{ name: 'espacio',type: 'string'},
 			{ name: 'grupo',type: 'string'},
 			{ name: 'sigla',type: 'string'},
 			{ name: 'descripcion',type: 'string'},
@@ -18,19 +20,17 @@ $(document).ready(function (){
 		$("#jqxgrid").jqxGrid({
 
 			width: '100%',
-			source: dataAdapter,
-			sortable: true,
-			altRows: true,
-			columnsresize: true,
-			pageable: true,
-			pagerMode: 'advanced',
-			theme: 'custom',
-			//scrollmode: 'deferred',
-			showstatusbar: true,
-			showfilterrow: true,
-			filterable: true,
-			autorowheight: true,
-			keyboardnavigation: false,
+            source: dataAdapter,                
+            sortable: true,
+            altRows: true,
+            columnsresize: true,
+            theme: 'custom',
+            showfilterrow: true,
+            filterable: true,
+            autorowheight: true,
+            pageable: true,
+            pagerMode: 'advanced',
+            groupable: true,
 			columns: [
 			{
 				text: '#', sortable: false, filterable: false, editable: false,
@@ -40,12 +40,17 @@ $(document).ready(function (){
 					return "<div style='margin:4px;'>" + (value + 1) + "</div>";
 				}
 			},
-			{ text: 'Grupo', datafield: 'grupo', filtertype: 'input',width: '27%' },
-			{ text: 'Sigla', datafield: 'sigla', filtertype: 'input',width: '30%' },
+			{ text: 'Espacio', datafield: 'espacio', filtertype: 'input',width: '17%' },
+			{ text: 'Grupo', datafield: 'grupo', filtertype: 'input',width: '20%' },
+			{ text: 'Sigla', datafield: 'sigla', filtertype: 'input',width: '20%' },
 			{ text: 'Descripción', datafield: 'descripcion', filtertype: 'input',width: '40%' }
-			]
+			],
+			groups: ['espacio']
 		});
 }
+
+
+ $("#jqxgrid").jqxGrid('expandallgroups');
 
 /*
 adicionar 
@@ -53,6 +58,7 @@ adicionar
 $("#add").click(function(){
 	$("#titulo").text("Adicionar Grupo");
 	$("#id").val("");
+	$("#espacio_id").val("");
 	$("#grupo").val("");
 	$("#sigla").val("");
 	$("#descripcion").val("");
@@ -69,6 +75,7 @@ $("#edit").click(function() {
  		var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', rowindex);
  		$("#id").val(dataRecord.id);
  		$("#titulo").text("Editar Grupo");
+ 		$("#espacio_id").val(dataRecord.espacio_id);
  		$("#grupo").val(dataRecord.grupo);
  		$("#sigla").val(dataRecord.sigla);
  		$("#descripcion").val(dataRecord.descripcion);
@@ -124,7 +131,7 @@ $("#testForm").submit(function() {
             	url:'/grupos/save/',
             	type:'POST',
             	datatype: 'json',
-            	data:{id:$("#id").val(),grupo:$("#grupo").val(),sigla:$("#sigla").val(),descripcion:$("#descripcion").val()},
+            	data:{id:$("#id").val(),grupo:$("#grupo").val(),sigla:$("#sigla").val(),descripcion:$("#descripcion").val(),espacio_id:$("#espacio_id").val()},
 				success: function(data) { cargar(); 
 					$("#divMsjeExito").show();
                     $("#divMsjeExito").addClass('alert alert-info alert-dismissable');

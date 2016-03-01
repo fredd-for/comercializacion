@@ -101,4 +101,20 @@ public function deleteAction(){
     $this->view->disable();
     echo $msm;
 }
+
+public function pruebaAction()
+{
+        $this->assets
+        ->addCss('/jqwidgets/styles/jqx.base.css')
+        ->addCss('/jqwidgets/styles/jqx.custom.css')
+        ;
+ 
+        $this->assets
+        ->addJs('/jqwidgets/jqxcore.js')
+        ->addJs('/jqwidgets/jqxdraw.js')
+        ->addJs('/jqwidgets/jqxgauge.js')
+        ->addJs('/scripts/lineas/prueba.js')
+        ;
+}
+
 }

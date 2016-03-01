@@ -64,11 +64,19 @@ $di->set('db', function () use ($config) {
             //  'charset' => $config->database->charset
     ));
 });
+// $di->set('sigec', function () {
+//     return new \Phalcon\Db\Adapter\Pdo\Mysql(array(
+//         'host' => '192.168.10.129',
+//         'username' => 'sigec',
+//         'password' => 'sistemas4-',
+//         'dbname' => 'dbsigec'
+//     ));
+// });
 $di->set('sigec', function () {
     return new \Phalcon\Db\Adapter\Pdo\Mysql(array(
-        'host' => '192.168.10.129',
-        'username' => 'sigec',
-        'password' => 'sistemas4-',
+        'host' => 'localhost',
+        'username' => 'user_comercial',
+        'password' => 'pass_comercial',
         'dbname' => 'dbsigec'
     ));
 });

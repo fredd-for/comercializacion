@@ -139,6 +139,7 @@ cargar2();
 			{ name: 'estacion',type: 'string'},
 			{ name: 'grupo',type: 'string'},
 			{ name: 'producto',type: 'string'},
+			{ name: 'codigo',type: 'string'},
 			{ name: 'producto_id',type: 'number'},
 			{ name: 'precio_tiempo',type: 'string'},
 			{ name: 'fecha_inicio',type:'date'},
@@ -181,14 +182,16 @@ cargar2();
 					return "<div style='margin:4px;'>" + (value + 1) + "</div>";
 				}
 			},
-			{ text: 'Linea', datafield: 'linea', filtertype: 'checkedlist',width: '10%' },
-			{ text: 'Estación', datafield: 'estacion', filtertype: 'checkedlist',width: '17%' },
-			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '25%' },
+			{ text: 'Linea', datafield: 'linea', filtertype: 'checkedlist',width: '8%' },
+			{ text: 'Estación', datafield: 'estacion', filtertype: 'checkedlist',width: '10%' },
+			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '17%' },
+			{ text: 'Codigo', datafield: 'codigo', filtertype: 'input',width: '8%' },
+			{ text: 'Cantidad', datafield: 'cantidad', filtertype: 'number',width: '8%' },
 			{ text: 'Precio Bs. / Tiempo', datafield: 'precio_tiempo', filtertype: 'input',width: '15%' },
 			{ text: 'Fecha Inicio', datafield: 'fecha_inicio', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
 	        { text: 'Fecha Finalización', datafield: 'fecha_fin', filtertype: 'range', width: '10%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
 			//{ text: 'Sub Total', datafield: 'total', filtertype: 'number',width: '10%' },
-			{ text: 'Sub Total', datafield: 'total', cellsalign: 'right', cellsformat: 'c2', aggregates: ['sum', 'avg'] },
+			{ text: 'Sub Total', datafield: 'total',width: '10%', cellsalign: 'right', cellsformat: 'c2', aggregates: ['sum', 'avg'] },
 			]
 		});
 
@@ -369,24 +372,88 @@ $("#quitar").click(function() {
 
  });
 
-$("#testForm").submit(function(){	
-	var v=$.ajax({
-		url:'/contratos/savecontratosproductos/',
-		type:'POST',
-		datatype: 'json',
-		data:{id:$("#id").val(),contrato_id:$("#contrato_id").val(),producto_id:$("#producto_id").val(),precio_unitario:$("#precio_unitario").val(),tiempo:$("#tiempo").val(),fecha_inicio:$("#fecha_inicio").val(),fecha_fin:$("#fecha_fin").val(),cantidad:$("#cantidad").val(),total:$("#total").val(),tipo_pago:$("#tipo_pago").val()},
-		success: function(data) { 
-			cargar2(); 
-			cargar();
-			$("#divMsjeExito").show();
-			$("#divMsjeExito").addClass('alert alert-info alert-dismissable');
-			$("#aMsjeExito").html(data); 
+
+
+$.validator.setDefaults( {
+	submitHandler: function () {
+		var v=$.ajax({
+			url:'/contratos/savecontratosproductos/',
+			type:'POST',
+			datatype: 'json',
+			data:{id:$("#id").val(),contrato_id:$("#contrato_id").val(),producto_id:$("#producto_id").val(),precio_unitario:$("#precio_unitario").val(),tiempo:$("#tiempo").val(),fecha_inicio:$("#fecha_inicio").val(),fecha_fin:$("#fecha_fin").val(),cantidad:$("#cantidad").val(),total:$("#total").val(),tipo_pago:$("#tipo_pago").val()},
+			success: function(data) { 
+				cargar2(); 
+				cargar();
+				$("#divMsjeExito").show();
+				$("#divMsjeExito").addClass('alert alert-info alert-dismissable');
+				$("#aMsjeExito").html(data); 
 				}, //mostramos el error
 				error: function() { alert('Se ha producido un error Inesperado'); }
 			});
 	$('#myModal').modal('hide');
-            return false; // ajax used, block the normal submit
-        });
+	}
+} );
+
+$( "#testForm" ).validate( {
+				rules: {
+					cantidad: {
+						required: true,
+						number: true
+					},
+					precio_unitario: {
+						required: true,
+						number: true
+					},
+
+					
+				},
+				messages: {
+					cantidad: {
+						required: "Campo requerido",
+						number: "Ingrese un numero"
+					},
+					precio_unitario: {
+						required: "Campo requerido",
+						number: "Ingrese un numero"
+					},
+					
+				},
+				errorElement: "label",
+				errorPlacement: function ( error, element ) {
+					// Add the `help-block` class to the error element
+					error.addClass( "help-block" );
+
+					if ( element.prop( "type" ) === "checkbox" ) {
+						error.insertAfter( element.parent( "label" ) );
+					} else {
+						error.insertAfter( element );
+					}
+				},
+				highlight: function ( element, errorClass, validClass ) {
+					$( element ).parents( ".col-md-9" ).addClass( "has-error" ).removeClass( "" );
+				},
+				unhighlight: function (element, errorClass, validClass) {
+					$( element ).parents( ".col-md-9" ).addClass( "" ).removeClass( "has-error" );
+				}
+			} );
+// $("#testForm").submit(function(){	
+// 	var v=$.ajax({
+// 		url:'/contratos/savecontratosproductos/',
+// 		type:'POST',
+// 		datatype: 'json',
+// 		data:{id:$("#id").val(),contrato_id:$("#contrato_id").val(),producto_id:$("#producto_id").val(),precio_unitario:$("#precio_unitario").val(),tiempo:$("#tiempo").val(),fecha_inicio:$("#fecha_inicio").val(),fecha_fin:$("#fecha_fin").val(),cantidad:$("#cantidad").val(),total:$("#total").val(),tipo_pago:$("#tipo_pago").val()},
+// 		success: function(data) { 
+// 			cargar2(); 
+// 			cargar();
+// 			$("#divMsjeExito").show();
+// 			$("#divMsjeExito").addClass('alert alert-info alert-dismissable');
+// 			$("#aMsjeExito").html(data); 
+// 				}, //mostramos el error
+// 				error: function() { alert('Se ha producido un error Inesperado'); }
+// 			});
+// 	$('#myModal').modal('hide');
+//             return false; // ajax used, block the normal submit
+//         });
 
 
 // Adicionar plan de pagos

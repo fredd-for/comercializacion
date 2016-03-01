@@ -85,6 +85,7 @@ class ClientesController extends ControllerBase
                     }
                     $customers[] = array(
                         'id' => $v->id,
+                        'empresa' => $v->empresa,
                         'razon_social_href' => '<a href="/clientes/view/'.$v->id.'">'.$v->razon_social.'</a>',
                         'razon_social' => $v->razon_social,
                         'nit' => $v->nit,
@@ -146,6 +147,7 @@ public function listcontratosclientesAction($cliente_id)
             if (isset($_POST['id'])) {
                 if ($_POST['id']>0) {
                     $resul = Clientes::findFirstById($this->request->getPost('id'));
+                    $resul->empresa= $this->request->getPost('empresa');
                     $resul->razon_social= $this->request->getPost('razon_social');
                     $resul->nit = $this->request->getPost('nit');
                     $resul->telefono = $this->request->getPost('telefono');
@@ -172,6 +174,7 @@ public function listcontratosclientesAction($cliente_id)
                 }
                 else{
                     $resul = new Clientes();
+                    $resul->empresa= $this->request->getPost('empresa');
                     $resul->razon_social= $this->request->getPost('razon_social');
                     $resul->nit = $this->request->getPost('nit');
                     $resul->telefono = $this->request->getPost('telefono');
@@ -233,6 +236,7 @@ public function listcontratosclientesAction($cliente_id)
 
         if ($this->request->isPost()) {
            $resul = Clientes::findFirstById($this->request->getPost('cliente_id'));
+           $resul->empresa= $this->request->getPost('empresa');
            $resul->razon_social= $this->request->getPost('razon_social');
            $resul->nit = $this->request->getPost('nit');
            $resul->telefono = $this->request->getPost('telefono');
@@ -448,6 +452,26 @@ public function listcontratosclientesAction($cliente_id)
         $this->view->disable();  
         echo json_encode($cliente);
 
-    }    
+    }
+
+    public function dashboardAction()
+    {
+      $model = new Planpagos();
+      $resul = $model->lista();
+      $this->view->disable();
+      foreach ($resul as $v) {
+        $customers[] = array(
+            'id' => $v->id,
+            'razon_social_href' => '<a href="/clientes/view/'.$v->id.'">'.$v->razon_social.'</a>',
+            'contrato' => '<a href="/planpagos/controlpago/'.$v->id.'">'.$v->contrato.'</a>',
+            'total' => $v->total,
+            'deposito' => $v->deposito,
+            'cobrar' => $v->total-$v->deposito,
+            'mora' => $v->mora,
+            'foto' => $this->foto($v->carpeta,$v->nombre_archivo)
+            );
+    }
+    echo json_encode($customers);
+}    
 
 }

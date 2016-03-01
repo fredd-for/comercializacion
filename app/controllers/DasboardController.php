@@ -70,45 +70,42 @@ class DasboardController extends ControllerBase {
         
     }
 
-//     public function solicitudesAction()
-//     {
-//         $this->view->disable();
-//         $category = array();
-//         $category['name'] = 'Meses';
+    public function porcentajemetasAction()
+    {
+        $gestion = $_POST['gestion'];
+        $mes = $_POST['mes'];
+        $responsable_id = $_POST['responsable_id'];
+        $recaudacion = $_POST['recaudacion'];
 
-//         $series15 = array();
-//         $series15['name'] = 'Wordpress';
+        $model = new consultas();
+        $mesActual = $model->montoMesActual($gestion,$mes,$responsable_id);
+        $mesAcumulado = $model->montoMesAcumulado($gestion,$mes,$responsable_id);
 
-//         $series2 = array();
-//         $series2['name'] = 'CodeIgniter';
+        $metaActual = $model->metaMesActual($gestion,$mes,$responsable_id);
+        $metaAcumulado = $model->metaMesAcumulado($gestion,$mes,$responsable_id);
+        $metaAnual = $model->metaAnual($gestion,$responsable_id);
+        // echo "<<<<".$mesActual[0]->monto_programado*100;
+        $porcentajeAvanceMes = ($mesActual[0]->monto_programado*100)/$metaActual[0]->meta;
+        $porcentajeAvanceAcumulado = ($mesAcumulado[0]->monto_programado*100)/$metaAcumulado[0]->meta;
+        $porcentajeAvanceAnual = ($mesAcumulado[0]->monto_programado*100)/$metaAnual[0]->meta;
 
-//         $series3 = array();
-//         $series3['name'] = 'Highcharts';
+        $rows = array();
+        // recaudacion 0 = programada , 1 = depositada
+        if ($recaudacion == 0) {
+            $porcentajeAvanceMes = ($mesActual[0]->monto_programado*100)/$metaActual[0]->meta;
+            $porcentajeAvanceAcumulado = ($mesAcumulado[0]->monto_programado*100)/$metaAcumulado[0]->meta;
+            $porcentajeAvanceAnual = ($mesAcumulado[0]->monto_programado*100)/$metaAnual[0]->meta;            
+        }else{
+            $porcentajeAvanceMes = ($mesActual[0]->monto_deposito*100)/$metaActual[0]->meta;
+            $porcentajeAvanceAcumulado = ($mesAcumulado[0]->monto_deposito*100)/$metaAcumulado[0]->meta;
+            $porcentajeAvanceAnual = ($mesAcumulado[0]->monto_deposito*100)/$metaAnual[0]->meta;            
+        }
+        $row['porcentajeAvanceMes'] = $porcentajeAvanceMes;
+        $row['porcentajeAvanceAcumulado'] = $porcentajeAvanceAcumulado;
+        $row['porcentajeAvanceAnual'] = $porcentajeAvanceAnual;    
 
-// // while($r = mysql_fetch_array($query)) {
-//         $category['data'][] = 'Ene';
-//         $series15['data'][] = 25;
-//         $series2['data'][] = 46;
-//         $series3['data'][] = 2;  
+         $this->view->disable();  
+        echo json_encode($row);
 
-//         $category['data'][] = 'Feb';
-//         $series15['data'][] = 25;
-//         $series2['data'][] = 46;
-//         $series3['data'][] = 2;  
-
-//         $category['data'][] = 'Mar';
-//         $series15['data'][] = 25;
-//         $series2['data'][] = 46;
-//         $series3['data'][] = 2;  
-// // }
-
-//         $result = array();
-//         array_push($result,$category);
-//         array_push($result,$series15);
-//         array_push($result,$series2);
-//         array_push($result,$series3);
-//         echo var_dump($result);
-//         echo json_encode($result);
-
-//     }
+    }
 }

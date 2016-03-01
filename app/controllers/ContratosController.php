@@ -104,9 +104,15 @@ class ContratosController extends ControllerBase
                 $resul->tipo_pago = $this->request->getPost('tipo_pago');
                 $resul->tipo_cobro_mora = $this->request->getPost('tipo_cobro_mora');
                 if ($resul->save()) {
-                    $msm ='Exito: Se guardo correctamente';
+                    $msm = array(
+                        'contrato_id' => $resul->id,
+                        'msm' => 'Exito: Se guardo correctamente'
+                        );
                 }else{
-                    $msm = 'Error: No se guardo el registro';
+                    $msm = array(
+                        'contrato_id' => 0,
+                        'msm' => 'Error: No se guardo el registro'
+                        );
                 }
             }
             else{
@@ -128,15 +134,24 @@ class ContratosController extends ControllerBase
                 $resul->tipo_pago = $this->request->getPost('tipo_pago');
                 $resul->tipo_cobro_mora = $this->request->getPost('tipo_cobro_mora');
                 if ($resul->save()) {
-                    $msm ='Exito: Se guardo correctamente';
+                    $msm = array(
+                        'contrato_id' => $resul->id,
+                        'msm' => 'Exito: Se guardo correctamente'
+                        );
+                    // $msm ='Exito: Se guardo correctamente';
                 }else{
-                    $msm = 'Error: No se guardo el registro';
+                    $msm = array(
+                        'contrato_id' => 0,
+                        'msm' => 'Error: No se guardo el registro'
+                        );
+                    // $msm = 'Error: No se guardo el registro';
                 }    
                 
             }   
         }
     $this->view->disable();
-    echo $msm;
+    // echo $msm;
+    echo json_encode($msm);
     }
     public function deletecontratoAction(){
         $resul = Contratos::findFirstById($this->request->getPost('id'));
@@ -273,6 +288,7 @@ class ContratosController extends ControllerBase
                 'estacion' => $v->estacion,
                 'grupo' => $v->grupo,
                 'producto' => $v->producto,
+                'codigo' => $v->codigo,
                 'producto_id' => $v->producto_id,
                 'precio_tiempo' => $v->precio_unitario.' Bs. x '.$v->tiempo,
                 'precio_unitario' => $v->precio_unitario,
@@ -375,9 +391,13 @@ class ContratosController extends ControllerBase
         $resul = Contratosproductos::findFirstById($this->request->getPost('id'));
         $resul->baja_logica = 0;
         if ($resul->save()) {
-            // $resul2 = Productos::findFirstById($resul->producto_id); 
-            // $resul2->cantidad = $resul2->cantidad + $resul->cantidad;
-            // $resul2->save();
+            $resul2 = Planpagos::find(array('baja_logica=1 and contratoproducto_id='.$resul->id));
+            foreach ($resul2 as $v) {
+                 $resul3 = Planpagos::findFirstById($v->id);
+                 $resul3->baja_logica = 0;
+                 $resul3->save();
+             } 
+            
             $msm ='Exito: Se retiro el producto correctamente';
         }else{
             $msm = 'Error: No se retiro el producto';
