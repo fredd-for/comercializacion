@@ -141,7 +141,7 @@ SQl para obtener los el monto por contrato agrupado por Responsables
       
       $sql = "SELECT COALESCE(SUM(ppd.monto_deposito) ,0) as total
       FROM planpagodepositos ppd
-      INNER JOIN planpagos pp ON ppd.planpago_id = pp.id AND pp.baja_logica=1
+      INNER JOIN planpagos pp ON ppd.planpago_id = pp.id AND pp.baja_logica=1 AND pp.estado = 1
       INNER JOIN productos p ON pp.producto_id = p.id
       INNER JOIN grupos g ON p.grupo_id = g.id
       INNER JOIN estaciones e ON p.estacion_id = e.id
@@ -161,7 +161,7 @@ SQl para obtener los el monto por contrato agrupado por Responsables
         FROM planpagos pp
         LEFT JOIN planpagodepositos ppd ON pp.id = ppd.planpago_id AND ppd.baja_logica = 1
         INNER JOIN contratos c ON pp.contrato_id=c.id ".$where." AND YEAR(c.fecha_contrato)='".$gestion."'
-        WHERE  YEAR(pp.fecha_programado)='".$gestion."' AND MONTH(pp.fecha_programado)='".$mes."' AND pp.baja_logica = 1";
+        WHERE  YEAR(pp.fecha_programado)='".$gestion."' AND MONTH(pp.fecha_programado)='".$mes."' AND pp.baja_logica = 1 AND pp.estado = 1";
         $db = new Consultas();
         return new Resultset(null, $db, $db->getReadConnection()->query($sql));         
     }
@@ -177,7 +177,7 @@ SQl para obtener los el monto por contrato agrupado por Responsables
         FROM planpagos pp
         LEFT JOIN planpagodepositos ppd ON pp.id = ppd.planpago_id AND ppd.baja_logica = 1
         INNER JOIN contratos c ON pp.contrato_id=c.id ".$where." AND YEAR(c.fecha_contrato)='".$gestion."'
-        WHERE  YEAR(fecha_programado) ='".$gestion."' AND MONTH(fecha_programado)<='".$mes."' AND pp.baja_logica = 1";
+        WHERE  YEAR(fecha_programado) ='".$gestion."' AND MONTH(fecha_programado)<='".$mes."' AND pp.baja_logica = 1 AND pp.estado = 1";
         $db = new Consultas();
         return new Resultset(null, $db, $db->getReadConnection()->query($sql));         
     }
@@ -221,5 +221,32 @@ SQl para obtener los el monto por contrato agrupado por Responsables
         return new Resultset(null, $db, $db->getReadConnection()->query($sql));         
     }
 
+    /*
+    alquiler asegurado gestiones pasadas
+     */
+    public function alquilerAsegurado()
+    {
+        $sql = "SELECT SUM(pp.monto_reprogramado) as total
+        FROM contratos c
+        INNER JOIN planpagos pp ON pp.contrato_id = c.id AND YEAR(pp.fecha_programado)=YEAR(NOW()) AND pp.baja_logica=1 AND pp.estado=1
+        WHERE c.baja_logica = 1 AND YEAR(c.fecha_contrato)<YEAR(NOW())";
+        $db = new Consultas();
+        return new Resultset(null, $db, $db->getReadConnection()->query($sql));         
+    }
+
+    /*
+    Metas por meses de todos los responsables comerciales
+     */
+    
+    public function metasPorMeses()
+    {
+        $sql = "SELECT u.id, CONCAT(u.nombre,' ',u.paterno,' ',u.materno) as nombre,m.meta,m.mes,m.gestion
+        FROM usuarios u
+        INNER JOIN metas m ON u.id = m.usuario_id AND gestion = YEAR(NOW())
+        WHERE u.nivel =2 AND u.habilitado = 1
+        ORDER BY u.id, m.mes ASC";
+        $db = new Consultas();
+        return new Resultset(null, $db, $db->getReadConnection()->query($sql));         
+    }
 
 }

@@ -9,7 +9,7 @@ class Facturas extends \Phalcon\Mvc\Model
 	public function lista($where1,$group)
 	{
 		$sql = "SELECT cl.razon_social,cl.correo,cl.representante_legal,cl.correo_representante_legal,cl.nombre_ref,cl.correo_ref,cl.nit,g.grupo,l.linea,e.estacion,c.contrato,p.producto,
-		pp.*,DATEDIFF(CURRENT_DATE(),pp.fecha_programado) AS diferencia_dias,ppf.nro_factura
+		pp.*,IF( DATEDIFF(CURRENT_DATE(),pp.fecha_programado) >0, DATEDIFF(CURRENT_DATE(),pp.fecha_programado),0) AS diferencia_dias,ppf.nro_factura
 		FROM planpagos pp
 		INNER JOIN contratosproductos cp ON pp.contratoproducto_id = cp.id AND cp.baja_logica =1
 		LEFT JOIN planpagofacturas ppf ON pp.id=ppf.planpago_id AND ppf.baja_logica = 1
@@ -25,7 +25,7 @@ class Facturas extends \Phalcon\Mvc\Model
 		return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));
 	}
 
-	public function listafacturas()
+	public function listafacturas($where1,$groups)
 	{
 		$sql = "SELECT cl.razon_social,cl.nit,g.grupo,l.linea,e.estacion,c.contrato,p.producto,pp.*,DATEDIFF(CURRENT_DATE(),pp.fecha_programado) AS diferencia_dias,ppf.id as planpagofactura_id,ppf.fecha_factura,ppf.fecha_recepcion_cliente,ppf.monto_factura,ppf.nro_factura,ppf.fecha_reg
 		FROM planpagos pp
@@ -36,8 +36,8 @@ class Facturas extends \Phalcon\Mvc\Model
 		INNER JOIN grupos g ON p.grupo_id = g.id
 		INNER JOIN estaciones e ON p.estacion_id = e.id
 		INNER JOIN lineas l ON e.linea_id = l.id
-		WHERE planpago_id IS NOT NULL AND DATEDIFF(CURRENT_DATE(),pp.fecha_programado) >='-10'
-		ORDER BY DATEDIFF(CURRENT_DATE(),pp.fecha_programado) DESC";
+		WHERE planpago_id IS NOT NULL AND DATEDIFF(CURRENT_DATE(),pp.fecha_programado) >='-10' ".$where1."
+		ORDER BY DATEDIFF(CURRENT_DATE(),pp.fecha_programado) DESC ".$group;
 		$this->_db = new Facturas();
 		return new Resultset(null, $this->_db, $this->_db->getReadConnection()->query($sql));
 	}

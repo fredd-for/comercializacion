@@ -1,0 +1,90 @@
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel">
+			<ul class="breadcrumb breadcrumb-top">
+				<li><a href="/">Inicio</a></li>
+				<li class="active">Reporte de Metas</li>
+			</ul>
+			<div class="panel-heading">
+				<h4>Reporte de Cumplimiento de Metas</h4>
+				<div class="options">
+					<ul class="nav nav-tabs">
+						<li class="active"><a data-toggle="tab" href="#domshortcuttiles"><i class="fa fa-users"></i></a></li>
+						<li><a data-toggle="tab" href="#codeshortcuttiles"><i class="fa fa-code"></i></a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div class="tab-content">
+					<div class="row">
+						<div class="col-md-12">
+							<?php  echo $this->flashSession->output(); ?>
+							<div id="divMsjeExito" class="msjs-alert" hidden="hidden">
+								<button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
+								<h5>
+									<i class="fa fa-check-circle"></i>
+									<!-- &Eacute;xito! -->
+									<a class="alert-link" href="javascript:void(0)" id="aMsjeExito"></a>
+								</h5>
+								
+							</div>
+						</div>
+					</div>
+				<div class="block">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="pull-left">
+								<h3>METAS vs LOGRO</h3>
+								<span></span>                
+							</div>
+							<div class="pull-right">
+								<a href="javascript:void(0)" class="btn btn-sm btn-success" id="reporte"><i class="fa fa-download"></i> Reporte</a>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+					<div class="col-md-6">
+						<div class="table-responsive">
+							<table class="table table-vcenter table-striped table-condensed table-bordered">
+							<!-- <thead>
+								<td></td>
+								<td>Enero</td>
+								<td>Febrero</td>
+								<td>Marzo</td>
+								<td>Mayo</td>
+								<td>TOTAL</td>
+							</thead> -->
+							<tbody>
+							<tr>
+								<td>ALQUILER ASEGURADO GESTIÓN <?php echo date("Y")-1; ?></td>
+								<td class="text-right"><?php echo number_format($alquilerAsegurado,2,',','.'); ?></td>
+							</tr>
+							<tr>
+								<td>CONTRATOS NUEVOS (META GESTIÓN <?php echo date("Y") ?>)</td>
+								<td class="text-right"><?php echo number_format($metaAnual,2,',','.'); ?></td>
+							</tr>
+							
+								
+							</tbody>
+							</table>
+						</div>
+					</div>
+						
+					</div>
+
+					<div class="row">
+						<div class="table-responsive">
+							<?php echo $tabla ?>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<style type="text/css">
+	.datepicker{
+		z-index:1151 !important;
+	}
+</style>

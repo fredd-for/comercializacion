@@ -1,10 +1,3 @@
-/*
- *   Oasis - Sistema de Gestión para Recursos Humanos
- *   Empresa Estatal de Transporte por Cable "Mi Teleférico"
- *   Versión:  1.0.0
- *   Usuario Creador: Lic. Javier Loza
- *   Fecha Creación:  09-11-2014
- */
 function exportarReporte(option){
     // alert(option);
     columna = new Object();
@@ -82,6 +75,89 @@ function exportarReporte(option){
     if(ruta!='')
         window.open(ruta+n_rows+"/"+json_columns+"/"+json_filter+"/"+json_groups+"/"+json_sorteds ,"_blank");
 }
+
+function exportarReporte2(option){
+    // alert(option);
+    columna = new Object();
+    filtros = new Object();
+    agrupados = new Object();
+    ordenados = new Object();
+    linea = $('#jqxgrid_facturas').jqxGrid('getcolumn','linea');
+    estacion = $('#jqxgrid_facturas').jqxGrid('getcolumn','estacion');
+    razon_social = $('#jqxgrid_facturas').jqxGrid('getcolumn','razon_social');
+    contrato = $('#jqxgrid_facturas').jqxGrid('getcolumn','contrato');
+    producto = $('#jqxgrid_facturas').jqxGrid('getcolumn','producto');
+    fecha_programado = $('#jqxgrid_facturas').jqxGrid('getcolumn','fecha_programado');
+    monto_reprogramado = $('#jqxgrid_facturas').jqxGrid('getcolumn','monto_reprogramado');
+    nro_factura = $('#jqxgrid_facturas').jqxGrid('getcolumn','nro_factura');
+    fecha_factura = $('#jqxgrid_facturas').jqxGrid('getcolumn','fecha_factura');
+    monto_factura = $('#jqxgrid_facturas').jqxGrid('getcolumn','monto_factura');
+
+    
+    columna[linea.datafield] = {text: linea.text, hidden: linea.hidden};
+    columna[estacion.datafield] = {text: estacion.text, hidden: estacion.hidden};
+    columna[razon_social.datafield] = {text: razon_social.text, hidden: razon_social.hidden};
+    columna[contrato.datafield] = {text: contrato.text, hidden: contrato.hidden};
+    columna[producto.datafield] = {text: producto.text, hidden: producto.hidden};
+    columna[fecha_programado.datafield] = {text: fecha_programado.text, hidden: fecha_programado.hidden};
+    columna[monto_reprogramado.datafield] = {text: monto_reprogramado.text, hidden: monto_reprogramado.hidden};
+    columna[nro_factura.datafield] = {text: nro_factura.text, hidden: nro_factura.hidden};
+    columna[fecha_factura.datafield] = {text: fecha_factura.text, hidden: fecha_factura.hidden};
+    columna[monto_factura.datafield] = {text: monto_factura.text, hidden: monto_factura.hidden};
+    
+    var groups = $('#jqxgrid_facturas').jqxGrid('groups');
+    if(groups==null||groups=='')groups='null';
+    //var sorteds = $('#jqxgrid_facturas').jqxGrid('getsortcolumn');
+
+    var sortinformation = $('#jqxgrid_facturas').jqxGrid('getsortinformation');
+    if(sortinformation.sortcolumn!=undefined){
+        // The sortcolumn rep   resents the sort column's datafield. If there's no sort column, the sortcolumn is null.
+        var sortcolumn = sortinformation.sortcolumn;
+        // The sortdirection is an object with two fields: 'ascending' and 'descending'. Ex: { 'ascending': true, 'descending': false }
+        var sortdirection = sortinformation.sortdirection;
+        ordenados[sortcolumn] = {asc: sortdirection.ascending, desc: sortdirection.descending};
+    }else ordenados='';
+
+    var rows = $('#jqxgrid_facturas').jqxGrid('getrows');
+    var filterGroups = $('#jqxgrid_facturas').jqxGrid('getfilterinformation');
+    var counter = 0;
+    for (var i = 0; i < filterGroups.length; i++) {
+        var filterGroup = filterGroups[i];
+        var filters = filterGroup.filter.getfilters();
+        for (var j = 0; j < filters.length; j++) {
+            if (j>0){
+                counter++;
+            }
+            var indice = i+counter;
+            filtros[indice] = {columna: filterGroup.filtercolumn, valor: filters[j].value,
+                condicion: filters[j].condition, tipo: filters[j].type};
+        }
+    }
+    var n_rows = rows.length;
+    var json_filter = JSON.stringify(filtros);
+    var json_columns = JSON.stringify(columna);
+    var json_sorteds = JSON.stringify(ordenados);
+    json_columns = btoa(utf8_encode(json_columns));
+    json_filter = btoa(utf8_encode(json_filter));
+    json_sorteds = btoa(utf8_encode(json_sorteds));
+    var json_groups =  btoa(utf8_encode(groups));
+
+    json_columns= json_columns.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');
+    json_filter= json_filter.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');
+    json_groups= json_groups.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');
+    json_sorteds= json_sorteds.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');
+    var ruta='';
+    switch (option){
+        case 1: ruta="/facturas/exportexcelfacturasrealizadas/";break;
+        case 2: ruta="/facturas/exportpdffacturasrealizadas/";break;
+    }
+    if(ruta!='')
+        window.open(ruta+n_rows+"/"+json_columns+"/"+json_filter+"/"+json_groups+"/"+json_sorteds ,"_blank");
+}
+
+
+
+
 function utf8_encode(argString) {
     //  discuss at: http://phpjs.org/functions/utf8_encode/
     // original by: Webtoolkit.info (http://www.webtoolkit.info/)

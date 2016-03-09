@@ -51,21 +51,19 @@
 						<div class="col-md-12">
 							<div class="pull-left">
 								<strong>Lista de Facturas Realizadas</strong>
-								<!-- <h5></h5> -->
 							</div>
-							<?php // if ($user->nivel==4) { ?>
-							
-							<?php // } ?>
-							
 						</div>
 					</div>
 					<div class="row">
-					<div class="col-md-12">
-						<div class="pull-left">
-								<button class="btn btn-sm btn-warning" type="button" id="edit"><i class="fa fa-pencil fa-fw"></i> Editar</button>
+						<div class="col-md-12">
+							<div class="pull-left">
+								<!-- <button class="btn btn-sm btn-warning" type="button" id="edit"><i class="fa fa-pencil fa-fw"></i> Editar</button> -->
 								<button class="btn btn-sm btn-danger" type="button" id="delete"><i class="fa fa-trash-o fa-fw"></i> Eliminar</button>
 							</div>	
+							<div class="pull-right">
+								<button class="btn btn-sm btn-success" type="button" id="btnExportarExcel2" accesskey="i"><i class="fa fa-download"></i> Exportar Excel</button>
 							</div>	
+						</div>	
 					</div>
 					<div class="row">
 						<div class="col-md-12">
@@ -141,25 +139,25 @@
 				</div>
 				<hr>
 				<div class="form-group">
-				<label class="col-md-4 control-label"><strong>Nro Factura:</strong></label>
+					<label class="col-md-4 control-label"><strong>Nro Factura:</strong></label>
 					<div class="col-md-8">
 						<input id="nro_factura" name="nro_factura" class="form-control" type="text" placeholder="Nro Factura" required>
 					</div>
 				</div>
 				<div class="form-group">
-				<label class="col-md-4 control-label"><strong>Fecha Factura:</strong></label>
+					<label class="col-md-4 control-label"><strong>Fecha Factura:</strong></label>
 					<div class="col-md-8">
 						<input type="text" id="fecha_factura" name="fecha_factura" class="form-control" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" required/>
 					</div>
 				</div>
 				<div class="form-group">
-				<label class="col-md-4 control-label"><strong>Fecha Entrega Factura:</strong></label>
+					<label class="col-md-4 control-label"><strong>Fecha Entrega Factura:</strong></label>
 					<div class="col-md-8">
 						<input type="text" id="fecha_recepcion_cliente" name="fecha_recepcion_cliente" class="form-control" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy"/>
 					</div>
 				</div>
 				<div class="form-group">
-				<label class="col-md-4 control-label"><strong>Monto Facturado Bs.:</strong></label>
+					<label class="col-md-4 control-label"><strong>Monto Facturado Bs.:</strong></label>
 					<div class="col-md-8">
 						<input id="monto_factura" name="monto_factura" class="form-control" type="text" placeholder="Monto Facturado Bs." required>
 					</div>

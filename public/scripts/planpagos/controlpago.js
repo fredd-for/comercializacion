@@ -127,11 +127,12 @@ $(document).ready(function (){
 				}]
 			},
 			{ text: 'Dias Atraso', datafield: 'dias_atraso', filtertype: 'input',width: '10%',align:'center',cellclassname:cellclassmora },
-			{ text: 'Mora', datafield: 'mora', filtertype: 'input',width: '12%' ,cellsalign:'right',cellsformat: 'c2',cellclassname:cellclassmora,
+			{ text: 'Mora', datafield: 'mora', filtertype: 'input',width: '12%', cellsalign: 'right',cellsformat: 'c2',align:'center',cellclassname:cellclassmora,
 				aggregates: [{ '<b>Bs.</b>': 
 				function (aggregatedValue, currentValue, column, record) {
+					
 					var total = aggregatedValue + record['mora'];
-					return total;
+					return total;	
 				}
 				}]
 			},

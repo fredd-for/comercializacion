@@ -53,11 +53,11 @@ $(document).ready(function (){
 			{ text: 'Linea', datafield: 'linea', filtertype: 'checkedlist',width: '8%' },
 			{ text: 'Estación', datafield: 'estacion', filtertype: 'checkedlist',width: '15%' },
 			{ text: 'Cliente / Razón Social', datafield: 'razon_social', filtertype: 'input',width: '20%' },
-			{ text: 'Contrato', datafield: 'contrato', filtertype: 'input',width: '10%' },
+			{ text: 'Contrato', datafield: 'contrato', filtertype: 'input',width: '8%' },
 			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '15%' },
 			{ text: 'Fecha Programado', datafield: 'fecha_programado', filtertype: 'range', width: '7%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
 			{ text: 'Monto Programado Bs.', datafield: 'monto_reprogramado', filtertype: 'number', width: '7%',cellsformat: "c2", cellsalign: 'right'},
-	        { text: 'Dias Atraso', datafield: 'diferencia_dias', filtertype: 'number', width: '7%',cellsalign: 'right'},
+	        { text: 'Dias Atraso', datafield: 'diferencia_dias', filtertype: 'number', width: '8%',cellsalign: 'right'},
 			],
 			//groups: ['razon_social','contrato']
 		});
@@ -228,6 +228,7 @@ $("#delete").click(function() {
  					data: {id: dataRecord.planpagofactura_id},
  					success: function(data) {
                             // cargar(); cargar2();
+                            $("#jqxgrid").jqxGrid('updatebounddata', 'cells');
                             $("#jqxgrid_facturas").jqxGrid('updatebounddata', 'cells');
                             $("#divMsjeExito").show();
                             $("#divMsjeExito").addClass('alert alert-warning alert-dismissable');
@@ -274,6 +275,11 @@ $("#fecha_factura, #fecha_recepcion_cliente").datepicker({
 $("#btnExportarExcel").click(function () {
 	// alert("hoal");
 	exportarReporte(1);
+});
+
+$("#btnExportarExcel2").click(function () {
+	// alert("hoal");
+	exportarReporte2(1);
 });
 
 })

@@ -178,7 +178,7 @@ public function listcontrolpagoAction($contratoproducto_id)
 
         /* calculo de mora */
         $dias_atraso = '';
-        $mora='';
+        $mora=0;
         
         //segun fecha programada
         $fecha_tolerancia = date("Y-m-d",strtotime( '+'.$contrato[0]->dias_tolerancia.' day' , strtotime($v->fecha_programado)));
@@ -230,6 +230,9 @@ public function listcontrolpagoAction($contratoproducto_id)
             }    
         }
         
+        // if($mora==0){
+        //     $mora = '';
+        // }
         
         /* fin calculo de mora*/
         $customers[] = array(
