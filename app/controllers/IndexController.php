@@ -27,8 +27,8 @@ class IndexController extends ControllerBase {
         $this->assets
 
         ->addCss('/media/plugins/org/css/primitives.latest.css')
-        ->addCss('/jqwidgets/styles/jqx.base.css')
-        ->addCss('/jqwidgets/styles/jqx.custom.css')
+        // ->addCss('/jqwidgets/styles/jqx.base.css')
+        // ->addCss('/jqwidgets/styles/jqx.custom.css')
         ->addCss('/js/treegrid/css/jquery.treegrid.css')
         ;
         $this->assets
@@ -39,29 +39,29 @@ class IndexController extends ControllerBase {
         ->addJs('/js/treegrid/js/jquery.treegrid.js')
         ->addJs('/scripts/dashboard.js')
 
-        ->addJs('/jqwidgets/jqxcore.js')
-        ->addJs('/jqwidgets/jqxdraw.js')
-        ->addJs('/jqwidgets/jqxgauge.js')
+        // ->addJs('/jqwidgets/jqxcore.js')
+        // ->addJs('/jqwidgets/jqxdraw.js')
+        // ->addJs('/jqwidgets/jqxgauge.js')
         ;
         
         /*
         datos gestiones
          */
-        $model = new Metas();
-        $result = $model->gestiones();
-        $gestiones = $this->tag->select(
-            array(
-                'gestion',
-                $result,
-                'using' => array('gestion', 'gestion'),
-                'useEmpty' => false,
-                'emptyText' => '(Selecionar)',
-                'emptyValue' => '',
-                'class' => 'form-control',
-                'required' => 'required'
-                )
-            );
-        $this->view->setVar('gestiones',$gestiones);
+        // $model = new Metas();
+        // $result = $model->gestiones();
+        // $gestiones = $this->tag->select(
+        //     array(
+        //         'gestion',
+        //         $result,
+        //         'using' => array('gestion', 'gestion'),
+        //         'useEmpty' => false,
+        //         'emptyText' => '(Selecionar)',
+        //         'emptyValue' => '',
+        //         'class' => 'form-control',
+        //         'required' => 'required'
+        //         )
+        //     );
+        // $this->view->setVar('gestiones',$gestiones);
         /*
         end gestiones
          */
@@ -69,53 +69,53 @@ class IndexController extends ControllerBase {
         /*
         Meses
          */
-        $this->tag->setDefault("mes", date("n"));
-        $meses = $this->tag->selectStatic(
-        array(
-            "mes",
-            $this->mes_array,
-            'useEmpty' => false,
-            'emptyText' => '(Selecionar)',
-            'emptyValue' => '',
-            'class' => 'form-control',
-            )
-        );
-        $this->view->setVar('meses', $meses);
+        // $this->tag->setDefault("mes", date("n"));
+        // $meses = $this->tag->selectStatic(
+        // array(
+        //     "mes",
+        //     $this->mes_array,
+        //     'useEmpty' => false,
+        //     'emptyText' => '(Selecionar)',
+        //     'emptyValue' => '',
+        //     'class' => 'form-control',
+        //     )
+        // );
+        // $this->view->setVar('meses', $meses);
 
         /*
         responsable comercial
          */
-        $model = new Usuarios();
-        $resul = $model->responsablecomercial();
-        $responsable = $this->tag->select(
-            array(
-                'responsable_id',
-                $resul,
-                'using' => array('id', 'nombres'),
-                'useEmpty' => true,
-                'emptyText' => '(Todos)',
-                'emptyValue' => '0',
-                'class' => 'form-control',
-                'required' => 'required'
-                )
-            );
-        $this->view->setVar('responsable',$responsable);
+        // $model = new Usuarios();
+        // $resul = $model->responsablecomercial();
+        // $responsable = $this->tag->select(
+        //     array(
+        //         'responsable_id',
+        //         $resul,
+        //         'using' => array('id', 'nombres'),
+        //         'useEmpty' => true,
+        //         'emptyText' => '(Todos)',
+        //         'emptyValue' => '0',
+        //         'class' => 'form-control',
+        //         'required' => 'required'
+        //         )
+        //     );
+        // $this->view->setVar('responsable',$responsable);
 
-        $recaudacion = $this->tag->select(
-            array(
-                'recaudacion',
-                array(
-                "1" => "DEPOSITADA",
-                "0"   => "PROGRAMADA",
-                ),
-                'useEmpty' => false,
-                'emptyText' => '(Todos)',
-                'emptyValue' => '0',
-                'class' => 'form-control',
-                'required' => 'required'
-                )
-            );
-        $this->view->setVar('recaudacion',$recaudacion);
+        // $recaudacion = $this->tag->select(
+        //     array(
+        //         'recaudacion',
+        //         array(
+        //         "0"   => "PROGRAMADA",
+        //         "1" => "DEPOSITADA",
+        //         ),
+        //         'useEmpty' => false,
+        //         'emptyText' => '(Todos)',
+        //         'emptyValue' => '0',
+        //         'class' => 'form-control',
+        //         'required' => 'required'
+        //         )
+        //     );
+        // $this->view->setVar('recaudacion',$recaudacion);
 
         $this->view->setVar('usuario', $this->_user);
         

@@ -1,6 +1,9 @@
 <?php
 
 require_once('../app/libs/nusoap/nusoap.php');
+ 
+require_once('../app/libs/phpmailer/class.phpmailer.php');
+require_once('../app/libs/phpmailer/class.smtp.php');
 
 class LoginController extends \Phalcon\Mvc\Controller {
 
@@ -48,13 +51,55 @@ class LoginController extends \Phalcon\Mvc\Controller {
                                 "bind" => array('email' => $email, 'estado' => 1)
             ));
             if ($user != false) {
+                /*
+                envio de email - restaurara contraseña
+                 */
+                
+                $password=$this->_generarPass();
+                $user->password = $password;
+                
+                    $destinatario = strtoupper($user->nombre).' '.strtoupper($user->paterno).' '.strtoupper($user->materno);
+                    $correo_destinatario=$user->correo;
+                    $contenido_html ='<p>Estimad@ '.$destinatario.', </p>
+                    <p>Ha solicitado restablecer su contraseña, si esta seguro de hacerlo favor haga click en el siguiente enlace: </p>
+                    <p>Recuperar Contraseña</p>
+                    <p>http://convocatorias.miteleferico.bo/</p>';
+                    $contenido = '';
+                    $mail = new PHPMailer();
+                    $mail->IsSMTP();
+                    $mail->SMTPAuth = true;
+                    $mail->SMTPSecure = "ssl";
+                    $mail->Host = "correo.miteleferico.bo";
+                    $mail->Port = 465;
+                    $mail->Username = "sistemas@miteleferico.bo";
+                    $mail->Password = "76KhCgc5";
+                    $mail->From = "sistemas@miteleferico.bo";
+                    $mail->FromName = "\"MI TELEFERICO\" SISTEMA DE COMERCIALIZACION ";
+                    $mail->Subject = utf8_decode("Restablecer Contraseña - SISTEMA DE COMERCIALIZACION \"MI TELEFERICO\"");
+                    $mail->AltBody = $contenido;
+                    $mail->MsgHTML(utf8_decode($contenido_html));
+                    $mail->AddAddress($correo_destinatario, $destinatario);
+                    $mail->IsHTML(true);
+                    if(!$mail->Send()) {
+                      $this->flashSession->error("<strong>Error: </strong>El correo electronico no existe.");
+                  } else{
+                    $this->flashSession->success("<strong>Exito: </strong>Revise su correo electronico ".$correo_destinatario.", se le envio la contraseña para restablecer. ");
+                    }
+
+            
+            $this->response->redirect('/');
+        
+                /*
+                end envio de email
+                 */
+
                 //acutalizamos la cantidad de ingresos
-                $user->logins = $user->logins + 1;
-                $user->lastlogin = time();
-                $user->save();
-                $this->_registerSession($user);
-                $this->flashSession->success('Bienvenido <i>' . $user->nombre . '</i>');
-                $this->response->redirect('/dashboard');
+                // $user->logins = $user->logins + 1;
+                // $user->lastlogin = time();
+                // $user->save();
+                // $this->_registerSession($user);
+                // $this->flashSession->success('Bienvenido <i>' . $user->nombre . '</i>');
+                // $this->response->redirect('/dashboard');
             }
             $this->flashSession->error('Email inexsitente en el sistema, o usuario No habilitado');
         }

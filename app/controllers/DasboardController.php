@@ -81,28 +81,47 @@ class DasboardController extends ControllerBase {
         $mesActual = $model->montoMesActual($gestion,$mes,$responsable_id);
         $mesAcumulado = $model->montoMesAcumulado($gestion,$mes,$responsable_id);
 
+        $garantiaLlaveMesActual = $model->garantiaLlaveMesActual($gestion,$mes,$responsable_id);
+        $garantiaLlaveMesAcumulado = $model->garantiaLlaveMesAcumulado($gestion,$mes,$responsable_id);
+
         $metaActual = $model->metaMesActual($gestion,$mes,$responsable_id);
         $metaAcumulado = $model->metaMesAcumulado($gestion,$mes,$responsable_id);
         $metaAnual = $model->metaAnual($gestion,$responsable_id);
         // echo "<<<<".$mesActual[0]->monto_programado*100;
-        $porcentajeAvanceMes = ($mesActual[0]->monto_programado*100)/$metaActual[0]->meta;
-        $porcentajeAvanceAcumulado = ($mesAcumulado[0]->monto_programado*100)/$metaAcumulado[0]->meta;
-        $porcentajeAvanceAnual = ($mesAcumulado[0]->monto_programado*100)/$metaAnual[0]->meta;
+        // $porcentajeAvanceMes = (($mesActual[0]->monto_programado+$garantiaLlaveMesActual->total)*100)/$metaActual[0]->meta;
+        // $porcentajeAvanceAcumulado = (($mesAcumulado[0]->monto_programado+$garantiaLlaveMesAcumulado->total)*100)/$metaAcumulado[0]->meta;
+        // $porcentajeAvanceAnual = (($mesAcumulado[0]->monto_programado+$garantiaLlaveMesAcumulado->total)*100)/$metaAnual[0]->meta;
 
         $rows = array();
         // recaudacion 0 = programada , 1 = depositada
         if ($recaudacion == 0) {
-            $porcentajeAvanceMes = ($mesActual[0]->monto_programado*100)/$metaActual[0]->meta;
-            $porcentajeAvanceAcumulado = ($mesAcumulado[0]->monto_programado*100)/$metaAcumulado[0]->meta;
-            $porcentajeAvanceAnual = ($mesAcumulado[0]->monto_programado*100)/$metaAnual[0]->meta;            
+            $logroMes=$mesActual[0]->monto_programado+$garantiaLlaveMesActual->total;
+            $logroAcumulado = $mesAcumulado[0]->monto_programado+$garantiaLlaveMesAcumulado->total;
+            $logroAnual = $mesAcumulado[0]->monto_programado+$garantiaLlaveMesAcumulado->total;
+
+            $porcentajeAvanceMes = ($logroMes*100)/$metaActual[0]->meta;
+            $porcentajeAvanceAcumulado = ($logroAcumulado*100)/$metaAcumulado[0]->meta;
+            $porcentajeAvanceAnual = ($logroAnual*100)/$metaAnual[0]->meta;            
         }else{
-            $porcentajeAvanceMes = ($mesActual[0]->monto_deposito*100)/$metaActual[0]->meta;
-            $porcentajeAvanceAcumulado = ($mesAcumulado[0]->monto_deposito*100)/$metaAcumulado[0]->meta;
-            $porcentajeAvanceAnual = ($mesAcumulado[0]->monto_deposito*100)/$metaAnual[0]->meta;            
+            $logroMes = $mesActual[0]->monto_deposito+$garantiaLlaveMesActual->total;
+            $logroAcumulado = $mesAcumulado[0]->monto_deposito+$garantiaLlaveMesAcumulado->total;
+            $logroAnual = $mesAcumulado[0]->monto_deposito+$garantiaLlaveMesAcumulado->total;
+
+            $porcentajeAvanceMes = ($logroMes*100)/$metaActual[0]->meta;
+            $porcentajeAvanceAcumulado = ($logroAcumulado*100)/$metaAcumulado[0]->meta;
+            $porcentajeAvanceAnual = ($logroAnual*100)/$metaAnual[0]->meta;            
         }
         $row['porcentajeAvanceMes'] = $porcentajeAvanceMes;
         $row['porcentajeAvanceAcumulado'] = $porcentajeAvanceAcumulado;
-        $row['porcentajeAvanceAnual'] = $porcentajeAvanceAnual;    
+        $row['porcentajeAvanceAnual'] = $porcentajeAvanceAnual;
+
+        $row['metaMes'] = number_format($metaActual[0]->meta,2,'.',',');
+        $row['metaAcumulado'] = number_format($metaAcumulado[0]->meta,2,'.',','); 
+        $row['metaAnual'] = number_format($metaAnual[0]->meta,2,'.',',');
+
+        $row['logroMes'] = number_format($logroMes,2,'.',',');
+        $row['logroAcumulado'] = number_format($logroAcumulado,2,'.',','); 
+        $row['logroAnual'] = number_format($logroAnual,2,'.',',');    
 
          $this->view->disable();  
         echo json_encode($row);

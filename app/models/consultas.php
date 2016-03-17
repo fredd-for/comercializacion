@@ -158,10 +158,11 @@ SQl para obtener los el monto por contrato agrupado por Responsables
             $where = 'AND c.responsable_id='.$responsable_id;
         }
         $sql = "SELECT COALESCE(SUM(pp.monto_programado),0) as monto_programado,COALESCE(SUM(ppd.monto_deposito),0) as monto_deposito
-        FROM planpagos pp
-        LEFT JOIN planpagodepositos ppd ON pp.id = ppd.planpago_id AND ppd.baja_logica = 1
-        INNER JOIN contratos c ON pp.contrato_id=c.id ".$where." AND YEAR(c.fecha_contrato)='".$gestion."'
-        WHERE  YEAR(pp.fecha_programado)='".$gestion."' AND MONTH(pp.fecha_programado)='".$mes."' AND pp.baja_logica = 1 AND pp.estado = 1";
+FROM contratos c
+INNER JOIN contratosproductos cp ON c.id = cp.contrato_id AND cp.baja_logica =1
+INNER JOIN planpagos pp ON pp.contratoproducto_id = cp.id AND YEAR(pp.fecha_programado)='".$gestion."' AND MONTH(pp.fecha_programado)='".$mes."' AND pp.baja_logica = 1 AND pp.estado = 1
+LEFT JOIN planpagodepositos ppd ON pp.id = ppd.planpago_id AND ppd.baja_logica = 1
+WHERE  YEAR(c.fecha_contrato)='".$gestion."' AND c.baja_logica =1 ".$where;
         $db = new Consultas();
         return new Resultset(null, $db, $db->getReadConnection()->query($sql));         
     }
@@ -218,8 +219,39 @@ SQl para obtener los el monto por contrato agrupado por Responsables
         FROM metas
         WHERE baja_logica = 1 ".$where." AND gestion = '".$gestion."'";
         $db = new Consultas();
-        return new Resultset(null, $db, $db->getReadConnection()->query($sql));         
+        return new Resultset(null, $db, $db->getReadConnection()->query($sql));
     }
+
+    public function garantiaLlaveMesActual($gestion,$mes,$responsable_id)
+    {
+       $where = '';
+        if ($responsable_id!=0) {
+            $where = 'AND c.responsable_id='.$responsable_id;
+        }
+        $sql = "SELECT COALESCE(SUM(g.monto_deposito)-SUM(g.monto_devolucion),0) as total
+FROM contratos c
+INNER JOIN contratosproductos cp ON c.id = cp.contrato_id AND cp.baja_logica=1
+INNER JOIN garantias g ON cp.id = g.contratoproducto_id and g.baja_logica = 1 AND YEAR(g.fecha_deposito)='".$gestion."'  AND MONTH(g.fecha_deposito)='".$mes."'
+WHERE YEAR(c.fecha_contrato)='".$gestion."'  AND c.baja_logica = 1 ".$where;
+        $db = new Consultas();
+        return new Resultset(null, $db, $db->getReadConnection()->query($sql));
+    }
+
+     public function garantiaLlaveMesAcumulado($gestion,$mes,$responsable_id)
+    {
+       $where = '';
+        if ($responsable_id!=0) {
+            $where = 'AND c.responsable_id='.$responsable_id;
+        }
+        $sql = "SELECT COALESCE(SUM(g.monto_deposito)-SUM(g.monto_devolucion),0) as total
+FROM contratos c
+INNER JOIN contratosproductos cp ON c.id = cp.contrato_id AND cp.baja_logica=1
+INNER JOIN garantias g ON cp.id = g.contratoproducto_id and g.baja_logica = 1 AND YEAR(g.fecha_deposito)='".$gestion."'  AND MONTH(g.fecha_deposito)<='".$mes."'
+WHERE YEAR(c.fecha_contrato)='".$gestion."'  AND c.baja_logica = 1 ".$where;
+        $db = new Consultas();
+        return new Resultset(null, $db, $db->getReadConnection()->query($sql));
+    }
+
 
     /*
     alquiler asegurado gestiones pasadas
@@ -248,5 +280,108 @@ SQl para obtener los el monto por contrato agrupado por Responsables
         $db = new Consultas();
         return new Resultset(null, $db, $db->getReadConnection()->query($sql));         
     }
+
+    public function metaAgrupadoMes($gestion,$responsable_id)
+    {
+        $where = '';
+        if ($responsable_id!=0) {
+            $where = 'AND c.responsable_id='.$responsable_id;
+        }
+        $sql = "SELECT mes,SUM(meta) as meta
+        FROM metas
+        WHERE baja_logica = 1 AND gestion = '$gestion' ".$where."
+        GROUP BY mes";
+        $db = new Consultas();
+        return new Resultset(null, $db, $db->getReadConnection()->query($sql));         
+    }
+
+    
+
+
+    public function pivotAlquilerAsegurado($gestion,$responsable_id,$alquilernuevo=1)
+    {
+       $gestionactual = ' AND YEAR(c.fecha_contrato)="'.$gestion.'" ';
+       if($alquilernuevo!=1){
+            $gestionactual = ' AND YEAR(c.fecha_contrato)<"'.$gestion.'" ';
+       }
+
+       $where = '';
+       if ($responsable_id!=0) {
+        $where = ' AND c.responsable_id='.$responsable_id.' ';
+       }
+       
+
+
+    $sql = 'select
+    v.id,v.contrato,v.fecha_contrato,
+    COALESCE(SUM( case when v.fecha_programado = "1" then monto_reprogramado end ),0) as enero,
+    COALESCE(SUM( case when v.fecha_programado = "2" then monto_reprogramado end ),0) as febrero,
+    COALESCE(SUM(case when v.fecha_programado = "3" then monto_reprogramado end ),0) as marzo,
+    COALESCE(SUM(case when v.fecha_programado = "4" then monto_reprogramado end ),0) as abril,
+    COALESCE(SUM(case when v.fecha_programado = "5" then monto_reprogramado end ),0) as mayo,
+    COALESCE(SUM(case when v.fecha_programado = "6" then monto_reprogramado end ),0) as junio,
+    COALESCE(SUM(case when v.fecha_programado = "7" then monto_reprogramado end ),0) as julio,
+    COALESCE(SUM(case when v.fecha_programado = "8" then monto_reprogramado end ),0) as agosto,
+    COALESCE(SUM(case when v.fecha_programado = "9" then monto_reprogramado end ),0) as septiembre,
+    COALESCE(SUM(case when v.fecha_programado = "10" then monto_reprogramado end ),0) as octubre,
+    COALESCE(SUM(case when v.fecha_programado = "11" then monto_reprogramado end ),0) as noviembre,
+    COALESCE(SUM(case when v.fecha_programado = "12" then monto_reprogramado end ),0) as diciembre
+    from (
+    select c.id,c.contrato,c.fecha_contrato,MONTH(p.fecha_programado) fecha_programado,sum(p.monto_reprogramado) monto_reprogramado
+    from contratos c
+    inner join contratosproductos cp on c.id = cp.contrato_id AND cp.baja_logica=1
+    inner join planpagos p on p.contratoproducto_id = cp.id AND p.baja_logica=1 AND p.estado = 1
+    where year(p.fecha_programado) = "'.$gestion.'" AND c.baja_logica = 1 '.$gestionactual.$where.'
+    group by fecha_programado,contrato
+    order by c.contrato
+    ) v
+    group by v.contrato';
+    $db = new Consultas();
+    return new Resultset(null, $db, $db->getReadConnection()->query($sql));            
+}
+
+
+public function pivotAlquilerDepositado($gestion,$responsable_id,$alquilernuevo=1)
+    {
+       $gestionactual = ' AND YEAR(c.fecha_contrato)="'.$gestion.'" ';
+       if($alquilernuevo!=1){
+            $gestionactual = ' AND YEAR(c.fecha_contrato)<"'.$gestion.'" ';
+       }
+
+       $where = '';
+       if ($responsable_id!=0) {
+        $where = 'AND c.responsable_id='.$responsable_id;
+       }
+       
+
+
+    $sql = 'select
+    v.id,v.contrato,v.fecha_contrato,
+    COALESCE(SUM( case when v.fecha_programado = "1" then monto_deposito end ),0) as enero,
+    COALESCE(SUM( case when v.fecha_programado = "2" then monto_deposito end ),0) as febrero,
+    COALESCE(SUM(case when v.fecha_programado = "3" then monto_deposito end ),0) as marzo,
+    COALESCE(SUM(case when v.fecha_programado = "4" then monto_deposito end ),0) as abril,
+    COALESCE(SUM(case when v.fecha_programado = "5" then monto_deposito end ),0) as mayo,
+    COALESCE(SUM(case when v.fecha_programado = "6" then monto_deposito end ),0) as junio,
+    COALESCE(SUM(case when v.fecha_programado = "7" then monto_deposito end ),0) as julio,
+    COALESCE(SUM(case when v.fecha_programado = "8" then monto_deposito end ),0) as agosto,
+    COALESCE(SUM(case when v.fecha_programado = "9" then monto_deposito end ),0) as septiembre,
+    COALESCE(SUM(case when v.fecha_programado = "10" then monto_deposito end ),0) as octubre,
+    COALESCE(SUM(case when v.fecha_programado = "11" then monto_deposito end ),0) as noviembre,
+    COALESCE(SUM(case when v.fecha_programado = "12" then monto_deposito end ),0) as diciembre
+    from (
+    select c.id,c.contrato,c.fecha_contrato,MONTH(p.fecha_programado) fecha_programado,sum(pd.monto_deposito) monto_deposito
+    from contratos c
+    inner join contratosproductos cp on c.id = cp.contrato_id AND cp.baja_logica=1
+    inner join planpagos p on p.contratoproducto_id = cp.id AND p.baja_logica=1 AND p.estado = 1
+    inner join planpagodepositos pd on p.id = pd.planpago_id and pd.baja_logica = 1
+    where year(p.fecha_programado) = "'.$gestion.'" AND c.baja_logica = 1 '.$gestionactual.$where.'
+    group by fecha_programado,contrato
+    order by c.contrato
+    ) v
+    group by v.contrato';
+    $db = new Consultas();
+    return new Resultset(null, $db, $db->getReadConnection()->query($sql));            
+}
 
 }

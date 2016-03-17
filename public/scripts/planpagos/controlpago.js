@@ -81,6 +81,8 @@ $(document).ready(function (){
         var barra = function(statusbar) {
 		};
 
+
+
 		$("#jqxgrid").jqxGrid({
             width: '100%',
             source: dataAdapter,

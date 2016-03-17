@@ -5,7 +5,8 @@
 class PlanpagosController extends ControllerBase
 {
 	private $tipo = array('1' =>'Garantia','2'=>'Derecho de Llave','3'=>'Devolución Garantia','4'=>'Devolución Derecho de Llave' );
-	public function indexAction()
+	
+    public function indexAction($contrato='')
 	{
 		$this->assets
         ->addCss('/jqwidgets/styles/jqx.base.css')
@@ -38,6 +39,8 @@ class PlanpagosController extends ControllerBase
         ->addJs('/scripts/planpagos/exportar.js')
         ->addJs('/media/plugins/bootbox/bootbox.min.js')
         ;
+        $contrato = base64_decode($contrato);
+        $this->view->setVar('contrato_f', $contrato);
 
     }
 

@@ -1,0 +1,95 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h4>Dashboard</h4>
+                <div class="options">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#domshortcuttiles"><i class="fa fa-dashboard"></i></a></li>
+                        <li><a data-toggle="tab" href="#codeshortcuttiles"><i class="fa fa-code"></i></a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- reloj de cumplimieto de metas -->
+<div class="block">
+<div class="row">
+
+    <div class="col-lg-3">
+        <form class="form-horizontal" id="testForm" data-toggle="validator" action="" method="post" />
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Gestión</label>
+                    <div class="col-md-8">
+                      <?php echo $gestiones ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Mes</label>
+                    <div class="col-md-8">
+                        <?php echo $meses; ?>
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label class="col-md-4 control-label">Resp. Comercial</label>
+                    <div class="col-md-8">
+                        <?php echo $responsable ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Recaudación</label>
+                    <div class="col-md-8">
+                        <?php echo $recaudacion ?>
+                    </div>
+                </div>
+            </div>
+                  </form>
+    </div>
+    <div class="block">
+        <div class="col-lg-9">
+        <div class="row">
+            <div class="col-md-4">
+                <div id="gaugeValue1" style="position: absolute; top: 190px; left: 100px; font-family: Sans-Serif; text-align: center; font-size: 17px; width: 70px;"></div>
+                <div id="gaugeContainer1"></div>    
+                <div class="row block-section text-left">
+                    <div class="col-xs-12">
+                        <button class="btn btn-primary" type="button" title="Logro" id="logroMes"></button>
+                        <button class="btn btn-success" type="button" title="Meta" id="metaMes"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div id="gaugeValue2" style="position: absolute; top: 190px; left: 100px; font-family: Sans-Serif; text-align: center; font-size: 17px; width: 70px;"></div>
+                <div id="gaugeContainer2"></div>
+                   <div class="row block-section text-left">
+                <div class="col-xs-12">
+                    <button class="btn btn-primary" type="button" id="logroAcumulado" title="Logro"></button>
+                    <button class="btn btn-success" type="button" id="metaAcumulado" title="Meta"></button>
+                </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div id="gaugeValue3" style="position: absolute; top: 190px; left: 100px; font-family: Sans-Serif; text-align: center; font-size: 17px; width: 70px;"></div>
+                <div id="gaugeContainer3"></div>
+                   <div class="row block-section text-left">
+                <div class="col-xs-12">
+                    <button class="btn btn-primary" type="button" id="logroAnual" title="Logro"></button>
+                    <button class="btn btn-success" type="button" id="metaAnual" title="Meta"></button>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    
+    </div>
+</div>
+
+
+<!-- fin reloj -->
+
+

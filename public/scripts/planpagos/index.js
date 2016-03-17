@@ -1,8 +1,8 @@
 
 $(document).ready(function (){
 
-cargar();	
-	function cargar(){	
+// cargar();	
+	// function cargar(){	
 		var source =
 		{
 			datatype: "json",
@@ -34,6 +34,21 @@ cargar();
                 //return '<span style="margin: 6px 3px; font-size: 12px; float: right; font-weight: bold;">' + cellvalue + '</span>';
                 return cellvalue;
             };
+
+            var FilterContrato = function () {
+            	// alert($("#contrato_f").val());
+            	if ($("#contrato_f").val()!='') {
+            		var filtergroup = new $.jqx.filter();
+            		var filter_or_operator = 1;
+            		var filtervalue = $("#contrato_f").val();
+            		var filtercondition = 'equal';
+            		var filter = filtergroup.createfilter('stringfilter', filtervalue, filtercondition);
+            		filtergroup.addfilter(filter_or_operator, filter);
+            		return filtergroup;
+            	}
+
+            }();
+
 		$("#jqxgrid").jqxGrid({
 
 			width: '100%',
@@ -62,7 +77,7 @@ cargar();
 			{ text: 'Linea', datafield: 'linea', filtertype: 'checkedlist',width: '7%' },
 			{ text: 'Estación', datafield: 'estacion', filtertype: 'checkedlist',width: '10%' },
 			{ text: 'Cliente / Razón Social', datafield: 'razon_social', filtertype: 'input',width: '10%' },
-			{ text: 'Contrato', datafield: 'contrato', filtertype: 'input',width: '5%' },
+			{ text: 'Contrato', datafield: 'contrato', filtertype: 'input',width: '5%' , filter:FilterContrato},
 			{ text: 'Fecha Contrato ', datafield: 'fecha_contrato', filtertype: 'range', width: '7%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
 			{ text: 'Producto', datafield: 'producto', filtertype: 'input',width: '10%' },
 			{ text: 'Fecha Inicio', datafield: 'fecha_inicio', filtertype: 'range', width: '7%', cellsalign: 'center', cellsformat: 'dd-MM-yyyy', align:'center'},
@@ -78,7 +93,7 @@ cargar();
   //           localizationobj.currencysymbol = "Bs ";
   //           $("#jqxgrid").jqxGrid('localizestrings', localizationobj);
  		//$("#jqxgrid").jqxGrid('expandgroup',4);
-}
+// }
 
 /*
 Control de pagos

@@ -1,104 +1,110 @@
     $(function () {
 $('.tree').treegrid();
 
- datosreloj();
+//  datosreloj();
 
-$("#gestion, #mes, #responsable_id, #recaudacion").change(function() {
-    datosreloj();
+// $("#gestion, #mes, #responsable_id, #recaudacion").change(function() {
+//     datosreloj();
     
-});
+// });
 
-function datosreloj() {
-    var v = $.ajax({
-        url: '/dasboard/porcentajemetas/',
-        type: 'POST',
-        datatype: 'json',
-        data: {gestion: $("#gestion").val(),mes:$("#mes").val(),responsable_id:$("#responsable_id").val(),recaudacion:$("#recaudacion").val()},
-        success: function(data) {
-            var row = jQuery.parseJSON(data);
-            mensual(row.porcentajeAvanceMes);
-            acumulado(row.porcentajeAvanceAcumulado);
-            anual(row.porcentajeAvanceAnual);
-            // alert(row.porcentajeAvanceMes);
-            //alert(row.porcentajeAvanceAcumulado);
-            // alert(row.porcentajeAvanceAnual);
-        }, 
-        error: function() {
-            alert('Se ha producido un error Inesperado');
-        }
-    });
-}
+// function datosreloj() {
+//     var v = $.ajax({
+//         url: '/dasboard/porcentajemetas/',
+//         type: 'POST',
+//         datatype: 'json',
+//         data: {gestion: $("#gestion").val(),mes:$("#mes").val(),responsable_id:$("#responsable_id").val(),recaudacion:$("#recaudacion").val()},
+//         success: function(data) {
+//             var row = jQuery.parseJSON(data);
+//             mensual(row.porcentajeAvanceMes);
+//             acumulado(row.porcentajeAvanceAcumulado);
+//             anual(row.porcentajeAvanceAnual);
 
-$('#gaugeContainer1').jqxGauge({
-        ranges: [
-        { startValue: 0, endValue: 40, style: { fill: '#e02629', stroke: '#e02629' }, endWidth: 10, startWidth: 1 },
-        { startValue: 40, endValue: 80, style: { fill: '#fbd109', stroke: '#fbd109' }, endWidth: 15, startWidth: 10 },
-        { startValue: 80, endValue: 100, style: { fill: '#4bb648', stroke: '#4bb648' }, endWidth: 20, startWidth: 15 }
-        ],
-        ticksMinor: { interval: 5, size: '5%' },
-        ticksMajor: { interval: 10, size: '9%' },
-        value: 0,
-        colorScheme: 'scheme05',
-        animationDuration: 1200,
-        caption: { offset: [0, -25], value: 'Avance del Mes', position: 'bottom' }
-    });
+//             $("#metaMes").text(row.metaMes);
+//             $("#metaAcumulado").text(row.metaAcumulado);
+//             $("#metaAnual").text(row.metaAnual);
 
-    $('#gaugeContainer1').on('valueChanging', function (e) {
-        var value = e.args.value.toFixed(1);
-        $('#gaugeValue1').text(value + ' % ');
-    });
+//             $("#logroMes").text(row.logroMes);
+//             $("#logroAcumulado").text(row.logroAcumulado);
+//             $("#logroAnual").text(row.logroAnual);
+            
+//         }, 
+//         error: function() {
+//             alert('Se ha producido un error Inesperado');
+//         }
+//     });
+// }
 
-     // $('#gaugeContainer1').jqxGauge('border', { visible: false });
+// $('#gaugeContainer1').jqxGauge({
+//         ranges: [
+//         { startValue: 0, endValue: 40, style: { fill: '#e02629', stroke: '#e02629' }, endWidth: 10, startWidth: 1 },
+//         { startValue: 40, endValue: 80, style: { fill: '#fbd109', stroke: '#fbd109' }, endWidth: 15, startWidth: 10 },
+//         { startValue: 80, endValue: 100, style: { fill: '#4bb648', stroke: '#4bb648' }, endWidth: 20, startWidth: 15 }
+//         ],
+//         ticksMinor: { interval: 5, size: '5%' },
+//         ticksMajor: { interval: 10, size: '9%' },
+//         value: 0,
+//         colorScheme: 'scheme05',
+//         animationDuration: 1200,
+//         caption: { offset: [0, -25], value: 'Avance del Mes', position: 'bottom' }
+//     });
 
-function mensual(valor) {
-    $('#gaugeContainer1').jqxGauge('value', valor);    
-}
+//     $('#gaugeContainer1').on('valueChanging', function (e) {
+//         var value = e.args.value.toFixed(1);
+//         $('#gaugeValue1').text(value + ' % ');
+//     });
 
-$('#gaugeContainer2').jqxGauge({
-        ranges: [
-        { startValue: 0, endValue: 40, style: { fill: '#e02629', stroke: '#e02629' }, endWidth: 10, startWidth: 1 },
-        { startValue: 40, endValue: 80, style: { fill: '#fbd109', stroke: '#fbd109' }, endWidth: 15, startWidth: 10 },
-        { startValue: 80, endValue: 100, style: { fill: '#4bb648', stroke: '#4bb648' }, endWidth: 20, startWidth: 15 }
-        ],
-        ticksMinor: { interval: 5, size: '5%' },
-        ticksMajor: { interval: 10, size: '9%' },
-        value: 0,
-        // width: '40%',
-  //       height: '80%',
-        colorScheme: 'scheme05',
-        animationDuration: 1200,
-        caption: { offset: [0, -25], value: 'Avance Acumulado', position: 'bottom' }
-    });
-    $('#gaugeContainer2').on('valueChanging', function (e) {
-        var value = e.args.value.toFixed(1);
-        $('#gaugeValue2').text(value + ' %');
-    });
+//      // $('#gaugeContainer1').jqxGauge('border', { visible: false });
 
-function acumulado(valor) {
-    $('#gaugeContainer2').jqxGauge('value', valor);
-}
+// function mensual(valor) {
+//     $('#gaugeContainer1').jqxGauge('value', valor);    
+// }
 
-    $('#gaugeContainer3').jqxGauge({
-        ranges: [
-        { startValue: 0, endValue: 40, style: { fill: '#e02629', stroke: '#e02629' }, endWidth: 10, startWidth: 1 },
-        { startValue: 40, endValue: 80, style: { fill: '#fbd109', stroke: '#fbd109' }, endWidth: 15, startWidth: 10 },
-        { startValue: 80, endValue: 100, style: { fill: '#4bb648', stroke: '#4bb648' }, endWidth: 20, startWidth: 15 }
-        ],
-        ticksMinor: { interval: 5, size: '5%' },
-        ticksMajor: { interval: 10, size: '9%' },
-        value: 0,
-        colorScheme: 'scheme05',
-        animationDuration: 1200,
-        caption: { offset: [0, -25], value: 'Avance Anual', position: 'bottom' }
-    });
+// $('#gaugeContainer2').jqxGauge({
+//         ranges: [
+//         { startValue: 0, endValue: 40, style: { fill: '#e02629', stroke: '#e02629' }, endWidth: 10, startWidth: 1 },
+//         { startValue: 40, endValue: 80, style: { fill: '#fbd109', stroke: '#fbd109' }, endWidth: 15, startWidth: 10 },
+//         { startValue: 80, endValue: 100, style: { fill: '#4bb648', stroke: '#4bb648' }, endWidth: 20, startWidth: 15 }
+//         ],
+//         ticksMinor: { interval: 5, size: '5%' },
+//         ticksMajor: { interval: 10, size: '9%' },
+//         value: 0,
+//         // width: '40%',
+//   //       height: '80%',
+//         colorScheme: 'scheme05',
+//         animationDuration: 1200,
+//         caption: { offset: [0, -25], value: 'Avance Acumulado', position: 'bottom' }
+//     });
+//     $('#gaugeContainer2').on('valueChanging', function (e) {
+//         var value = e.args.value.toFixed(1);
+//         $('#gaugeValue2').text(value + ' %');
+//     });
 
-    $('#gaugeContainer3').on('valueChanging', function (e) {
-        var value = e.args.value.toFixed(1);
-        $('#gaugeValue3').text(value + ' %');
-    });
-function anual(valor) {
-    $('#gaugeContainer3').jqxGauge('value', valor);
-}
+// function acumulado(valor) {
+//     $('#gaugeContainer2').jqxGauge('value', valor);
+// }
+
+//     $('#gaugeContainer3').jqxGauge({
+//         ranges: [
+//         { startValue: 0, endValue: 40, style: { fill: '#e02629', stroke: '#e02629' }, endWidth: 10, startWidth: 1 },
+//         { startValue: 40, endValue: 80, style: { fill: '#fbd109', stroke: '#fbd109' }, endWidth: 15, startWidth: 10 },
+//         { startValue: 80, endValue: 100, style: { fill: '#4bb648', stroke: '#4bb648' }, endWidth: 20, startWidth: 15 }
+//         ],
+//         ticksMinor: { interval: 5, size: '5%' },
+//         ticksMajor: { interval: 10, size: '9%' },
+//         value: 0,
+//         colorScheme: 'scheme05',
+//         animationDuration: 1200,
+//         caption: { offset: [0, -25], value: 'Avance Anual', position: 'bottom' }
+//     });
+
+//     $('#gaugeContainer3').on('valueChanging', function (e) {
+//         var value = e.args.value.toFixed(1);
+//         $('#gaugeValue3').text(value + ' %');
+//     });
+// function anual(valor) {
+//     $('#gaugeContainer3').jqxGauge('value', valor);
+// }
 
     
 
