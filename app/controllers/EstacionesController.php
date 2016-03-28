@@ -208,7 +208,7 @@ echo json_encode($result, JSON_NUMERIC_CHECK);
 
 public function pruebaAction()
 {
-    $password = hash_hmac('sha256', 'lucas', '2, 4, 6, 7, 9, 15, 20, 23, 25, 30');
+    $password = hash_hmac('sha256', 'comercial2k16', '2, 4, 6, 7, 9, 15, 20, 23, 25, 30');
     echo $password;
 }
 
