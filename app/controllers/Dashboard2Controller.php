@@ -100,19 +100,19 @@ class Dashboard2Controller extends ControllerBase {
          */
         $model = new Usuarios();
         $resul = $model->responsablecomercial();
-        $responsable = $this->tag->select(
-            array(
-                'responsable_id',
-                $resul,
-                'using' => array('id', 'nombres'),
-                'useEmpty' => true,
-                'emptyText' => '(Todos)',
-                'emptyValue' => '0',
-                'class' => 'form-control',
-                'required' => 'required'
-                )
-            );
-        $this->view->setVar('responsable',$responsable);
+        // $responsable = $this->tag->select(
+        //     array(
+        //         'responsable_id',
+        //         $resul,
+        //         'using' => array('id', 'nombres'),
+        //         'useEmpty' => true,
+        //         'emptyText' => '(Todos)',
+        //         'emptyValue' => '0',
+        //         'class' => 'form-control',
+        //         'required' => 'required'
+        //         )
+        //     );
+        $this->view->setVar('responsable',$resul);
 
         $recaudacion = $this->tag->select(
             array(
@@ -228,8 +228,9 @@ class Dashboard2Controller extends ControllerBase {
       foreach ($resul as $v) {
         $string = base64_encode($v->contrato);
         $customers[] = array(
-            'id' => $v->id,
-            'contrato' => '<div><a href="/planpagos/index/'.$string.'" ><b>'.$v->contrato.' </b></a> ('.date("d-m-Y",strtotime($v->fecha_contrato)).')</div>',
+            // 'id' => $v->id,
+            // 'contrato' => '<div><a href="/planpagos/index/'.$string.'" ><b>'.$v->razon_social.' </b></a> ('.date("d-m-Y",strtotime($v->fecha_contrato)).')</div>',
+            'contrato' => '<div><a href="/planpagos/index/'.$string.'" ><b>'.$v->razon_social.' </b></a></div>',
             'enero' => $v->enero,
             'febrero' => $v->febrero,
             'marzo' => $v->marzo,
@@ -264,7 +265,8 @@ class Dashboard2Controller extends ControllerBase {
         $string = base64_encode($v->contrato);
         $customers[] = array(
             'id' => $v->id,
-            'contrato' => '<div><a href="/planpagos/index/'.$string.'" ><b>'.$v->contrato.' </b></a> ('.date("d-m-Y",strtotime($v->fecha_contrato)).')</div>',
+            // 'contrato' => '<div><a href="/planpagos/index/'.$string.'" ><b>'.$v->razon_social.' </b></a> ('.date("d-m-Y",strtotime($v->fecha_contrato)).')</div>',
+            'contrato' => '<div><a href="/planpagos/index/'.$string.'" ><b>'.$v->razon_social.' </b></a></div>',
             'enero' => $v->enero,
             'febrero' => $v->febrero,
             'marzo' => $v->marzo,

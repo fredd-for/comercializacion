@@ -495,6 +495,12 @@ public function saveppAction()
                 $resul->monto_programado = $_POST['monto_programado'];
                 $resul->monto_reprogramado = $_POST['monto_programado'];
                 if ($resul->save()) {
+                    $sum = Planpagos::sum(array("baja_logica=1 and contratoproducto_id = ".$_POST['contratoproducto_id'], 'column' => 'monto_programado'));
+
+                    $resul2 = Contratosproductos::findFirstById($_POST['contratoproducto_id']);
+                    $resul2->total = $sum;
+                    $resul2->save();
+
                     $msm = 'Exito: Se guardo correctamente';
                 }else{
                     $msm = 'Error: No se guardo el registro';

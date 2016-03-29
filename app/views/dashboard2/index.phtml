@@ -33,7 +33,14 @@
 									<div class="form-group">
 										<label class="col-md-4 control-label">Resp. Comercial</label>
 										<div class="col-md-8">
-											<?php echo $responsable ?>
+										<select name="responsable_id" id="responsable_id" class="form-control">
+											<option value="-1">Ingreso General</option>
+											<option value="0">Ingreso Anual</option>
+											<?php foreach ($responsable as $v) { ?>
+												<option value="<?php echo $v->id ?>"><?php echo $v->nombres ?></option>
+											<?php } ?>
+										</select>
+											<?php // echo $responsable ?>
 										</div>
 									</div>
 									<div class="form-group">
@@ -109,7 +116,7 @@
 					</div>
 				<div class="row">
 					<div class="col-md-12">
-						<div id="jqxgrid2" style="height: 350px; width: 100%;" ></div>
+						<div id="jqxgrid2" style="height: 500px; width: 100%;" ></div>
 					</div>
 				</div>
 				<br>

@@ -4,6 +4,10 @@ $(document).ready(function (){
 /*
 meta por meses
  */
+
+$("#jqxgrid").hide();
+metaMesAgrupado();
+function metaMesAgrupado(argument) {
     var v=$.ajax({
         url:'/dashboard2/metaMesAgrupado/',
         type:'POST',
@@ -19,6 +23,8 @@ meta por meses
                 }, //mostramos el error
                 error: function() { alert('Se ha producido un error Inesperado'); }
             });
+}
+    
     
 contratosAsegurados();
 
@@ -241,7 +247,7 @@ var recaudacion = $("#recaudacion").val();
     $("#jqxgrid2").jqxGrid({
 
         width: '100%',
-        height: '250px',
+        // height: '250px',
         source: dataAdapter2,
         sortable: true,
         altRows: true,
@@ -267,7 +273,7 @@ var recaudacion = $("#recaudacion").val();
                     return "<div style='margin:4px;'>" + (value + 1) + "</div>";
                 }
             },
-            { text: 'Contrato', datafield: 'contrato', filtertype: 'input',width: '12%',pinned: true,aggregates: ['Logro', 'Meta'],
+            { text: 'Contrato', datafield: 'contrato', filtertype: 'input',width: '20%',pinned: true,aggregates: ['Logro', 'Meta'],
                       aggregatesrenderer: function (aggregates) {
                           var renderstring = "";
                           renderstring = '<div style="position: relative; margin: 4px; overflow: hidden;"><b>Logro</b></div>';
@@ -446,17 +452,26 @@ $(".text_gestion").text($("#gestion").val());
 
 $("#gestion, #mes, #responsable_id, #recaudacion").change(function() {
     
-    $(".text_gestion").text($("#gestion").val());
+    if($("#responsable_id").val()==-1){
+        $("#jqxgrid").hide();
+        $(".text_gestion").text("");
+    }else{
+        $("#jqxgrid").show();
+        $(".text_gestion").text($("#gestion").val());
+    }
+
+    
+    metaMesAgrupado();
     obtenerimagen();
     datosreloj();
     contratosNuevos();
     contratosAsegurados();
 });
 
-obtenerimagen();
+// obtenerimagen();
 function obtenerimagen() {
     var responsable_id = $("#responsable_id").val();
-    if (responsable_id==0) {
+    if (responsable_id<=0) {
     $("#imagen_responsable").attr("src","/images/logo.png");    
     $("#text_responsable").text("Equipo Comercial");
 }else{

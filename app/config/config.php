@@ -2,12 +2,7 @@
  return new \Phalcon\Config(array(
     'database' => array(
        'adapter'     => 'Mysql',
-       /*  'host'        => 'localhost',
-        'username'    => 'postgres',
-        'password'    => 'r0salinda',
-        'dbname'      => 'bd_rrhh',
-       */
-        'host'        => 'localhost',
+       'host'        => 'localhost',
         'username'    => 'user_comercial',
         'password'    => 'pass_comercial',
         'dbname'      => 'bd_comercial',
